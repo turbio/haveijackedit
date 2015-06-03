@@ -1,0 +1,40 @@
+<html>
+<head>
+	{% load staticfiles %}
+	<link rel="stylesheet" type="text/css" href="{% static 'index/style.css' %}" />
+	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport'/>
+	<script src="{% static 'index/signup.js' %}"></script>
+</head>
+<body>
+{% if latest_jack %}
+	<div id="wrapper">
+		<div class="quote">
+			<div class="msg">
+				{% for jack in latest_jack %}
+				{{ jack.comment }}
+				{% endfor %}
+			</div>
+			<div class="name">
+				-usr
+			</div>
+		</div>
+		<div id="footer">
+			<a id="signup_link" href="#" onclick="signup()">get your own</a>
+			<div id="signup">
+				<form method="POST">
+					Sign up
+					<br/>
+					<input type="text" name="username" placeholder="username"/>
+					<br/>
+					<input type="password" name="password" placeholder="password"/>
+					<br/>
+					<input type="submit" name="submin" value="sign up"/>
+				</form>
+			</div>
+		</div>
+	</div>
+{% else %}
+	<p>hmm</p>
+{% endif %}
+</body>
+</html>

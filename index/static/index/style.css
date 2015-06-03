@@ -1,0 +1,60 @@
+body{
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+	padding: 0;
+	margin: 0;
+	font-size: 3em;
+}
+
+#wrapper{
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	top: 0;
+	vertical-align: middle;
+}
+
+.quote{
+	margin-left: auto;
+	margin-right: auto;
+	padding: 1em;
+}
+
+.msg{
+	font-style: italic;
+	text-align: center;
+}
+
+.name{
+	text-align: right;
+	color: #bbb;
+	font-size: 0.75em;
+}
+
+a{
+	text-decoration: none;
+}
+
+input{
+	font-size: 0.5em;
+	background: white;
+	border: solid;
+	border-color: #888;
+	outline: 0;
+}
+
+#footer{
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: 1em;
+	text-align: center;
+
+	/*transition: all 2s;*/
+	/*-webkit-transition: all 2s;*/
+}
+
+#signup{
+	display: none;
+}
