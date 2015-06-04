@@ -3,34 +3,39 @@
 	{% load staticfiles %}
 	<link rel="stylesheet" type="text/css" href="{% static 'index/style.css' %}" />
 	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport'/>
-	<script src="{% static 'index/signup.js' %}"></script>
+	<script src="{% static 'index/account_action.js' %}"></script>
 </head>
 <body>
 {% if latest_jack %}
 	<div id="wrapper">
-		<div class="quote">
-			<div class="msg">
-				{% for jack in latest_jack %}
-				{{ jack.comment }}
-				{% endfor %}
-			</div>
-			<div class="name">
-				-usr
-			</div>
+		<div id="splash_quote">
+			<div class="msg">{{ latest_jack.comment }}</div>
+			<div class="name">&ndash;{{ latest_jack.user_id.name }}<!--,{{ latest_jack.date.year }}--></div>
 		</div>
 		<div id="footer">
-			<a id="signup_link" href="#" onclick="signup()">get your own</a>
-			<div id="signup">
-				<form method="POST">
-					Sign up
-					<br/>
-					<input type="text" name="username" placeholder="username"/>
-					<br/>
-					<input type="password" name="password" placeholder="password"/>
-					<br/>
-					<input type="submit" name="submin" value="sign up"/>
-				</form>
-			</div>
+			<div><a id="signup_link" href="#" onclick="show_signup()">get your own</a></div>
+			<div><a id="signin_link" href="#" onclick="show_signin()">sign in</a></div>
+		</div>
+		<div id="signup" class="account_dialog">
+			<form method="POST">{% csrf_token %}sign up <br/>
+				<div class="error_box" id="signup_error">asdf</div>
+				<input id="signup_username" class="text_box" type="text" name="username" placeholder="username" onchange="username_entered()"/>
+				<br/>
+				<input class="text_box" type="password" name="password" placeholder="password"/>
+				<br/>
+				<input type="submit" name="submin" value="sign up"/>
+			</form>
+			<a href="#" onclick="hide_dialog()">back</a>
+		</div>
+		<div id="signin" class="account_dialog">
+			<form method="POST">{% csrf_token %}sign in<br/>
+				<input class="text_box" type="text" name="username" placeholder="username"/>
+				<br/>
+				<input class="text_box" type="password" name="password" placeholder="password"/>
+				<br/>
+				<input type="submit" name="submin" value="sign in"/>
+			</form>
+			<a href="#" onclick="hide_dialog()">back</a>
 		</div>
 	</div>
 {% else %}
