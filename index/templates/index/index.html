@@ -4,6 +4,7 @@
 	<link rel="stylesheet" type="text/css" href="{% static 'index/style.css' %}" />
 	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport'/>
 	<script src="{% static 'index/account_action.js' %}"></script>
+	<script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 <body>
 {% if latest_jack %}
@@ -18,10 +19,12 @@
 		</div>
 		<div id="signup" class="account_dialog">
 			<form method="POST">{% csrf_token %}sign up <br/>
-				<div class="error_box" id="signup_error">asdf</div>
+				<div class="error_box" id="signup_error"></div>
 				<input id="signup_username" class="text_box" type="text" name="username" placeholder="username" onchange="username_entered()"/>
 				<br/>
 				<input class="text_box" type="password" name="password" placeholder="password"/>
+				<br/>
+				<div id="captcha" class="g-recaptcha" data-sitekey="6LeJ2gcTAAAAAJjYYMTcPqa9ZmjqHeVy-MZZTGqs"></div>
 				<br/>
 				<input type="submit" name="submin" value="sign up"/>
 			</form>

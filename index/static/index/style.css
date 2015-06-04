@@ -99,11 +99,11 @@ input{
 }
 
 #signup{
-	/*display: none;*/
+	display: none;
 }
 
 #signup_error{
-	/*display: none;*/
+	display: none;
 }
 
 .error_box{
@@ -123,4 +123,10 @@ input{
 
 #signin_link{
 	font-size: 0.50em;
+}
+
+#captcha{
+	/*margin-left: auto;*/
+	/*margin-right: auto;*/
+	display: inline-block;
 }
