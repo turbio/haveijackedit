@@ -8,9 +8,17 @@
 </head>
 <body>
 	<div id="wrapper">
+		<div id="feed_title_box">
+			<div id="feed_title_q">
+				Has {{ username }} jacked it today?
+			</div>
+			<div id="feed_title_a">
+				{{ title_text_a }}
+			</div>
+		</div>
 {% if jack_list %}
 	{% for jack in jack_list %}
-		<div class="quote">
+		<div class="quote feed_quote">
 			<div class="msg">{{ jack.comment }}</div>
 			<div class="name">&ndash;{{ username }}</div>
 		</div>

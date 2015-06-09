@@ -39,8 +39,7 @@ def feed(request):
 	context = {
 		'jack_list': userJackList,
 		'username': subdomain,
-		'jacked_today': True,
-		'title_text': 'lmao'
+		'title_text_a': 'lmao'
 	}
 
 	print(str(context))
