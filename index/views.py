@@ -8,16 +8,58 @@ import datetime
 
 # Create your views here.
 def index(request):
+	userError = False
 	if request.method == 'POST':
 		try:
 			handleUsercredentials(request)
 		except:
-			return HttpResponse("you did something wrong (probably)")
+			userError = "yep"
 
-	latest_jack = jack.objects.order_by('date')[0]
-	template = loader.get_template('index/index.html')
+	latest_jack = jack.objects.order_by('date')
+	if len(latest_jack) > 0:
+		latest_jack = latest_jack[0]
+	else:
+		latest_jack = None
+
 	context = {'latest_jack': latest_jack}
-	return render(request, 'index/index.html', context)
+
+	subdomain = getSubdomain(request.META['HTTP_HOST'])
+	if subdomain:
+		return feed(request)
+	else:
+		template = loader.get_template('index/index.html')
+		return render(request, 'index/index.html', context)
+
+
+def feed(request):
+	subdomain = getSubdomain(request.META['HTTP_HOST'])
+	userId = user.objects.filter(name = subdomain)[0].id
+	userJackList = jack.objects.order_by('date').filter(user_id = userId)
+
+	context = {
+		'jack_list': userJackList,
+		'username': subdomain,
+		'jacked_today': True,
+		'title_text': 'lmao'
+	}
+
+	print(str(context))
+	template = loader.get_template('index/feed.html')
+	return render(request, 'index/feed.html', context)
+
+def getSubdomain(url):
+	splitUrl = url.split('.')
+
+	urlParts = len(splitUrl)
+
+	#for dealing with localhost
+	if 'localhost' in splitUrl[-1]:
+		urlParts += 1
+
+	if urlParts == 3:
+		return splitUrl[0]
+
+	return False
 
 def handleUsercredentials(request):
 	username = str(request.POST.get('username', ''))

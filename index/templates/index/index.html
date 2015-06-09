@@ -7,12 +7,15 @@
 	<script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 <body>
-{% if latest_jack %}
 	<div id="wrapper">
-		<div id="splash_quote">
+		{% if latest_jack %}
+		<div class="quote">
 			<div class="msg">{{ latest_jack.comment }}</div>
 			<div class="name">&ndash;{{ latest_jack.user_id.name }}<!--,{{ latest_jack.date.year }}--></div>
 		</div>
+		{% else %}
+			nothing yet...
+		{% endif %}
 		<div id="footer">
 			<div><a id="signup_link" href="#" onclick="show_signup()">get your own</a></div>
 			<div><a id="signin_link" href="#" onclick="show_signin()">sign in</a></div>
@@ -21,7 +24,7 @@
 			<form method="POST">{% csrf_token %}sign up<br/>
 				<input type='hidden' name='action' value='signup'/>
 				<div class="error_box" id="signup_error"></div>
-				<input id="signup_username" class="text_box" type="text" name="username" placeholder="username" onchange="username_entered()"/>
+				<input id="signup_username" class="text_box" type="text" name="username" placeholder="username" onchange="username_entered()" autofocus/>
 				<br/>
 				<input class="text_box" type="password" name="password" placeholder="password"/>
 				<br/>
@@ -34,7 +37,7 @@
 		<div id="signin" class="account_dialog">
 			<form method="POST">{% csrf_token %}sign in<br/>
 				<input type='hidden' name='action' value='signin'/>
-				<input class="text_box" type="text" name="username" placeholder="username"/>
+				<input class="text_box" type="text" name="username" placeholder="username" autofocus/>
 				<br/>
 				<input class="text_box" type="password" name="password" placeholder="password"/>
 				<br/>
@@ -43,8 +46,5 @@
 			<a href="#" onclick="hide_dialog()">back</a>
 		</div>
 	</div>
-{% else %}
-	<p>hmm</p>
-{% endif %}
 </body>
 </html>

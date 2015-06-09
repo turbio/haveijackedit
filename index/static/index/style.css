@@ -15,12 +15,12 @@ body{
 }
 
 @media (min-width: 600px){
-	#splash_quote{
+	.quote{
 		width: 10em;
 	}
 }
 
-#splash_quote{
+.quote{
 	margin-left: auto;
 	margin-right: auto;
 	padding: 1em;
