@@ -27,24 +27,45 @@ def index(request):
 	if subdomain:
 		return feed(request)
 	else:
-		template = loader.get_template('index/index.html')
 		return render(request, 'index/index.html', context)
 
 
 def feed(request):
+	isUser = True
+	userJackList = False
 	subdomain = getSubdomain(request.META['HTTP_HOST'])
-	userId = user.objects.filter(name = subdomain)[0].id
-	userJackList = jack.objects.order_by('date').filter(user_id = userId)
+
+	userId = user.objects.filter(name = subdomain)
+	if len(userId) > 0:
+		userId = userId[0].id
+		userJackList = jack.objects.order_by('date').filter(user_id = userId)
+		isUser = True
+	else:
+		isUser = False
 
 	context = {
 		'jack_list': userJackList,
 		'username': subdomain,
-		'title_text_a': 'lmao'
+		'title_text_a': 'lmao',
+		'is_user': isUser
 	}
 
 	print(str(context))
-	template = loader.get_template('index/feed.html')
 	return render(request, 'index/feed.html', context)
+
+def dashboard(request):
+	username = getSubdomain(request.META['HTTP_HOST'])
+
+	userId = user.objects.filter(name = subdomain)
+	if len(userId) > 0:
+		userId = userId[0].id
+		userJackList = jack.objects.order_by('date').filter(user_id = userId)
+
+	context = {
+		'jack_list': userJackList,
+		'username': username,
+	}
+	return render(request, 'index/dash.html', context)
 
 def getSubdomain(url):
 	splitUrl = url.split('.')
@@ -73,10 +94,21 @@ def handleUsercredentials(request):
 	if action == 'signup':
 		signup(username, password)
 	elif action == 'signin':
-		pass
+		print('try...' + action)
+		signin(username, password)
 
 def signin(username, password):
-	pass
+	userObject = user.objects.filter(name = username)
+	hashed_password = hashlib.sha512(password.encode()).hexdigest()
+
+	if userObject == None:
+		raise Exception('incorrect credentials')
+
+	if userObject.password == hashed_password:
+		print('success...')
+		#TODO this should then log the use in
+	else:
+		raise Exception('incorrect credentials')
 
 def signup(username, password):
 	if not username.isalnum():

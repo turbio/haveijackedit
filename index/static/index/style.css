@@ -151,3 +151,8 @@ input{
 .feed_quote{
 	font-size: 0.75em;
 }
+
+.error_page_message{
+	text-align: center;
+	margin: 0.5em;
+}
