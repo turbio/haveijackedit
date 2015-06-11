@@ -61,8 +61,7 @@ def dashboard(request):
 		userId = userId[0].id
 		userJackList = jack.objects.order_by('date').filter(user_id = userId)
 
-	context = {
-		'jack_list': userJackList,
+	context = { 'jack_list': userJackList,
 		'username': username,
 	}
 	return render(request, 'index/dash.html', context)
