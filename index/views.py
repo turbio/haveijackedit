@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from django.template import RequestContext, loader
 from .models import jack, user
 import hashlib
@@ -14,6 +15,9 @@ def index(request):
 			handleUsercredentials(request)
 		except Exception as e:
 			userError = e.args[0]
+
+	if 'user_logged_in' in request.session:
+		return HttpResponseRedirect('dash')
 
 	latest_jack = jack.objects.order_by('date')
 	if len(latest_jack) > 0:
@@ -56,18 +60,34 @@ def feed(request):
 	print(str(context))
 	return render(request, 'index/feed.html', context)
 
-def dashboard(request):
-	username = getSubdomain(request.META['HTTP_HOST'])
+def signout(request):
+	request.session.flush()
+	return HttpResponseRedirect('/')
 
-	userId = user.objects.filter(name = subdomain)
+def dashboard(request):
+	if not 'user_logged_in' in request.session:
+		return HttpResponseRedirect('')
+
+	username = request.session['user_name']
+
+	userJackList = False
+	userId = user.objects.filter(name = username)
 	if len(userId) > 0:
 		userId = userId[0].id
 		userJackList = jack.objects.order_by('date').filter(user_id = userId)
-
-	context = { 'jack_list': userJackList,
+	context = {
 		'username': username,
+		'jack_list': userJackList,
 	}
+
 	return render(request, 'index/dash.html', context)
+
+def new_jack(request):
+	print
+	if request.method == 'POST':
+		message = str(request.POST.get('new_jack', ''))
+		print(message)
+	return HttpResponseRedirect('/dash')
 
 def getSubdomain(url):
 	splitUrl = url.split('.')
@@ -96,23 +116,25 @@ def handleUsercredentials(request):
 	if action == 'signup':
 		signup(username, password)
 	elif action == 'signin':
-		signin(username, password)
+		userId = signin(username, password)
+		request.session['user_logged_in'] = True
+		request.session['user_id'] = userId
+		request.session['user_name'] = username
 
 def signin(username, password):
 	userObject = user.objects.filter(name = username)
 	if len(userObject) == 0:
 		raise Exception('incorrect credentials')
+	else:
+		userObject = userObject[0]
 	print('user object created: ' + str(userObject))
 	hashed_password = hashlib.sha512((
 		userObject.password_salt + password).encode()).hexdigest()
 	print('password hashed')
 
-
-	if userObject.password == hashed_password:
-		print('logged in')
-		#TODO this should then log the use in
+	if userObject.password_hash == hashed_password:
+		return userObject.id
 	else:
-		print('nope')
 		raise Exception('incorrect credentials')
 
 def signup(username, password):
@@ -133,4 +155,8 @@ def signup(username, password):
 	newUser.save()
 
 def userExists(username):
-	return False;
+	userObject = user.objects.filter(name = username)
+	if len(userObject) == 0:
+		return False
+	else:
+		return True
