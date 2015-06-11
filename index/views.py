@@ -1,8 +1,10 @@
 from django.shortcuts import render
+from django.conf import settings
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.template import RequestContext, loader
 from .models import jack, user, yes_word, no_word
+#import urllib
 import hashlib
 import time
 import datetime
@@ -125,6 +127,21 @@ def handleUsercredentials(request):
 		raise Exception('most provide a password')
 
 	if action == 'signup':
+		#check captcha
+		captchaClientResponse = str(request.POST.get('g-recaptcha-response', ''))
+		x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+		if x_forwarded_for:
+			ip = x_forwarded_for.split(',')[0]
+		else:
+			ip = request.META.get('REMOTE_ADDR')
+		post_data = [
+			('secret', settings.CAPTCHA_KEY),
+			('response', captchaClientResponse),
+			('remoteip', ip),
+		]
+		#result = urllib.urlopen('https://www.google.com/recaptcha/api/siteverify', urllib.urlencode(post_data))
+		#content = result.read()
+		#print(content)
 		signup(username, password)
 	elif action == 'signin':
 		userId = signin(username, password)
