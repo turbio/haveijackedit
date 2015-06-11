@@ -8,6 +8,9 @@
 </head>
 <body>
 	<div id="wrapper">
+		{% if user_error %}
+			{{ user_error }}
+		{% endif %}
 		{% if latest_jack %}
 		<div class="quote">
 			<div class="msg">{{ latest_jack.comment }}</div>

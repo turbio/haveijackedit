@@ -12,8 +12,8 @@ def index(request):
 	if request.method == 'POST':
 		try:
 			handleUsercredentials(request)
-		except:
-			userError = "yep"
+		except Exception as e:
+			userError = e.args[0]
 
 	latest_jack = jack.objects.order_by('date')
 	if len(latest_jack) > 0:
@@ -21,7 +21,10 @@ def index(request):
 	else:
 		latest_jack = None
 
-	context = {'latest_jack': latest_jack}
+	context = {
+		'latest_jack': latest_jack,
+		'user_error': userError
+	}
 
 	subdomain = getSubdomain(request.META['HTTP_HOST'])
 	if subdomain:
@@ -93,20 +96,23 @@ def handleUsercredentials(request):
 	if action == 'signup':
 		signup(username, password)
 	elif action == 'signin':
-		print('try...' + action)
 		signin(username, password)
 
 def signin(username, password):
 	userObject = user.objects.filter(name = username)
-	hashed_password = hashlib.sha512(password.encode()).hexdigest()
-
-	if userObject == None:
+	if len(userObject) == 0:
 		raise Exception('incorrect credentials')
+	print('user object created: ' + str(userObject))
+	hashed_password = hashlib.sha512((
+		userObject.password_salt + password).encode()).hexdigest()
+	print('password hashed')
+
 
 	if userObject.password == hashed_password:
-		print('success...')
+		print('logged in')
 		#TODO this should then log the use in
 	else:
+		print('nope')
 		raise Exception('incorrect credentials')
 
 def signup(username, password):
@@ -116,7 +122,7 @@ def signup(username, password):
 		raise Exception('username already exists')
 
 	hash_salt = hashlib.md5(str(time.time()).encode()).hexdigest()
-	hashed_password = hashlib.sha512(password.encode()).hexdigest()
+	hashed_password = hashlib.sha512((hash_salt + password).encode()).hexdigest()
 
 	newUser = user(
 		name=username,
