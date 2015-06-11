@@ -15,3 +15,6 @@ class jack(models.Model):
 
 class yes_word(models.Model):
 	word = models.CharField(max_length=32)
+
+class no_word(models.Model):
+	word = models.CharField(max_length=32)
