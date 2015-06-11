@@ -19,7 +19,7 @@ def index(request):
 	if 'user_logged_in' in request.session:
 		return HttpResponseRedirect('dash')
 
-	latest_jack = jack.objects.order_by('date')
+	latest_jack = jack.objects.order_by('date').reverse()
 	if len(latest_jack) > 0:
 		latest_jack = latest_jack[0]
 	else:
@@ -45,7 +45,7 @@ def feed(request):
 	userId = user.objects.filter(name = subdomain)
 	if len(userId) > 0:
 		userId = userId[0].id
-		userJackList = jack.objects.order_by('date').filter(user_id = userId)
+		userJackList = jack.objects.order_by('date').filter(user_id = userId).reverse()
 		isUser = True
 	else:
 		isUser = False
@@ -71,7 +71,7 @@ def dashboard(request):
 	username = request.session['user_name']
 
 	userId = user.objects.filter(name = username).first()
-	userJackList = jack.objects.order_by('date').filter(user_id = userId)
+	userJackList = jack.objects.order_by('date').filter(user_id = userId).reverse()
 
 	yesWord = yes_word.objects.order_by('?').first().word
 
