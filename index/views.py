@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.template import RequestContext, loader
-from .models import jack, user
+from .models import jack, user, yes_word, no_word
 import hashlib
 import time
 import datetime
@@ -70,23 +70,34 @@ def dashboard(request):
 
 	username = request.session['user_name']
 
-	userJackList = False
-	userId = user.objects.filter(name = username)
-	if len(userId) > 0:
-		userId = userId[0].id
-		userJackList = jack.objects.order_by('date').filter(user_id = userId)
+	userId = user.objects.filter(name = username).first()
+	userJackList = jack.objects.order_by('date').filter(user_id = userId)
+
+	yesWord = yes_word.objects.order_by('?').first().word
+
 	context = {
 		'username': username,
+		'yes_word': yesWord,
 		'jack_list': userJackList,
 	}
 
 	return render(request, 'index/dash.html', context)
 
 def new_jack(request):
-	print
 	if request.method == 'POST':
 		message = str(request.POST.get('new_jack', ''))
-		print(message)
+		if message[-1] == ' ':
+			message = message[0:-1]
+		if message[-1] == ',':
+			message = message[0:-1]
+
+		userObject = user.objects.filter(id = request.session['user_id']).first()
+
+		newJack = jack(
+			user_id=userObject,
+			comment=message,
+			date=datetime.datetime.today())
+		newJack.save()
 	return HttpResponseRedirect('/dash')
 
 def getSubdomain(url):
