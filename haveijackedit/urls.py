@@ -18,9 +18,11 @@ from django.contrib import admin
 from index import views
 
 urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^dash/$', views.dashboard),
-    url(r'^signout/$', views.signout),
-    url(r'^new_jack/$', views.new_jack),
-    url(r'^$', views.index),
+	url(r'^admin/', include(admin.site.urls)),
+	url(r'^dash/$', views.dashboard),
+	url(r'^signout/$', views.signout),
+	url(r'^signin/$', views.signin),
+	url(r'^signup/$', views.signup),
+	url(r'^new_jack/$', views.new_jack),
+	url(r'^$', views.index),
 ]

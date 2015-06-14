@@ -38,6 +38,49 @@ def index(request):
 	else:
 		return render(request, 'index/index.html', context)
 
+def signout(request):
+	request.session.flush()
+	return HttpResponseRedirect('/')
+
+def signin(request):
+	username = None
+	password = None
+
+	if request.method == 'POST':
+		username = str(request.POST.get('username', ''))
+		password = str(request.POST.get('password', ''))
+
+	userObject = user.objects.filter(name = username)
+	if len(userObject) == 0:
+		raise Exception('incorrect credentials')
+	else:
+		userObject = userObject[0]
+
+	hashed_password = hashlib.sha512((
+		userObject.password_salt + password).encode()).hexdigest()
+	print('password hashed')
+
+	if userObject.password_hash == hashed_password:
+		return userObject.id
+	else:
+		raise Exception('incorrect credentials')
+
+def signup(request):
+	if not username.isalnum():
+		raise Exception('username must be alphanumeric')
+	if userExists(username):
+		raise Exception('username already exists')
+
+	hash_salt = hashlib.md5(str(time.time()).encode()).hexdigest()
+	hashed_password = hashlib.sha512((hash_salt + password).encode()).hexdigest()
+
+	newUser = user(
+		name=username,
+		password_hash=hashed_password,
+		last_online=datetime.datetime.today(),
+		creation_date=datetime.datetime.today(),
+		password_salt=hash_salt)
+	newUser.save()
 
 def feed(request):
 	isUser = True
@@ -61,10 +104,6 @@ def feed(request):
 
 	print(str(context))
 	return render(request, 'index/feed.html', context)
-
-def signout(request):
-	request.session.flush()
-	return HttpResponseRedirect('/')
 
 def dashboard(request):
 	if not 'user_logged_in' in request.session:
@@ -148,39 +187,6 @@ def handleUsercredentials(request):
 		request.session['user_logged_in'] = True
 		request.session['user_id'] = userId
 		request.session['user_name'] = username
-
-def signin(username, password):
-	userObject = user.objects.filter(name = username)
-	if len(userObject) == 0:
-		raise Exception('incorrect credentials')
-	else:
-		userObject = userObject[0]
-	print('user object created: ' + str(userObject))
-	hashed_password = hashlib.sha512((
-		userObject.password_salt + password).encode()).hexdigest()
-	print('password hashed')
-
-	if userObject.password_hash == hashed_password:
-		return userObject.id
-	else:
-		raise Exception('incorrect credentials')
-
-def signup(username, password):
-	if not username.isalnum():
-		raise Exception('username must be alphanumeric')
-	if userExists(username):
-		raise Exception('username already exists')
-
-	hash_salt = hashlib.md5(str(time.time()).encode()).hexdigest()
-	hashed_password = hashlib.sha512((hash_salt + password).encode()).hexdigest()
-
-	newUser = user(
-		name=username,
-		password_hash=hashed_password,
-		last_online=datetime.datetime.today(),
-		creation_date=datetime.datetime.today(),
-		password_salt=hash_salt)
-	newUser.save()
 
 def userExists(username):
 	userObject = user.objects.filter(name = username)
