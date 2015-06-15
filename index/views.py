@@ -66,21 +66,23 @@ def signin(request):
 
 
 def signup(request):
-	if not username.isalnum():
-		raise Exception('username must be alphanumeric')
-	if userExists(username):
-		raise Exception('username already exists')
+	context = {
+		'standalone': True
+	}
 
-	hash_salt = hashlib.md5(str(time.time()).encode()).hexdigest()
-	hashed_password = hashlib.sha512((hash_salt + password).encode()).hexdigest()
+	if request.method == 'POST':
+		username = str(request.POST.get('username', ''))
+		password = str(request.POST.get('password', ''))
 
-	newUser = user(
-		name=username,
-		password_hash=hashed_password,
-		last_online=datetime.datetime.today(),
-		creation_date=datetime.datetime.today(),
-		password_salt=hash_salt)
-	newUser.save()
+		try:
+			#TODO: captcha check should be here
+			createUser(username, password)
+			signin(request)
+			return HttpResponseRedirect('/dash')
+		except Exception as e:
+			context['error'] = e.args[0]
+
+	return render(request, 'signup.html', context)
 
 def feed(request):
 	isUser = True
@@ -195,6 +197,24 @@ def userExists(username):
 		return False
 	else:
 		return True
+
+#creates user or raises exception detailing what went wrong
+def createUser(username, password):
+	if not username.isalnum():
+		raise Exception('username must be alphanumeric')
+	if userExists(username):
+		raise Exception('username already exists')
+
+	hash_salt = hashlib.md5(str(time.time()).encode()).hexdigest()
+	hashed_password = hashlib.sha512((hash_salt + password).encode()).hexdigest()
+
+	newUser = user(
+		name=username,
+		password_hash=hashed_password,
+		last_online=datetime.datetime.today(),
+		creation_date=datetime.datetime.today(),
+		password_salt=hash_salt)
+	newUser.save()
 
 #returns an id if username matches password, otherwise throws an exception
 def checkCred(username, password):
