@@ -1,12 +1,8 @@
-<html>
-<head>
-	{% load staticfiles %}
-	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport'/>
-	<script src='https://www.google.com/recaptcha/api.js'></script>
-	<link rel="stylesheet" type="text/css" href="/static/style.css" />
+{% extends "base.html" %}
+{% block head %}
 	<script src="/static/account_action.js"></script>
-</head>
-<body>
+{% endblock %}
+{% block content %}
 {% if is_user %}
 	<div id="wrapper">
 		<div id="feed_title_box">
@@ -31,9 +27,11 @@
 	<div class="error_page_message">
 		doesn't look like this user exists
 		<div><a href="http://haveijackedit.com">
+			take this url
+		</a></div>
+		<div><a href="http://haveijackedit.com">
 			return to index
 		</a></div>
 	</div>
 {% endif %}
-</body>
-</html>
+{% endblock %}

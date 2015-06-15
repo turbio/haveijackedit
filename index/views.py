@@ -43,27 +43,27 @@ def signout(request):
 	return HttpResponseRedirect('/')
 
 def signin(request):
-	username = None
-	password = None
+	context = {
+		'standalone': True,
+	}
 
 	if request.method == 'POST':
 		username = str(request.POST.get('username', ''))
 		password = str(request.POST.get('password', ''))
 
-	userObject = user.objects.filter(name = username)
-	if len(userObject) == 0:
-		raise Exception('incorrect credentials')
-	else:
-		userObject = userObject[0]
+	try:
+		userId = checkCred(username, password)
 
-	hashed_password = hashlib.sha512((
-		userObject.password_salt + password).encode()).hexdigest()
-	print('password hashed')
+		request.session['user_logged_in'] = True
+		request.session['user_id'] = userId
+		request.session['user_name'] = username
 
-	if userObject.password_hash == hashed_password:
-		return userObject.id
-	else:
-		raise Exception('incorrect credentials')
+		return HttpResponseRedirect('/dash')
+	except Exception as e:
+		context['error'] = e.args[0]
+
+	return render(request, 'signin.html', context)
+
 
 def signup(request):
 	if not username.isalnum():
@@ -188,9 +188,32 @@ def handleUsercredentials(request):
 		request.session['user_id'] = userId
 		request.session['user_name'] = username
 
+#returns True if a use with username exists, otherwise returns false
 def userExists(username):
 	userObject = user.objects.filter(name = username)
 	if len(userObject) == 0:
 		return False
 	else:
 		return True
+
+#returns an id if username matches password, otherwise throws an exception
+def checkCred(username, password):
+	if(username == None or username == ''):
+		raise Exception('must provide a username')
+	if(password == None or password == ''):
+		raise Exception('must provide a password')
+
+	userObject = user.objects.filter(name = username)
+	if len(userObject) == 0:
+		raise Exception('incorrect credentials')
+	else:
+		userObject = userObject[0]
+
+	hashed_password = hashlib.sha512((
+		userObject.password_salt + password).encode()).hexdigest()
+
+	if userObject.password_hash == hashed_password:
+		return userObject.id
+	else:
+		raise Exception('incorrect credentials')
+
