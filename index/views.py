@@ -51,16 +51,16 @@ def signin(request):
 		username = str(request.POST.get('username', ''))
 		password = str(request.POST.get('password', ''))
 
-	try:
-		userId = checkCred(username, password)
+		try:
+			userId = checkCred(username, password)
 
-		request.session['user_logged_in'] = True
-		request.session['user_id'] = userId
-		request.session['user_name'] = username
+			request.session['user_logged_in'] = True
+			request.session['user_id'] = userId
+			request.session['user_name'] = username
 
-		return HttpResponseRedirect('/dash')
-	except Exception as e:
-		context['error'] = e.args[0]
+			return HttpResponseRedirect('/dash')
+		except Exception as e:
+			context['error'] = e.args[0]
 
 	return render(request, 'signin.html', context)
 
