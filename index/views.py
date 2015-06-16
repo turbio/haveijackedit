@@ -28,7 +28,8 @@ def index(request):
 		latest_jack = None
 
 	context = {
-		'latest_jack': latest_jack,
+		'jack': latest_jack,
+		'host': "haveijackedit.com",
 		'user_error': userError
 	}
 

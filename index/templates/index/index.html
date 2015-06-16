@@ -5,12 +5,9 @@
 {% endblock %}
 {% block content %}
 	<div id="wrapper">
-		{% if latest_jack %}
+		{% if jack %}
 			<div id="title">Have I jacked it?</div>
-			<div class="quote">
-				<div class="msg">{{ latest_jack.comment }}</div>
-				<div class="name">&ndash;{{ latest_jack.user_id.name }}<!--,{{ latest_jack.date.year }}--></div>
-			</div>
+			{% include "quote.html" %}
 		{% else %}
 			nothing yet...
 		{% endif %}

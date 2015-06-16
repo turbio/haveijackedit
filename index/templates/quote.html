@@ -1,0 +1,6 @@
+{% if jack %}
+<div class="quote">
+	<div class="msg">{{ jack.comment }}</div>
+	<a href="http://{{ jack.user_id.name }}.{{ host }}"><div class="name">&ndash;{{ jack.user_id.name }}</div></a>
+</div>
+{% endif %}
