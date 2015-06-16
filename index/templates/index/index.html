@@ -1,22 +1,16 @@
-<html>
-<head>
-	{% load staticfiles %}
-	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport'/>
-	<script src='https://www.google.com/recaptcha/api.js'></script>
-	<link rel="stylesheet" type="text/css" href="/static/style.css" />
+{% extends "base.html" %}
+{% block head %}
 	<script src="/static/account_action.js"></script>
-</head>
-<body>
+	<script src='https://www.google.com/recaptcha/api.js'></script>
+{% endblock %}
+{% block content %}
 	<div id="wrapper">
-		{% if user_error %}
-			{{ user_error }}
-		{% endif %}
 		{% if latest_jack %}
-		<div id="title">Have I jacked it?</div>
-		<div class="quote">
-			<div class="msg">{{ latest_jack.comment }}</div>
-			<div class="name">&ndash;{{ latest_jack.user_id.name }}<!--,{{ latest_jack.date.year }}--></div>
-		</div>
+			<div id="title">Have I jacked it?</div>
+			<div class="quote">
+				<div class="msg">{{ latest_jack.comment }}</div>
+				<div class="name">&ndash;{{ latest_jack.user_id.name }}<!--,{{ latest_jack.date.year }}--></div>
+			</div>
 		{% else %}
 			nothing yet...
 		{% endif %}
@@ -25,30 +19,13 @@
 			<div><a id="signin_link" href="#" onclick="show_signin()">sign in</a></div>
 		</div>
 	</div>
-	<!--<div id="signup" class="account_dialog">-->
-		<!--<form method="POST">{% csrf_token %}sign up<br/>-->
-			<!--<input type='hidden' name='action' value='signup'/>-->
-			<!--<div class="error_box" id="signup_error"></div>-->
-			<!--<input id="signup_username" class="text_box" type="text" name="username" placeholder="username" onchange="username_entered()" autofocus/>-->
-			<!--<br/>-->
-			<!--<input class="text_box" type="password" name="password" placeholder="password"/>-->
-			<!--<br/>-->
-			<!--<div id="captcha" class="g-recaptcha" data-sitekey="6LeJ2gcTAAAAAJjYYMTcPqa9ZmjqHeVy-MZZTGqs"></div>-->
-			<!--<br/>-->
-			<!--<input type="submit" name="submin" value="sign up"/>-->
-		<!--</form>-->
-		<!--<a href="#" onclick="hide_dialog()">back</a>-->
-	<!--</div>-->
+	<!--signin-->
 	<div id="signin" class="account_dialog">
-		<form method="POST" action="/signin/">{% csrf_token %}sign in<br/>
-			<input type='hidden' name='action' value='signin'/>
-			<input class="text_box" type="text" name="username" placeholder="username" autofocus/>
-			<br/>
-			<input class="text_box" type="password" name="password" placeholder="password"/>
-			<br/>
-			<input type="submit" name="submit" value="sign in"/>
-		</form>
+		{% include "signin.html" %}
 		<a href="#" onclick="hide_dialog()">back</a>
 	</div>
-</body>
-</html>
+	<div id="signup" class="account_dialog">
+		{% include "signup.html" %}
+		<a href="#" onclick="hide_dialog()">back</a>
+	</div>
+{% endblock %}

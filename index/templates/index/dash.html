@@ -1,12 +1,8 @@
-<html>
-<head>
-	{% load staticfiles %}
-	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport'/>
-	<script src='https://www.google.com/recaptcha/api.js'></script>
-	<link rel="stylesheet" type="text/css" href="/static/style.css" />
+{% extends "base.html" %}
+{% block head %}
 	<script src="/static/dash_action.js"></script>
-</head>
-<body>
+{% endblock %}
+{% block content %}
 	<div id="wrapper">
 		<div id="account_opt_box">
 			<a href="#">settings</a>
@@ -27,14 +23,11 @@
 				<input id="submit_jack_submit" type="submit" value="submit"/>
 			</form>
 		</div>
-	{% if jack_list %}
-	{% for jack in jack_list %}
+	{% if jack_list %}{% for jack in jack_list %}
 		<div class="quote feed_quote">
 			<div class="msg">{{ jack.comment }}</div>
 			<div class="name">&ndash;you, {{ jack.date }}</div>
 		</div>
-	{% endfor %}
-	{% endif %}
+	{% endfor %}{% endif %}
 	</div>
-</body>
-</html>
+{% endblock %}

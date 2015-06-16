@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% if standalone %}
+	{% block head %}
+		<script src="/static/account_action.js"></script>
+	{% endblock %}
+	{% block content %}
+		<form method="POST" action="/signin/">{% csrf_token %}sign in<br/>
+			{% if error %}
+				<div class="error_box">{{ error }}</div>
+			{% endif %}
+			<input type='hidden' name='action' value='signin'/>
+			<input class="text_box" type="text" name="username" placeholder="username" autofocus/>
+			<br/>
+			<input class="text_box" type="password" name="password" placeholder="password"/>
+			<br/>
+			<input type="submit" name="submit" value="sign in"/>
+		</form>
+	{% endblock %}
+{% else %}
+	<form method="POST" action="/signin/">{% csrf_token %}sign in<br/>
+		<input type='hidden' name='action' value='signin'/>
+		<input class="text_box" type="text" name="username" placeholder="username" autofocus/>
+		<br/>
+		<input class="text_box" type="password" name="password" placeholder="password"/>
+		<br/>
+		<input type="submit" name="submit" value="sign in"/>
+	</form>
+{% endif %}

@@ -43,44 +43,46 @@ def signout(request):
 	return HttpResponseRedirect('/dash/')
 
 def signin(request):
-	username = None
-	password = None
+	context = {
+		'standalone': True,
+	}
 
 	if request.method == 'POST':
 		username = str(request.POST.get('username', ''))
 		password = str(request.POST.get('password', ''))
 
-	userObject = user.objects.filter(name = username)
-	if len(userObject) == 0:
-		raise Exception('incorrect credentials')
-	else:
-		userObject = userObject[0]
+		try:
+			userId = checkCred(username, password)
 
-	hashed_password = hashlib.sha512((
-		userObject.password_salt + password).encode()).hexdigest()
-	print('password hashed')
+			request.session['user_logged_in'] = True
+			request.session['user_id'] = userId
+			request.session['user_name'] = username
 
-	if userObject.password_hash == hashed_password:
-		return userObject.id
-	else:
-		raise Exception('incorrect credentials')
+			return HttpResponseRedirect('/dash')
+		except Exception as e:
+			context['error'] = e.args[0]
+
+	return render(request, 'signin.html', context)
+
 
 def signup(request):
-	if not username.isalnum():
-		raise Exception('username must be alphanumeric')
-	if userExists(username):
-		raise Exception('username already exists')
+	context = {
+		'standalone': True
+	}
 
-	hash_salt = hashlib.md5(str(time.time()).encode()).hexdigest()
-	hashed_password = hashlib.sha512((hash_salt + password).encode()).hexdigest()
+	if request.method == 'POST':
+		username = str(request.POST.get('username', ''))
+		password = str(request.POST.get('password', ''))
 
-	newUser = user(
-		name=username,
-		password_hash=hashed_password,
-		last_online=datetime.datetime.today(),
-		creation_date=datetime.datetime.today(),
-		password_salt=hash_salt)
-	newUser.save()
+		try:
+			#TODO: captcha check should be here
+			createUser(username, password)
+			signin(request)
+			return HttpResponseRedirect('/dash')
+		except Exception as e:
+			context['error'] = e.args[0]
+
+	return render(request, 'signup.html', context)
 
 def feed(request):
 	isUser = True
@@ -188,9 +190,50 @@ def handleUsercredentials(request):
 		request.session['user_id'] = userId
 		request.session['user_name'] = username
 
+#returns True if a use with username exists, otherwise returns false
 def userExists(username):
 	userObject = user.objects.filter(name = username)
 	if len(userObject) == 0:
 		return False
 	else:
 		return True
+
+#creates user or raises exception detailing what went wrong
+def createUser(username, password):
+	if not username.isalnum():
+		raise Exception('username must be alphanumeric')
+	if userExists(username):
+		raise Exception('username already exists')
+
+	hash_salt = hashlib.md5(str(time.time()).encode()).hexdigest()
+	hashed_password = hashlib.sha512((hash_salt + password).encode()).hexdigest()
+
+	newUser = user(
+		name=username,
+		password_hash=hashed_password,
+		last_online=datetime.datetime.today(),
+		creation_date=datetime.datetime.today(),
+		password_salt=hash_salt)
+	newUser.save()
+
+#returns an id if username matches password, otherwise throws an exception
+def checkCred(username, password):
+	if(username == None or username == ''):
+		raise Exception('must provide a username')
+	if(password == None or password == ''):
+		raise Exception('must provide a password')
+
+	userObject = user.objects.filter(name = username)
+	if len(userObject) == 0:
+		raise Exception('incorrect credentials')
+	else:
+		userObject = userObject[0]
+
+	hashed_password = hashlib.sha512((
+		userObject.password_salt + password).encode()).hexdigest()
+
+	if userObject.password_hash == hashed_password:
+		return userObject.id
+	else:
+		raise Exception('incorrect credentials')
+
