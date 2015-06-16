@@ -15,9 +15,8 @@
 		</div>
 	{% if jack_list %}
 	{% for jack in jack_list %}
-		<div class="quote feed_quote">
-			<div class="msg">{{ jack.comment }}</div>
-			<div class="name">&ndash;{{ username }}</div>
+		<div class="feed_quote">
+			{% include "quote.html" %}
 		</div>
 	{% endfor %}
 	{% else %}

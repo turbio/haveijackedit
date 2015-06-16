@@ -99,6 +99,7 @@ def feed(request):
 		isUser = False
 
 	context = {
+		'host': "haveijackedit.com",
 		'jack_list': userJackList,
 		'username': subdomain,
 		'title_text_a': 'lmao',
