@@ -19,7 +19,7 @@ def index(request):
 			userError = e.args[0]
 
 	if 'user_logged_in' in request.session:
-		return HttpResponseRedirect('dash')
+		return HttpResponseRedirect('/dash/')
 
 	latest_jack = jack.objects.order_by('date').reverse()
 	if len(latest_jack) > 0:
@@ -40,7 +40,7 @@ def index(request):
 
 def signout(request):
 	request.session.flush()
-	return HttpResponseRedirect('/')
+	return HttpResponseRedirect('/dash/')
 
 def signin(request):
 	username = None
@@ -107,7 +107,7 @@ def feed(request):
 
 def dashboard(request):
 	if not 'user_logged_in' in request.session:
-		return HttpResponseRedirect('')
+		return HttpResponseRedirect('/')
 
 	username = request.session['user_name']
 
@@ -139,7 +139,7 @@ def new_jack(request):
 			comment=message,
 			date=datetime.datetime.today())
 		newJack.save()
-	return HttpResponseRedirect('/dash')
+	return HttpResponseRedirect('/dash/')
 
 def getSubdomain(url):
 	splitUrl = url.split('.')
