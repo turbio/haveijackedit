@@ -4,20 +4,15 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.template import RequestContext, loader
 from .models import jack, user, yes_word, no_word
-#import urllib
+import urllib.request
+import urllib.parse
+import json
 import hashlib
 import time
 import datetime
 
 # Create your views here.
 def index(request):
-	userError = False
-	if request.method == 'POST':
-		try:
-			handleUsercredentials(request)
-		except Exception as e:
-			userError = e.args[0]
-
 	if 'user_logged_in' in request.session:
 		return HttpResponseRedirect('/dash/')
 
@@ -31,7 +26,6 @@ def index(request):
 		'show_username': True,
 		'jack': latest_jack,
 		'host': "haveijackedit.com",
-		'user_error': userError
 	}
 
 	subdomain = getSubdomain(request.META['HTTP_HOST'])
@@ -77,7 +71,34 @@ def signup(request):
 		password = str(request.POST.get('password', ''))
 
 		try:
-			#TODO: captcha check should be here
+			captchaClientResponse = str(request.POST.get('g-recaptcha-response', ''))
+
+			#get the users ip
+			x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+			if x_forwarded_for:
+				ip = x_forwarded_for.split(',')[0]
+			else:
+				ip = request.META.get('REMOTE_ADDR')
+
+			#information to send to google
+			captchaData = {
+				'secret': settings.CAPTCHA_KEY,
+				'response': captchaClientResponse,
+				'remoteip': ip,
+			}
+			encodedPostData = urllib.parse.urlencode(captchaData).encode('utf-8')
+
+			captchaRequest = urllib.request.Request(settings.CAPTCHA_URL)
+			captchaRequest.add_header("Content-Type","application/x-www-form-urlencoded;charset=utf-8")
+
+			captchaResponse = ''
+			with urllib.request.urlopen(captchaRequest, encodedPostData) as f:
+				captchaResponse += f.read().decode('utf-8')
+
+			decodedCaptchaResponse = json.loads(captchaResponse)
+			if not decodedCaptchaResponse['success']:
+				raise Exception('must verify captcha')
+
 			createUser(username, password)
 			signin(request)
 			return HttpResponseRedirect('/dash')
@@ -168,38 +189,38 @@ def getSubdomain(url):
 
 	return False
 
-def handleUsercredentials(request):
-	username = str(request.POST.get('username', ''))
-	password = str(request.POST.get('password', ''))
-	action = str(request.POST.get('action', ''))
+#def handleUsercredentials(request):
+	#username = str(request.POST.get('username', ''))
+	#password = str(request.POST.get('password', ''))
+	#action = str(request.POST.get('action', ''))
 
-	if username == '':
-		raise Exception('most provide a username')
-	if password == '':
-		raise Exception('most provide a password')
+	#if username == '':
+		#raise Exception('most provide a username')
+	#if password == '':
+		#raise Exception('most provide a password')
 
-	if action == 'signup':
-		#check captcha
-		captchaClientResponse = str(request.POST.get('g-recaptcha-response', ''))
-		x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-		if x_forwarded_for:
-			ip = x_forwarded_for.split(',')[0]
-		else:
-			ip = request.META.get('REMOTE_ADDR')
-		post_data = [
-			('secret', settings.CAPTCHA_KEY),
-			('response', captchaClientResponse),
-			('remoteip', ip),
-		]
-		#result = urllib.urlopen('https://www.google.com/recaptcha/api/siteverify', urllib.urlencode(post_data))
-		#content = result.read()
-		#print(content)
-		signup(username, password)
-	elif action == 'signin':
-		userId = signin(username, password)
-		request.session['user_logged_in'] = True
-		request.session['user_id'] = userId
-		request.session['user_name'] = username
+	#if action == 'signup':
+		##check captcha
+		#captchaClientResponse = str(request.POST.get('g-recaptcha-response', ''))
+		#x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+		#if x_forwarded_for:
+			#ip = x_forwarded_for.split(',')[0]
+		#else:
+			#ip = request.META.get('REMOTE_ADDR')
+		#post_data = [
+			#('secret', settings.CAPTCHA_KEY),
+			#('response', captchaClientResponse),
+			#('remoteip', ip),
+		#]
+		##result = urllib.urlopen('https://www.google.com/recaptcha/api/siteverify', urllib.urlencode(post_data))
+		##content = result.read()
+		##print(content)
+		#signup(username, password)
+	#elif action == 'signin':
+		#userId = signin(username, password)
+		#request.session['user_logged_in'] = True
+		#request.session['user_id'] = userId
+		#request.session['user_name'] = username
 
 #returns True if a use with username exists, otherwise returns false
 def userExists(username):
@@ -211,6 +232,8 @@ def userExists(username):
 
 #creates user or raises exception detailing what went wrong
 def createUser(username, password):
+	if username == '':
+		raise Exception('must supply a username')
 	if not username.isalnum():
 		raise Exception('username must be alphanumeric')
 	if userExists(username):
