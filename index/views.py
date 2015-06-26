@@ -28,6 +28,7 @@ def index(request):
 		latest_jack = None
 
 	context = {
+		'show_username': True,
 		'jack': latest_jack,
 		'host': "haveijackedit.com",
 		'user_error': userError
@@ -99,6 +100,7 @@ def feed(request):
 		isUser = False
 
 	context = {
+		'show_username': True,
 		'host': "haveijackedit.com",
 		'jack_list': userJackList,
 		'username': subdomain,
@@ -121,6 +123,8 @@ def dashboard(request):
 	yesWord = yes_word.objects.order_by('?').first().word
 
 	context = {
+		'host': "haveijackedit.com",
+		'show_date': True,
 		'username': username,
 		'yes_word': yesWord,
 		'jack_list': userJackList,

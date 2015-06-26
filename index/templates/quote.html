@@ -1,6 +1,6 @@
 {% if jack %}
 <div class="quote">
 	<div class="msg">{{ jack.comment }}</div>
-	<a href="http://{{ jack.user_id.name }}.{{ host }}"><div class="name">&ndash;{{ jack.user_id.name }}</div></a>
+	<a href="http://{{ jack.user_id.name }}.{{ host }}"><div class="name">&ndash;{% if show_username %}{{ jack.user_id.name }}{% else %}you{% endif %}{% if show_date %}, {{ jack.date.month }}/{{ jack.date.day }}/{{ jack.date.year }}{% endif %}</div></a>
 </div>
 {% endif %}
