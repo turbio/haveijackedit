@@ -1,3 +1,8 @@
+var addedPunc = false;
+
 function add_punc(){
-	document.getElementById("new_jack_box").innerHTML += ', '
+	if(!addedPunc){
+		document.getElementById("new_jack_box").innerHTML += ', ';
+		addedPunc = true;
+	}
 }

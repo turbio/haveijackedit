@@ -120,7 +120,12 @@ def dashboard(request):
 	userId = user.objects.filter(name = username).first()
 	userJackList = jack.objects.order_by('date').filter(user_id = userId).reverse()
 
-	yesWord = yes_word.objects.order_by('?').first().word
+	yesWord = yes_word.objects.order_by('?').first()
+
+	if yesWord == None:
+		yesWord = 'yes'
+	else:
+		yesWord = yesWord.word
 
 	context = {
 		'host': "haveijackedit.com",
