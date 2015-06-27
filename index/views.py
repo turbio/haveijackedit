@@ -129,7 +129,6 @@ def feed(request):
 		'is_user': isUser
 	}
 
-	print(str(context))
 	return render(request, 'index/feed.html', context)
 
 def dashboard(request):
