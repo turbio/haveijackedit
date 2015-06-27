@@ -9,14 +9,13 @@
 			<div id="feed_title_q">
 				Have you jacked it today?
 			</div>
-			<!--<div id="feed_title_a">-->
-				<!--{{ title_text_a }}-->
-			<!--</div>-->
 		</div>
 		<div id="new_jack_form">
 			<form method="POST" action="/new_jack/">{% csrf_token %}
-				<textarea id="new_jack_box" name="new_jack" onClick="add_punc();">{{ yes_word }}</textarea>
+				<!--<textarea id="new_jack_box" name="new_jack" onKeyDown="textChange()" onchange="textChange()" onClick="add_punc();">{{ yes_word }}</textarea>-->
+				<div contentEditable="true" id="new_jack_box" name="new_jack" onKeyUp="textChange()" onchange="textChange()" onClick="add_punc(); textChange()">{{ yes_word }}</div>
 				<input id="submit_jack_submit" type="submit" value="submit"/>
+				<div id="remaining_chars"></div>
 			</form>
 		</div>
 	{% if jack_list %}{% for jack in jack_list %}

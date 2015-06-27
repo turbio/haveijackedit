@@ -6,3 +6,9 @@ function add_punc(){
 		addedPunc = true;
 	}
 }
+
+function textChange(){
+	jackChars = document.getElementById("new_jack_box").innerHTML;
+	usedChars = jackChars.length;
+	document.getElementById("remaining_chars").innerHTML = (usedChars + '/160');
+}
