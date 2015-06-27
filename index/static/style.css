@@ -86,6 +86,10 @@ textarea{
 	outline: 0;
 }
 
+input[type=submit]{
+	transition: all .2s;
+}
+
 input[type=submit]:hover{
 	background: #888;
 	color: #fff;
@@ -254,20 +258,32 @@ form{
 }
 
 #home_icon{
-	background-image: url(/static/home.svg);
+	background-image: url(/static/home_white.svg);
+}
+#home_icon:hover{
+	background-image: url(/static/home_black.svg);
 }
 
 #settings_icon{
-	background-image: url(/static/settings.svg);
+	background-image: url(/static/settings_white.svg);
 	float: right;
+}
+#settings_icon:hover{
+	background-image: url(/static/settings_black.svg);
 }
 
 #dash_icon{
-	background-image: url(/static/dash.svg);
+	background-image: url(/static/dash_white.svg);
 	float: right;
+}
+#dash_icon:hover{
+	background-image: url(/static/dash_black.svg);
 }
 
 #exit_icon{
-	background-image: url(/static/exit.svg);
+	background-image: url(/static/exit_white.svg);
 	float: right;
+}
+#exit_icon:hover{
+	background-image: url(/static/exit_black.svg);
 }
