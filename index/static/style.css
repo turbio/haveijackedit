@@ -86,6 +86,11 @@ textarea{
 	outline: 0;
 }
 
+input[type=submit]:hover{
+	background: #888;
+	color: #fff;
+}
+
 form{
 	margin: 0;
 	padding: 0;
@@ -236,7 +241,7 @@ form{
 }
 
 .icon:hover{
-	background-color: grey;
+	background-color: #fff;
 	cursor: pointer;
 }
 
@@ -251,14 +256,17 @@ form{
 #home_icon{
 	background-image: url(/static/home.svg);
 }
+
 #settings_icon{
 	background-image: url(/static/settings.svg);
 	float: right;
 }
+
 #dash_icon{
 	background-image: url(/static/dash.svg);
 	float: right;
 }
+
 #exit_icon{
 	background-image: url(/static/exit.svg);
 	float: right;
