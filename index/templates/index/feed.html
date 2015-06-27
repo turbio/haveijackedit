@@ -5,6 +5,7 @@
 {% block content %}
 {% if is_user %}
 	<div id="wrapper">
+		{% include "titlebar.html" %}
 		<div id="feed_title_box">
 			<div id="feed_title_q">
 				Has {{ username }} jacked it today?
@@ -25,11 +26,11 @@
 {% else %}
 	<div class="error_page_message">
 		doesn't look like this user exists
-		<div><a href="http://haveijackedit.com">
+		<div><a href="http://haveijackedit.com?url={{ username }}">
 			take this url
 		</a></div>
 		<div><a href="http://haveijackedit.com">
-			return to index
+			return home
 		</a></div>
 	</div>
 {% endif %}

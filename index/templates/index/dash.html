@@ -4,11 +4,7 @@
 {% endblock %}
 {% block content %}
 	<div id="wrapper">
-		<div id="account_opt_box">
-			<a href="#">settings</a>
-			|
-			<a href="/signout">signout</a>
-		</div>
+		{% include "titlebar.html" %}
 		<div id="feed_title_box">
 			<div id="feed_title_q">
 				Have you jacked it today?

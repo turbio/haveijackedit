@@ -13,8 +13,8 @@ import datetime
 
 # Create your views here.
 def index(request):
-	if 'user_logged_in' in request.session:
-		return HttpResponseRedirect('/dash/')
+	#if 'user_logged_in' in request.session:
+		#return HttpResponseRedirect('/dash/')
 
 	latest_jack = jack.objects.order_by('date').reverse()
 	if len(latest_jack) > 0:
@@ -26,6 +26,7 @@ def index(request):
 		'show_username': True,
 		'jack': latest_jack,
 		'host': "haveijackedit.com",
+		'signed_in': 'user_logged_in' in request.session,
 	}
 
 	subdomain = getSubdomain(request.META['HTTP_HOST'])
@@ -39,9 +40,7 @@ def signout(request):
 	return HttpResponseRedirect('/dash/')
 
 def signin(request):
-	context = {
-		'standalone': True,
-	}
+	context = {}
 
 	if request.method == 'POST':
 		username = str(request.POST.get('username', ''))
@@ -58,13 +57,11 @@ def signin(request):
 		except Exception as e:
 			context['error'] = e.args[0]
 
-	return render(request, 'signin.html', context)
+	return render(request, 'signin_standalone.html', context)
 
 
 def signup(request):
-	context = {
-		'standalone': True
-	}
+	context = { }
 
 	if request.method == 'POST':
 		username = str(request.POST.get('username', ''))
@@ -105,7 +102,7 @@ def signup(request):
 		except Exception as e:
 			context['error'] = e.args[0]
 
-	return render(request, 'signup.html', context)
+	return render(request, 'signup_standalone.html', context)
 
 def feed(request):
 	isUser = True
@@ -126,7 +123,8 @@ def feed(request):
 		'jack_list': userJackList,
 		'username': subdomain,
 		'title_text_a': 'lmao',
-		'is_user': isUser
+		'is_user': isUser,
+		'signed_in': 'user_logged_in' in request.session,
 	}
 
 	return render(request, 'index/feed.html', context)
@@ -153,6 +151,7 @@ def dashboard(request):
 		'username': username,
 		'yes_word': yesWord,
 		'jack_list': userJackList,
+		'signed_in': 'user_logged_in' in request.session,
 	}
 
 	return render(request, 'index/dash.html', context)

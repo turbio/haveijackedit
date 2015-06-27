@@ -223,3 +223,43 @@ form{
 	font-weight: bold;
 	margin: 0.25em;
 }
+
+#title_bar{
+	position: relative;
+	top: 0;
+	left: 0;
+	right: 0;
+
+	background: #000;
+	color: #fff;
+	height: 1em;
+}
+
+.icon:hover{
+	background-color: grey;
+	cursor: pointer;
+}
+
+.icon{
+	width: 1em;
+	height: 1em;
+	background-repeat: no-repeat;
+	background-size: 100%;
+	float: left;
+}
+
+#home_icon{
+	background-image: url(/static/home.svg);
+}
+#settings_icon{
+	background-image: url(/static/settings.svg);
+	float: right;
+}
+#dash_icon{
+	background-image: url(/static/dash.svg);
+	float: right;
+}
+#exit_icon{
+	background-image: url(/static/exit.svg);
+	float: right;
+}

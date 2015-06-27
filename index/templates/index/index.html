@@ -5,6 +5,7 @@
 {% endblock %}
 {% block content %}
 	<div id="wrapper">
+		{% include "titlebar.html" %}
 		{% if jack %}
 			<div id="title">Have I jacked it?</div>
 			{% include "quote.html" %}
@@ -12,11 +13,12 @@
 			nothing yet...
 		{% endif %}
 		<div id="footer">
+			{% if not signed_in %}
 			<div><a id="signup_link" href="#" onclick="show_signup()">get your own</a></div>
 			<div><a id="signin_link" href="#" onclick="show_signin()">sign in</a></div>
+			{% endif %}
 		</div>
 	</div>
-	<!--signin-->
 	<div id="signin" class="account_dialog">
 		{% include "signin.html" %}
 		<a href="#" onclick="hide_dialog()">back</a>
