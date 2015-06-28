@@ -5,6 +5,9 @@
 {% endblock %}
 {% block content %}
 	<div id="wrapper">
+		{% if not signed_in %}
+		<span id="forkongithub"><a href="https://github.com/turbio/haveijackedit">Fork me on GitHub</a></span>
+		{% endif %}
 		{% include "titlebar.html" %}
 		{% if jack %}
 			<div id="title">Have I jacked it?</div>
