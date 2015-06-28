@@ -12,9 +12,11 @@
 		</div>
 		<div id="new_jack_form">
 			<form method="POST" action="/new_jack/">{% csrf_token %}
-				<!--<textarea id="new_jack_box" name="new_jack" onKeyDown="textChange()" onchange="textChange()" onClick="add_punc();">{{ yes_word }}</textarea>-->
-				<div contentEditable="true" id="new_jack_box" name="new_jack" onKeyUp="textChange()" onchange="textChange()" onClick="add_punc(); textChange()">{{ yes_word }}</div>
+				<div contentEditable="true" id="new_jack_box" name="new_jack" onKeyDown="textChange()" onKeyUp="textChange()" onchange="textChange()" onClick="add_punc(); textChange()">{{ yes_word }}</div>
 				<input id="submit_jack_submit" type="submit" value="submit"/>
+				<div class="jack_box_button">a</div>
+				<div class="jack_box_button">b</div>
+				<div class="jack_box_button">c</div>
 				<div id="remaining_chars"></div>
 			</form>
 		</div>

@@ -192,7 +192,7 @@ form{
 
 @media (max-width: 600px){
 	#new_jack_form{
-		width: 95%;
+		/*width: 100%;*/
 	}
 }
 
@@ -203,34 +203,47 @@ form{
 }
 
 #new_jack_form{
-	height: 2.25em;
 	text-align: center;
-	position: relative;
 	margin-right: auto;
 	margin-left: auto;
 	border: solid;
 	border-color: #888;
+	overflow: hidden;
+	height: 1.5em;
+}
+.jack_box_button:hover{
+	background-color: #888;
+	color: #fff;
+	transition: all .2s;
+}
+
+.jack_box_button{
+	cursor: pointer;
+	border: solid;
+	border-color: #888;
+	border-bottom: none;
+	border-right: none;
+	float: right;
+	height: 1.5em;
+	font-size: 0.5em;
 }
 
 #new_jack_box{
+	margin: .25em;
 	resize: none;
 	font-size: 0.5em;
 	background: white;
 	outline: 0;
-	position: absolute;
-	right: 0;
-	top: 0;
-	left: 0;
 	border: none;
-	background: red;
+	/*background: red;*/
+	text-align: left;
 }
 
 #submit_jack_submit{
-	position: absolute;
-	right: 0;
-	bottom: 0;
 	border-bottom: none;
 	border-right: none;
+	float: right;
+	height: 1.5em;
 }
 
 #title{
@@ -296,11 +309,14 @@ form{
 }
 
 #remaining_chars{
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	font-size: .5em;
+	/*float: left;*/
+	height: 1.5em;
+
+	font-size: 0.5em;
 	color: #888;
+
+	display: table-cell;
+	vertical-align: bottom;
 }
 
 #forkongithub a{
@@ -314,7 +330,7 @@ form{
 	font-size:1rem;
 	line-height:2rem;
 	position:relative;
-	transition:0.5s;
+	transition: 0.5s;
 }
 #forkongithub a:hover{
 	background:#fff;
