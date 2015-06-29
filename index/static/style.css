@@ -387,3 +387,24 @@ form{
 		display: none;
 	}
 }
+
+#location_button{
+	background-image: url(/static/location_off_black.svg);
+	width: 1.4em;
+	background-repeat: no-repeat;
+	background-size: 100%;
+}
+
+#image_button{
+	background-image: url(/static/insert_photo_black.svg);
+	width: 1.4em;
+	background-repeat: no-repeat;
+	background-size: 100%;
+}
+
+#link_button{
+	background-image: url(/static/attach_file_black.svg);
+	width: 1.4em;
+	background-repeat: no-repeat;
+	background-size: 100%;
+}

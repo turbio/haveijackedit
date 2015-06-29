@@ -159,10 +159,10 @@ def dashboard(request):
 def new_jack(request):
 	if request.method == 'POST':
 		message = str(request.POST.get('new_jack', ''))
-		if message[-1] == ' ':
-			message = message[0:-1]
-		if message[-1] == ',':
-			message = message[0:-1]
+		#if message[-1] == ' ':
+			#message = message[0:-1]
+		#if message[-1] == ',':
+			#message = message[0:-1]
 
 		userObject = user.objects.filter(id = request.session['user_id']).first()
 
