@@ -112,4 +112,5 @@ function showPosition(position) {
 	map.mapTypes.set(MY_MAPTYPE_ID, customMapType);
 
 	document.getElementById("geolocation_map").style.display = 'block';
+	document.getElementById("location_button").style['background-image'] = 'url("/static/location_on_black.svg")';
 }
