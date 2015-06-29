@@ -208,8 +208,8 @@ form{
 	margin-left: auto;
 	border: solid;
 	border-color: #888;
-	overflow: hidden;
-	height: 1.5em;
+	/*overflow: hidden;*/
+	/*height: 1.5em;*/
 }
 .jack_box_button:hover{
 	background-color: #888;
@@ -237,6 +237,15 @@ form{
 	border: none;
 	/*background: red;*/
 	text-align: left;
+}
+
+#new_jack_box br{
+	display: none
+}
+
+.new_jack_box_over_limit{
+	background-color: red;
+	color: blue;
 }
 
 #submit_jack_submit{
