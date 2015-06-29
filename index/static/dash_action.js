@@ -79,7 +79,7 @@ function showPosition(position) {
 	var marker = new google.maps.Marker({
 		position: longlat,
 		map: map,
-		title: 'lmao'
+		//title: 'lmao'
 	});
 
 	var featureOpts = [

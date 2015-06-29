@@ -29,6 +29,9 @@ def index(request):
 		'signed_in': 'user_logged_in' in request.session,
 	}
 
+	if 'user_logged_in' in request.session:
+		context['user_analytic_id'] = request.session['user_name']
+
 	subdomain = getSubdomain(request.META['HTTP_HOST'])
 	if subdomain:
 		return feed(request)
@@ -127,6 +130,9 @@ def feed(request):
 		'signed_in': 'user_logged_in' in request.session,
 	}
 
+	if 'user_logged_in' in request.session:
+		context['user_analytic_id'] = request.session['user_name']
+
 	return render(request, 'index/feed.html', context)
 
 def dashboard(request):
@@ -153,6 +159,9 @@ def dashboard(request):
 		'jack_list': userJackList,
 		'signed_in': 'user_logged_in' in request.session,
 	}
+
+	if 'user_logged_in' in request.session:
+		context['user_analytic_id'] = request.session['user_name']
 
 	return render(request, 'index/dash.html', context)
 
