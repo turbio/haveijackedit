@@ -91,6 +91,7 @@ input[type=submit]{
 input[type=submit]:hover{
 	background: #888;
 	color: #fff;
+	cursor: pointer;
 }
 
 form{
@@ -203,6 +204,7 @@ form{
 }
 
 #new_jack_form{
+	transition: all .2s;
 	text-align: center;
 	margin-right: auto;
 	margin-left: auto;
@@ -218,6 +220,9 @@ form{
 }
 
 .jack_box_button{
+	width: 1.4em;
+	background-repeat: no-repeat;
+	background-size: 100%;
 	cursor: pointer;
 	border: solid;
 	border-color: #888;
@@ -389,22 +394,45 @@ form{
 }
 
 #location_button{
+	-webkit-transition: opacity 1s ease-in-out;
+	-moz-transition: opacity 1s ease-in-out;
+	-o-transition: opacity 1s ease-in-out;
+	-ms-transition: opacity 1s ease-in-out;
+	transition: opacity 1s ease-in-out;
 	background-image: url(/static/location_off_black.svg);
-	width: 1.4em;
-	background-repeat: no-repeat;
-	background-size: 100%;
+}
+#location_button:hover{
+	background-image: url('/static/location_off_white.svg');
 }
 
 #image_button{
-	background-image: url(/static/insert_photo_black.svg);
-	width: 1.4em;
-	background-repeat: no-repeat;
-	background-size: 100%;
+	-webkit-transition: opacity 1s ease-in-out;
+	-moz-transition: opacity 1s ease-in-out;
+	-o-transition: opacity 1s ease-in-out;
+	-ms-transition: opacity 1s ease-in-out;
+	transition: opacity 1s ease-in-out;
+	background-image: url('/static/insert_photo_black.svg');
+}
+#image_button:hover{
+	background-image: url('/static/insert_photo_white.svg');
 }
 
 #link_button{
-	background-image: url(/static/attach_file_black.svg);
-	width: 1.4em;
-	background-repeat: no-repeat;
-	background-size: 100%;
+	-webkit-transition: opacity 1s ease-in-out;
+	-moz-transition: opacity 1s ease-in-out;
+	-o-transition: opacity 1s ease-in-out;
+	-ms-transition: opacity 1s ease-in-out;
+	transition: opacity 1s ease-in-out;
+	background-image: url(/static/link_black.svg);
+}
+
+#link_button:hover{
+	background-image: url('/static/link_white.svg');
+}
+
+#geolocation_map{
+	display: none;
+	background: #888;
+	height: 6em;
+	/*width: 1em;*/
 }

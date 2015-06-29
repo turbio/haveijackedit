@@ -35,3 +35,81 @@ function setEndOfContenteditable(contentEditableElement){
 		range.select();//Select the range (make it the visible selection
 	}
 }
+
+function addLocation(){
+	if (navigator.geolocation){
+		navigator.geolocation.getCurrentPosition(showPosition);
+	}else{
+		document.getElementById("new_jack_box").textContent += "no geolocation";
+		//x.innerHTML = "Geolocation is not supported by this browser.";
+	}
+}
+
+function showPosition(position) {
+	var MY_MAPTYPE_ID = 'custom_style';
+
+	position_object = {
+		"lat": position.coords.latitude,
+		"long": position.coords.longitude
+	}
+	json_pos = JSON.stringify(position_object);
+	document.getElementById("jack_geo").value = json_pos
+
+	//and now display it on the page, using google maps
+	longlat = new google.maps.LatLng(position_object["lat"], position_object["long"])
+	var mapCanvas = document.getElementById('geolocation_map');
+	var mapOptions = {
+		center: longlat,
+		zoom: 16,
+		mapTypeControlOptions: {
+			mapTypeIds: [google.maps.MapTypeId.ROADMAP, MY_MAPTYPE_ID]
+		},
+		mapTypeId: MY_MAPTYPE_ID,
+
+		panControl: false,
+		zoomControl: false,
+		mapTypeControl: false,
+		scaleControl: false,
+		streetViewControl: false,
+		overviewMapControl: false,
+		disableDefaultUI: true
+	}
+	var map = new google.maps.Map(mapCanvas, mapOptions);
+
+	var marker = new google.maps.Marker({
+		position: longlat,
+		map: map,
+		title: 'lmao'
+	});
+
+	var featureOpts = [
+	{
+		stylers: [
+		{ visibility: 'simplified' },
+		{ saturation: -100 },
+		{ weight: 2 }
+		]
+	},
+	{
+		elementType: 'labels',
+		stylers: [
+		{ visibility: 'off' }
+		]
+	},
+	{
+		featureType: 'water',
+		stylers: [
+		{ color: '#888888' }
+		]
+	}
+	];
+
+	var styledMapOptions = {
+		name: 'Custom Style'
+	};
+	var customMapType = new google.maps.StyledMapType(featureOpts, styledMapOptions);
+
+	map.mapTypes.set(MY_MAPTYPE_ID, customMapType);
+
+	document.getElementById("geolocation_map").style.display = 'block';
+}

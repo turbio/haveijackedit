@@ -159,6 +159,10 @@ def dashboard(request):
 def new_jack(request):
 	if request.method == 'POST':
 		message = str(request.POST.get('new_jack', ''))
+
+		#temp fix
+		if message == '':
+			return HttpResponseRedirect('/dash/')
 		#if message[-1] == ' ':
 			#message = message[0:-1]
 		#if message[-1] == ',':
