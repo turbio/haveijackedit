@@ -390,10 +390,29 @@ form{
 }
 
 #geolocation_map{
+	margin: .5em;
 	display: none;
 	background: #888;
 	height: 6em;
 	/*width: 1em;*/
+}
+
+#jack_add_picture{
+	position: relative;
+	height: 6em;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	border-style: dashed;
+	border-color: #aaa;
+	background-color: #eee;
+	margin: .5em;
+}
+
+.or{
+	font-size: .25em !important;
+	color: #ccc;
 }
 
 .material-icons.md-18 { font-size: 18px; }
@@ -401,3 +420,36 @@ form{
 /*.material-icons.md-35 { font-size: 35px; }*/
 .material-icons.md-36 { font-size: 36px; }
 .material-icons.md-48 { font-size: 48px; }
+
+.bg_text{
+	color: #888;
+}
+
+#camera_box{
+	display: none;
+}
+
+#camera_view{
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	background: black;
+}
+
+#camera_capture{
+	cursor: pointer;
+	position: absolute;
+	z-index: 10;
+	font-size: 0.5em;
+	background-color: #fff;
+	border-color: #888;
+	border-style: solid;
+	transition: all .2s;
+	padding: .1em;
+}
+#camera_capture:hover{
+	background-color: #888;
+	color: #fff;
+}

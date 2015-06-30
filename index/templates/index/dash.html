@@ -2,6 +2,7 @@
 {% block head %}
 	<script src="/static/dash_action.js"></script>
 	<script src="https://maps.googleapis.com/maps/api/js"></script>
+	<script src="/static/webcam.js"></script>
 {% endblock %}
 {% block content %}
 	<div id="wrapper">
@@ -17,6 +18,32 @@
 				<input id="jack_geo" type="hidden" name="jack_geo" value=""/>
 				<div contentEditable="true" id="new_jack_box" name="new_jack_editable" onKeyDown="textChange()" onKeyUp="textChange()" onchange="textChange()" onClick="add_punc(); textChange()">{{ yes_word }}</div>
 				<div id="geolocation_map"></div>
+				<div id="jack_add_picture">
+					<div class="bg_text">drag image here</div>
+					<div class="or">or</div>
+					<div><a href="#" id="picture_from_webcam" onClick="useWebcam()">webcam</a></div>
+					<div class="or">or</div>
+					<div><a href="#" id="picture_from_filesystem">upload</a></div>
+
+					<div id="camera_box">
+						<div id="camera_view"></div>
+						<div id="camera_capture">capture</div>
+					</div>
+					<!--<div id="my_result"></div>-->
+
+					<!--<script language="JavaScript">-->
+						<!--Webcam.attach('#camera_view');-->
+
+						<!--function take_snapshot(){-->
+							<!--Webcam.snap(function(data_uri){-->
+								<!--document.getElementById('my_result').innerHTML = '<img src="'+data_uri+'"/>';-->
+							<!--});-->
+						<!--}-->
+					<!--</script>-->
+
+					<!--<a href="javascript:void(take_snapshot())">Take Snapshot</a>-->
+
+				</div>
 				<input id="submit_jack_submit" type="submit" value="submit"/>
 				<div class="jack_box_button" id="location_button" onClick="addLocation()"><i class="material-icons">location_on</i></div>
 				<div class="jack_box_button" id="image_button"><i class="material-icons">insert_photo</i></div>

@@ -131,3 +131,8 @@ function showPosition(position) {
 		document.getElementById("jack_geo").value = "";
 	}
 }
+
+function useWebcam(){
+	document.getElementById("camera_box").style['display'] = "block";
+	Webcam.attach('#camera_view');
+}
