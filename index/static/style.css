@@ -398,9 +398,10 @@ form{
 }
 
 #jack_add_picture{
+	display: none;
 	position: relative;
 	height: 6em;
-	display: flex;
+	/*display: flex;*/
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
@@ -430,26 +431,46 @@ form{
 }
 
 #camera_view{
+	background: black;
 	position: absolute;
 	top: 0;
-	left: 0;
 	bottom: 0;
 	right: 0;
-	background: black;
+	left: 0;
 }
 
-#camera_capture{
+.button{
+	margin: .25em;
 	cursor: pointer;
-	position: absolute;
-	z-index: 10;
 	font-size: 0.5em;
 	background-color: #fff;
 	border-color: #888;
 	border-style: solid;
 	transition: all .2s;
 	padding: .1em;
+
 }
-#camera_capture:hover{
+.button:hover{
 	background-color: #888;
 	color: #fff;
+}
+
+#camera_controls{
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 1em;
+	display: flex;
+
+	justify-content: center;
+	align-items: center;
+	flex-direction: row;
+}
+
+#cam_retry{
+	display: none;
+}
+#cam_save{
+	display: none;
 }

@@ -1,6 +1,16 @@
 var addedPunc = false;
 
 function add_punc(){
+	var myDropzone = new Dropzone("div#jack_add_picture",
+		{
+			url: "/file/post",
+			maxFilesize: 8,
+			maxFiles: 1,
+			acceptedFiles: "image/*",
+			autoProcessQueue: false,
+			//previewTemplate: ""
+		});
+
 	if(!addedPunc){
 		document.getElementById("new_jack_box").innerHTML += ',&nbsp;';
 		addedPunc = true;
@@ -135,4 +145,31 @@ function showPosition(position) {
 function useWebcam(){
 	document.getElementById("camera_box").style['display'] = "block";
 	Webcam.attach('#camera_view');
+}
+
+function captureImage(){
+	Webcam.freeze()
+
+	document.getElementById("cam_cap").style.display = "none";
+	document.getElementById("cam_retry").style.display = "block";
+	document.getElementById("cam_save").style.display = "block";
+	//Webcam.snap(function(data_uri, canvas, context){
+		////document.getElementById('my_result').innerHTML = canvas.;
+	//});
+}
+
+function retryImage(){
+	Webcam.unfreeze()
+
+	document.getElementById("cam_cap").style.display = "block";
+	document.getElementById("cam_retry").style.display = "none";
+	document.getElementById("cam_save").style.display = "none";
+}
+
+function saveImage(){
+
+}
+
+function imageDialog(){
+	document.getElementById("jack_add_picture").style.display = "flex";
 }
