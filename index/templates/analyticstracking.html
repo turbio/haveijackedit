@@ -7,6 +7,6 @@
   ga('create', 'UA-64115056-1', 'auto');
   ga('send', 'pageview');
   {% if user_analytic_id %}
-    ga(‘set’, ‘&uid’, {{ user_analytic_id }});
+    ga(‘set’, ‘&uid’, "{{ user_analytic_id }}");
   {% endif %}
 </script>
