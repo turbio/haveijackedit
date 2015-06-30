@@ -36,28 +36,22 @@ function setEndOfContenteditable(contentEditableElement){
 	}
 }
 
+var mapCreated = false;
+var geoEnabled = false;
+
 function addLocation(){
 	if (navigator.geolocation){
 		navigator.geolocation.getCurrentPosition(showPosition);
 	}else{
 		document.getElementById("new_jack_box").textContent += "no geolocation";
-		//x.innerHTML = "Geolocation is not supported by this browser.";
 	}
 }
 
-function showPosition(position) {
+function createMap(mapCanvas, position_object){
 	var MY_MAPTYPE_ID = 'custom_style';
-
-	position_object = {
-		"lat": position.coords.latitude,
-		"long": position.coords.longitude
-	}
-	json_pos = JSON.stringify(position_object);
-	document.getElementById("jack_geo").value = json_pos
 
 	//and now display it on the page, using google maps
 	longlat = new google.maps.LatLng(position_object["lat"], position_object["long"])
-	var mapCanvas = document.getElementById('geolocation_map');
 	var mapOptions = {
 		center: longlat,
 		zoom: 16,
@@ -110,6 +104,30 @@ function showPosition(position) {
 	var customMapType = new google.maps.StyledMapType(featureOpts, styledMapOptions);
 
 	map.mapTypes.set(MY_MAPTYPE_ID, customMapType);
+	mapCreated = true;
+}
 
-	document.getElementById("geolocation_map").style.display = 'block';
+function showPosition(position) {
+	geoEnabled = !geoEnabled
+	if(geoEnabled){
+		position_object = {
+			"lat": position.coords.latitude,
+			"long": position.coords.longitude
+		}
+
+		var mapCanvas = document.getElementById('geolocation_map');
+		if(!mapCreated){
+			createMap(mapCanvas, position_object);
+		}
+
+		json_pos = JSON.stringify(position_object);
+		document.getElementById("jack_geo").value = json_pos;
+		document.getElementById("geolocation_map").style.display = 'block';
+		document.getElementById("location_button").children[0].innerHTML = "location_off";
+
+	}else{
+		document.getElementById("geolocation_map").style.display = 'none';
+		document.getElementById("location_button").children[0].innerHTML = "location_on";
+		document.getElementById("jack_geo").value = "";
+	}
 }

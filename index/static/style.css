@@ -277,51 +277,34 @@ form{
 
 	background: #000;
 	color: #fff;
-	height: 1em;
+	height: .75em;
 }
 
-.icon:hover{
+.titlebar_button:hover{
 	background-color: #fff;
 	cursor: pointer;
+	color: black;
 }
 
-.icon{
-	width: 1em;
-	height: 1em;
+.titlebar_button{
+	transition: all .2s;
+	width: 0.75em;
+	height: 0.75em;
 	background-repeat: no-repeat;
 	background-size: 100%;
 	float: left;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
-#home_icon{
-	background-image: url(/static/home_white.svg);
-}
-#home_icon:hover{
-	background-image: url(/static/home_black.svg);
-}
-
-#settings_icon{
-	background-image: url(/static/settings_white.svg);
+.btn_right{
 	float: right;
 }
-#settings_icon:hover{
-	background-image: url(/static/settings_black.svg);
-}
 
-#dash_icon{
-	background-image: url(/static/dash_white.svg);
-	float: right;
-}
-#dash_icon:hover{
-	background-image: url(/static/dash_black.svg);
-}
-
-#exit_icon{
-	background-image: url(/static/exit_white.svg);
-	float: right;
-}
-#exit_icon:hover{
-	background-image: url(/static/exit_black.svg);
+#title_bar a{
+	color: white;
+	/*background: red;*/
 }
 
 #remaining_chars{
