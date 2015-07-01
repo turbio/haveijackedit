@@ -50,10 +50,20 @@ var mapCreated = false;
 var geoEnabled = false;
 
 function addLocation(){
-	if (navigator.geolocation){
-		navigator.geolocation.getCurrentPosition(showPosition);
+	geoEnabled = !geoEnabled
+	if(geoEnabled){
+		if (navigator.geolocation){
+			navigator.geolocation.getCurrentPosition(showPosition);
+		}else{
+			document.getElementById("new_jack_box").textContent += "no geolocation";
+		}
+
+		document.getElementById("geolocation_map").style.display = 'flex';
+		document.getElementById("location_button").children[0].innerHTML = "location_off";
 	}else{
-		document.getElementById("new_jack_box").textContent += "no geolocation";
+		document.getElementById("geolocation_map").style.display = 'none';
+		document.getElementById("location_button").children[0].innerHTML = "location_on";
+		document.getElementById("jack_geo").value = "";
 	}
 }
 
@@ -118,28 +128,19 @@ function createMap(mapCanvas, position_object){
 }
 
 function showPosition(position) {
-	geoEnabled = !geoEnabled
-	if(geoEnabled){
-		position_object = {
-			"lat": position.coords.latitude,
-			"long": position.coords.longitude
-		}
-
-		var mapCanvas = document.getElementById('geolocation_map');
-		if(!mapCreated){
-			createMap(mapCanvas, position_object);
-		}
-
-		json_pos = JSON.stringify(position_object);
-		document.getElementById("jack_geo").value = json_pos;
-		document.getElementById("geolocation_map").style.display = 'block';
-		document.getElementById("location_button").children[0].innerHTML = "location_off";
-
-	}else{
-		document.getElementById("geolocation_map").style.display = 'none';
-		document.getElementById("location_button").children[0].innerHTML = "location_on";
-		document.getElementById("jack_geo").value = "";
+	position_object = {
+		"lat": position.coords.latitude,
+		"long": position.coords.longitude
 	}
+
+	var mapCanvas = document.getElementById('geolocation_map');
+	if(!mapCreated){
+		createMap(mapCanvas, position_object);
+	}
+
+	json_pos = JSON.stringify(position_object);
+	document.getElementById("jack_geo").value = json_pos;
+	document.getElementById("geolocation_map").className = "";
 }
 
 function useWebcam(){
