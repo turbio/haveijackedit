@@ -18,9 +18,26 @@
 				<input id="new_jack_post_box" type="hidden" name="new_jack" value="{{ yes_word }}"/>
 				<input id="jack_geo" type="hidden" name="jack_geo" value=""/>
 				<div contentEditable="true" id="new_jack_box" name="new_jack_editable" onKeyDown="textChange()" onKeyUp="textChange()" onchange="textChange()" onClick="add_punc(); textChange()">{{ yes_word }}</div>
-				<div id="geolocation_map"></div>
-
-				<div id="jack_add_picture">
+				<div id="geolocation_map" class="empty_box">
+					<div class="loading_bar">
+						<div class="loading_segment">
+							<div class="dot dot_creator"></div>
+							<div class="dot dot_creator dot_second"></div>
+						</div>
+						<div class="loading_segment">
+							<div class="dot loading_dot"></div>
+							<div class="dot loading_dot dot_second"></div>
+						</div>
+						<div class="loading_segment">
+							<div class="dot dot_destroyer"></div>
+							<div class="dot dot_destroyer dot_second"></div>
+						</div>
+					</div>
+				</div>
+				<div id="jack_add_picture" class="empty_box">
+					<div class="button">
+						<i class="material-icons">close</i>
+					</div>
 					<div class="bg_text">drag image here</div>
 					<div class="or">or</div>
 					<div><a href="javascript:void(useWebcam())" id="picture_from_webcam">webcam</a></div>
@@ -35,10 +52,19 @@
 				</div>
 
 				<input id="submit_jack_submit" type="submit" value="submit"/>
-				<div class="jack_box_button" id="location_button" onClick="addLocation()"><i class="material-icons">location_on</i></div>
-				<div class="jack_box_button" id="image_button" onClick="imageDialog()"><i class="material-icons">insert_photo</i></div>
-				<div class="jack_box_button" id="link_button"><i class="link_add_icon material-icons">add</i><i class="material-icons link_icon">link</i></div>
-				<div class="jack_box_button" id="link_button"><i class="material-icons">person_add</i></div>
+
+				<a href="/nojs" onClick="addLocation(); return false;">
+					<div class="jack_box_button" id="location_button"><i class="material-icons">location_on</i></div>
+				</a>
+				<a href="/nojs" onClick="imageDialog(); return false;">
+					<div class="jack_box_button" id="image_button"><i class="material-icons">insert_photo</i></div>
+				</a>
+				<a href="/nojs" onClick="addLink(); return false;">
+					<div class="jack_box_button" id="link_button"><i class="link_add_icon material-icons">add</i><i class="material-icons link_icon">link</i></div>
+				</a>
+				<a href="/nojs" onClick="addBro(); return false;">
+					<div class="jack_box_button" id="link_button"><i class="material-icons">person_add</i></div>
+				</a>
 				<!--<div class="jack_box_button">b</div>-->
 				<!--<div class="jack_box_button">c</div>-->
 				<div id="remaining_chars"></div>
