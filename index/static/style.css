@@ -474,3 +474,12 @@ form{
 #cam_save{
 	display: none;
 }
+
+.link_icon{
+	transform: rotate(-45deg) translate(-5px, -2px);
+}
+
+.link_add_icon{
+	transform: translate(2px, -5px);
+	font-size: 18px !important;
+}
