@@ -174,3 +174,11 @@ function saveImage(){
 function imageDialog(){
 	document.getElementById("jack_add_picture").style.display = "flex";
 }
+
+function addLink(){
+	document.getElementById("jack_add_link").style.display = "block";
+}
+
+function addBro(){
+	document.getElementById("jack_add_bro").style.display = "block";
+}

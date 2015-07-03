@@ -213,6 +213,11 @@ form{
 	/*overflow: hidden;*/
 	/*height: 1.5em;*/
 }
+
+#new_jack_form a{
+	color: black;
+}
+
 .jack_box_button:hover{
 	background-color: #888;
 	color: #fff;
@@ -461,6 +466,14 @@ form{
 	color: #fff;
 }
 
+.close_button{
+	width: 1em;
+	height: 1em;
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+
 #camera_controls{
 	position: absolute;
 	left: 0;
@@ -572,4 +585,24 @@ form{
 .link_add_icon{
 	transform: translate(2px, -5px);
 	font-size: 18px !important;
+}
+
+#jack_link_url{
+	width: 100%;
+	margin: 0;
+}
+
+#jack_link_title{
+	text-align: left;
+	font-size: .5em;
+	margin: 0;
+}
+
+.jack_field{
+	margin-top: 0.25em;
+	margin-bottom: 0.25em;
+	position: relative;
+	background-color: #eee;
+	display: none;
+	padding: .25em;
 }
