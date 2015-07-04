@@ -1,16 +1,6 @@
 var addedPunc = false;
 
 function add_punc(){
-	var myDropzone = new Dropzone("div#jack_add_picture",
-		{
-			url: "/file/post",
-			maxFilesize: 8,
-			maxFiles: 1,
-			acceptedFiles: "image/*",
-			autoProcessQueue: false,
-			//previewTemplate: ""
-		});
-
 	if(!addedPunc){
 		document.getElementById("new_jack_box").innerHTML += ',&nbsp;';
 		addedPunc = true;
@@ -100,7 +90,6 @@ function createMap(mapCanvas, position_object){
 	var marker = new google.maps.Marker({
 		position: longlat,
 		map: map,
-		//title: 'lmao'
 	});
 
 	var featureOpts = [
@@ -150,9 +139,12 @@ function showPosition(position) {
 	document.getElementById("geolocation_map").className = "";
 }
 
+picFromWebcam = false;
+
 function useWebcam(){
 	document.getElementById("camera_box").style['display'] = "block";
 	Webcam.attach('#camera_view');
+	picFromWebcam = true;
 }
 
 function captureImage(){
@@ -175,14 +167,36 @@ function retryImage(){
 }
 
 function saveImage(){
-
+	alert("TODO: this");
 }
 
-function imageDialog(){
+var dropzoneAdded = false;
+
+function addImage(){
 	document.getElementById("jack_add_picture").style.display = "flex";
+
+	if(!dropzoneAdded){
+		dropzoneAdded = true;
+		var myDropzone = new Dropzone("div#jack_add_picture",
+			{
+				url: "/file/post",
+				maxFilesize: 8,
+				maxFiles: 1,
+				acceptedFiles: "image/*",
+				autoProcessQueue: false,
+				//previewTemplate: ""
+			});
+	}
 }
+
 function removePicture(){
-	document.getElementById("jack_add_picture").style.display = "none";
+	if(picFromWebcam){
+		document.getElementById("camera_box").style['display'] = "none";
+		picFromWebcam = false;
+		Webcam.reset();
+	}else{
+		document.getElementById("jack_add_picture").style.display = "none";
+	}
 }
 
 function addLink(){
@@ -197,4 +211,33 @@ function addBro(){
 }
 function removeBro(){
 	document.getElementById("jack_add_bro").style.display = "none";
+}
+
+function uploadFromFS(){
+	fileinput = document.getElementById("image_input");
+	fileinput.click();
+
+	fileinput.onchange = function(){
+		showUploadedImage(this);
+	};
+}
+
+function showUploadedImage(input){
+	if (input.files && input.files[0]) {
+		var reader = new FileReader();
+
+		reader.onload = function(e){
+			showImage(e.target.result);
+		}
+
+		reader.readAsDataURL(input.files[0]);
+	}
+}
+
+function showImage(imageData){
+	document.getElementById("add_pic_controls").style.display = "none";
+	document.getElementById("selected_image").setAttribute("src", imageData);
+	document.getElementById("jack_add_picture").setAttribute("class", "jack_field");
+	document.getElementById("jack_add_picture").style.height = "inherit";
+	document.getElementById("jack_add_picture").style.margin = "0";
 }

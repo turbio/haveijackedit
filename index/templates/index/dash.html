@@ -40,16 +40,25 @@
 				</div>
 
 				<div id="jack_add_picture" class="empty_box">
+					<img id="selected_image" src=""/>
+					<input id="image_input" type="file" name="image" accept="image/*"/>
+					<input type="hidden" name="image_source"/>
 					<a href="/nojs" onClick="removePicture(); return false;"><div class="button close_button"><i class="material-icons">close</i></div></a>
-					<div class="bg_text">drag image here</div>
-					<div class="or">or</div>
-					<div><a href="javascript:void(useWebcam())" id="picture_from_webcam">webcam</a></div>
-					<div id="camera_box">
-						<div id="camera_view"></div>
-						<div id="camera_controls">
-							<div class="button" id="cam_cap" onClick="captureImage()">capture</div>
-							<div class="button" id="cam_retry" onClick="retryImage()">retry</div>
-							<div class="button" id="cam_save" onClick="saveImage()">save</div>
+
+					<div id="add_pic_controls"/>
+						<div class="bg_text add_pic_instruction">drag image here</div>
+						<div class="or">or</div>
+						<div class="add_pic_instruction"><a href="/nojs" onClick=" useWebcam(); return false;" id="picture_from_webcam">use webcam</a></div>
+						<div class="or">or</div>
+						<div class="add_pic_instruction"><a href="/nojs" onClick="uploadFromFS(); return false;">upload image</a></div>
+
+						<div id="camera_box">
+							<div id="camera_view"></div>
+							<div id="camera_controls">
+								<div class="button" id="cam_cap" onClick="captureImage()">capture</div>
+								<div class="button" id="cam_retry" onClick="retryImage()">retry</div>
+								<div class="button" id="cam_save" onClick="saveImage()">save</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -71,7 +80,7 @@
 				<a href="/nojs" onClick="addLocation(); return false;">
 					<div class="jack_box_button" id="location_button"><i class="material-icons">location_on</i></div>
 				</a>
-				<a href="/nojs" onClick="imageDialog(); return false;">
+				<a href="/nojs" onClick="addImage(); return false;">
 					<div class="jack_box_button" id="image_button"><i class="material-icons">insert_photo</i></div>
 				</a>
 				<a href="/nojs" onClick="addLink(); return false;">

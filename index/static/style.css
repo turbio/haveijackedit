@@ -607,3 +607,15 @@ form{
 	display: none;
 	padding: .25em;
 }
+
+.add_pic_instruction{
+	font-size: .5em;
+}
+
+#image_input{
+	display: none;
+}
+
+#selected_image{
+	width: 100%;
+}
