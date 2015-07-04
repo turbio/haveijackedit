@@ -395,7 +395,7 @@ form{
 }
 
 #geolocation_map{
-	margin: .5em;
+	/*margin: .5em;*/
 	display: none;
 	background: #eee;
 	height: 6em;
@@ -467,6 +467,7 @@ form{
 }
 
 .close_button{
+	z-index: 1;
 	width: 1em;
 	height: 1em;
 	position: absolute;

@@ -49,6 +49,11 @@ function setEndOfContenteditable(contentEditableElement){
 var mapCreated = false;
 var geoEnabled = false;
 
+function removeGeo(){
+	geoEnabled = true;
+	addLocation();
+}
+
 function addLocation(){
 	geoEnabled = !geoEnabled
 	if(geoEnabled){
@@ -59,9 +64,11 @@ function addLocation(){
 		}
 
 		document.getElementById("geolocation_map").style.display = 'flex';
+		document.getElementById("geobox").style.display = 'block';
 		document.getElementById("location_button").children[0].innerHTML = "location_off";
 	}else{
 		document.getElementById("geolocation_map").style.display = 'none';
+		document.getElementById("geobox").style.display = 'none';
 		document.getElementById("location_button").children[0].innerHTML = "location_on";
 		document.getElementById("jack_geo").value = "";
 	}
@@ -174,11 +181,20 @@ function saveImage(){
 function imageDialog(){
 	document.getElementById("jack_add_picture").style.display = "flex";
 }
+function removePicture(){
+	document.getElementById("jack_add_picture").style.display = "none";
+}
 
 function addLink(){
 	document.getElementById("jack_add_link").style.display = "block";
 }
+function removeLink(){
+	document.getElementById("jack_add_link").style.display = "none";
+}
 
 function addBro(){
 	document.getElementById("jack_add_bro").style.display = "block";
+}
+function removeBro(){
+	document.getElementById("jack_add_bro").style.display = "none";
 }
