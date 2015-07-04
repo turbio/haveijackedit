@@ -617,5 +617,6 @@ form{
 }
 
 #selected_image{
+	display: none;
 	width: 100%;
 }

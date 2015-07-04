@@ -177,6 +177,7 @@ function addImage(){
 
 	if(!dropzoneAdded){
 		dropzoneAdded = true;
+
 		var myDropzone = new Dropzone("div#jack_add_picture",
 			{
 				url: "/file/post",
@@ -190,12 +191,16 @@ function addImage(){
 }
 
 function removePicture(){
-	if(picFromWebcam){
-		document.getElementById("camera_box").style['display'] = "none";
-		picFromWebcam = false;
-		Webcam.reset();
+	if(imageAdded){
+		hideImage();
 	}else{
-		document.getElementById("jack_add_picture").style.display = "none";
+		if(picFromWebcam){
+			document.getElementById("camera_box").style['display'] = "none";
+			picFromWebcam = false;
+			Webcam.reset();
+		}else{
+			document.getElementById("jack_add_picture").style.display = "none";
+		}
 	}
 }
 
@@ -234,10 +239,23 @@ function showUploadedImage(input){
 	}
 }
 
+var imageAdded = false;
+
+function hideImage(){
+	document.getElementById("add_pic_controls").style.display = "block";
+	document.getElementById("selected_image").style.display = "none";
+	document.getElementById("jack_add_picture").setAttribute("class", "empty_box");
+	document.getElementById("jack_add_picture").style.height = "6em";
+	document.getElementById("jack_add_picture").style.margin = ".5em";
+	imageAdded = false;
+}
+
 function showImage(imageData){
 	document.getElementById("add_pic_controls").style.display = "none";
 	document.getElementById("selected_image").setAttribute("src", imageData);
+	document.getElementById("selected_image").style.display = "block";
 	document.getElementById("jack_add_picture").setAttribute("class", "jack_field");
 	document.getElementById("jack_add_picture").style.height = "inherit";
 	document.getElementById("jack_add_picture").style.margin = "0";
+	imageAdded = true;
 }
