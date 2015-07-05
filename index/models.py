@@ -23,7 +23,7 @@ class link(models.Model):
 
 class image(models.Model):
 	jack = models.ForeignKey(jack)
-	path = models.CharField(max_length=2083)
+	file = models.ImageField(upload_to='./data/jack_image/')
 
 class jack_bro(models.Model):
 	jack = models.ForeignKey(jack)

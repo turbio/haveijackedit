@@ -3,7 +3,7 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.template import RequestContext, loader
-from .models import jack, user, yes_word, no_word
+from .models import jack, user, yes_word, no_word, geolocation, link, image, jack_bro
 import urllib.request
 import urllib.parse
 import json
@@ -166,24 +166,35 @@ def dashboard(request):
 	return render(request, 'index/dash.html', context)
 
 def new_jack(request):
-	if request.method == 'POST':
-		message = str(request.POST.get('new_jack', ''))
+	if request.method != 'POST':
+		return HttpResponseRedirect('/dash/')
 
-		#temp fix
-		if message == '':
-			return HttpResponseRedirect('/dash/')
-		#if message[-1] == ' ':
-			#message = message[0:-1]
-		#if message[-1] == ',':
-			#message = message[0:-1]
+	message = str(request.POST.get('new_jack', ''))
+	if message == '':
+		return HttpResponseRedirect('/dash/')
 
-		userObject = user.objects.filter(id = request.session['user_id']).first()
+	userObject = user.objects.filter(id = request.session['user_id']).first()
 
-		newJack = jack(
-			user_id=userObject,
-			comment=message,
-			date=datetime.datetime.today())
-		newJack.save()
+	newJack = jack(
+		user_id=userObject,
+		comment=message,
+		date=datetime.datetime.today())
+	newJack.save()
+
+	print(str(request.POST))
+
+	if 'jack_geo' in request.POST and not request.POST['jack_geo'] == '':
+		recievedGeolocationJson = request.POST['jack_geo']
+		recievedGeolocation = json.loads(recievedGeolocationJson)
+
+		newGeolocation = geolocation(
+			jack=newJack,
+			lat=recievedGeolocation['lat'],
+			lng=recievedGeolocation['long'])
+		newGeolocation.save()
+
+	print("files: " + str(request.FILES))
+
 	return HttpResponseRedirect('/dash/')
 
 def getSubdomain(url):
