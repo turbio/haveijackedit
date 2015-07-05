@@ -233,6 +233,7 @@ function showUploadedImage(input){
 
 		reader.onload = function(e){
 			showImage(e.target.result);
+			document.getElementById("image_data").value = e.target.result;
 		}
 
 		reader.readAsDataURL(input.files[0]);

@@ -19,11 +19,14 @@ class geolocation(models.Model):
 
 class link(models.Model):
 	jack = models.ForeignKey(jack)
-	url = models.CharField(max_length=2083)
+	url = models.CharField(max_length=512)
+	#scheme = models.CharField(max_length=8)
+	#host = models.CharField(max_length=255)
+	#path = models.CharField(max_length=256)
 
 class image(models.Model):
 	jack = models.ForeignKey(jack)
-	file = models.ImageField(upload_to='./data/jack_image/')
+	data = models.ImageField(upload_to='./data/jack_image/')
 
 class jack_bro(models.Model):
 	jack = models.ForeignKey(jack)

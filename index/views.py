@@ -3,7 +3,10 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.template import RequestContext, loader
+from django.core.validators import URLValidator
+from django.core.exceptions import ValidationError
 from .models import jack, user, yes_word, no_word, geolocation, link, image, jack_bro
+from urllib.parse import urlparse
 import urllib.request
 import urllib.parse
 import json
@@ -193,7 +196,31 @@ def new_jack(request):
 			lng=recievedGeolocation['long'])
 		newGeolocation.save()
 
-	print("files: " + str(request.FILES))
+	if 'image' in request.POST and not request.POST['image'] == '':
+		newImage = image(
+			jack=newJack,
+			data=request.POST['image'])
+		newImage.save()
+
+	if 'jack_link_url' in request.POST and not request.POST['jack_link_url'] == '':
+		validUrl = validateUrl(request.POST['jack_link_url'])
+		if(validUrl):
+			newLink = link(
+				jack=newJack,
+				url=validUrl)
+			newLink.save()
+
+	if 'jack_bro' in request.POST and not request.POST['jack_bro'] == '':
+		broStringList = request.POST['jack_bro'].split(",")
+		broStringList = [s.strip(' ') for s in broStringList]
+
+		for b in broStringList:
+			bro = user.objects.filter(name = b)
+			if not len(bro) <= 0:
+				newJackBro = jack_bro(
+					jack=newJack,
+					bro=bro.first())
+				newJackBro.save()
 
 	return HttpResponseRedirect('/dash/')
 
@@ -293,3 +320,16 @@ def checkCred(username, password):
 	else:
 		raise Exception('incorrect credentials')
 
+def validateUrl(url):
+	#first check if it has a scheme
+	#if it does not, assume http by adding http://
+	if(not urlparse(url).scheme):
+		url = 'http://' + url
+
+	validate = URLValidator()
+	try:
+		validate(url)
+	except:
+		return False
+
+	return url
