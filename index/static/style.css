@@ -625,3 +625,20 @@ form{
 	display: none;
 	width: 100%;
 }
+
+.jack_map{
+	overflow: hidden;
+	position: relative;
+	height: 2em;
+	/*width: 200%;*/
+}
+
+.jack_map_image{
+	position: absolute;
+	top: -100%;
+	bottom: -100%;
+	left: -100%;
+	right: -100%;
+	margin: auto;
+	width: 100%;
+}

@@ -93,10 +93,12 @@
 				<div id="remaining_chars"></div>
 			</form>
 		</div>
-	{% if jack_list %}{% for jack in jack_list %}
-		<div class="feed_quote">
-			{% include "quote.html" %}
-		</div>
-	{% endfor %}{% endif %}
+	{% if jack_list %}
+		{% for jack in jack_list %}
+			<div class="feed_quote">
+				{% include "quote.html" %}
+			</div>
+		{% endfor %}
+	{% endif %}
 	</div>
 {% endblock %}

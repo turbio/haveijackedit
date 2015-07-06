@@ -145,7 +145,34 @@ def dashboard(request):
 	username = request.session['user_name']
 
 	userId = user.objects.filter(name = username).first()
+
 	userJackList = jack.objects.order_by('date').filter(user_id = userId).reverse()
+
+	for j in userJackList:
+		jackGeolocation = geolocation.objects.filter(jack = j)
+		if not len(jackGeolocation) == 0:
+			j.has_geolocation = True
+			j.lng = jackGeolocation.first().lng
+			j.lat = jackGeolocation.first().lat
+
+		jackImage = image.objects.filter(jack = j)
+		if not len(jackImage) == 0:
+			j.has_image = True
+			j.image_data = jackImage.first().data
+
+		jackLink = link.objects.filter(jack = j)
+		if not len(jackLink) == 0:
+			j.has_link = True
+			j.link_url = jackLink.first().url
+			j.link_text = jackLink.first().url
+
+		jackBro = jack_bro.objects.filter(jack = j)
+		if not len(jackBro) == 0:
+			j.has_bro = True
+			j.bros = []
+
+		for b in jackBro:
+			j.bros.append(b.bro)
 
 	yesWord = yes_word.objects.order_by('?').first()
 
@@ -167,6 +194,12 @@ def dashboard(request):
 		context['user_analytic_id'] = request.session['user_name']
 
 	return render(request, 'index/dash.html', context)
+
+#takes a django jack object list and turns it into something that can be put
+#into the template
+#def constructJackList(jacklist):
+	#jacks = []
+	#return jacklist
 
 def new_jack(request):
 	if request.method != 'POST':
