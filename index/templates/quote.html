@@ -1,26 +1,34 @@
 {% if jack %}
 <div class="quote">
 	<div class="msg">{{ jack.comment }}</div>
-		{% if jack.has_geolocation  %}
-		<div class="jack_map">
-			<img class="jack_map_image" src="https://maps.googleapis.com/maps/api/staticmap?center={{ jack.lat }},{{ jack.lng }}&zoom=16&size=600x300&maptype=roadmap&style=element:labels|visibility:off&style=saturation:-100"/>
+	{% if jack.has_geolocation  %}
+	<div class="quote_image_container quote_row">
+		<img class="quote_image" src="https://maps.googleapis.com/maps/api/staticmap?center={{ jack.lat }},{{ jack.lng }}&zoom=16&size=600x300&maptype=roadmap&style=element:labels|visibility:off&style=saturation:-100"/>
+	</div>
+	{% endif %}
+	{% if jack.has_image  %}
+		<div class="quote_image_container quote_row">
+			<img class="quote_image" src="{{ jack.image_data }}"/>
 		</div>
-		{% endif %}
-		{% if jack.has_image  %}
-			<div class="jack_map">
-				<img class="jack_map_image" src="{{ jack.image_data }}"/>
-			</div>
-		{% endif %}
-		{% if jack.has_link  %}
-			<a href="{{ jack.link_url }}">{{ jack.link_text }}</a>
-		{% endif %}
-		{% if jack.has_bro  %}
+	{% endif %}
+	{% if jack.has_link  %}
+		<div class="quote_row with_icon">
+			<div class="quote_icon quote_row"><i class="material-icons">link</i></div>
+			<div class="quote_link quote_row"><a href="{{ jack.link_url }}">{{ jack.link_text }}</a></div>
+		</div>
+	{% endif %}
+	{% if jack.has_bro  %}
+		<div class="quote_row with_icon">
+			<div class="quote_icon"><i class="material-icons">people</i></div>
 			{% for bro in jack.bros %}
-				<div class="quote_jack_bro"><a href="http://{{ bro.name }}.{{ host }}">{{ bro.name }}</a></div>
+				<div class="quote_bro"><a href="http://{{ bro.name }}.{{ host }}">{{ bro.name }}</a></div>
 			{% endfor %}
-		{% endif %}
-	<a href="http://{{ jack.user_id.name }}.{{ host }}">
-		<div class="name">&ndash;{% if show_username %}{{ jack.user_id.name }}{% else %}you{% endif %}{% if show_date %}, {{ jack.date }}{% endif %}</div>
-	</a>
+		</div>
+	{% endif %}
+	<div class="quote_row">
+		<a href="http://{{ jack.user_id.name }}.{{ host }}">
+			<div class="name">&ndash;{% if show_username %}{{ jack.user_id.name }}{% else %}you{% endif %}{% if show_date %}, {{ jack.date }}{% endif %}</div>
+		</a>
+	</div>
 </div>
 {% endif %}

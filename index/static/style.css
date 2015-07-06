@@ -626,19 +626,96 @@ form{
 	width: 100%;
 }
 
-.jack_map{
-	overflow: hidden;
-	position: relative;
-	height: 2em;
-	/*width: 200%;*/
+.quote_image_container{
+	overflow: auto;
+	/*position: relative;*/
+	max-height: 2em;
+	width: 100%;
+	transition: all 0.4s;
+
 }
 
-.jack_map_image{
-	position: absolute;
-	top: -100%;
-	bottom: -100%;
-	left: -100%;
-	right: -100%;
-	margin: auto;
+.quote_image_container:hover{
+	/*overflow: visible;*/
+	/*height: auto;*/
+	max-height: 20em;
+	/*width: 150%;*/
+	/*width: 150%;*/
+}
+
+.quote_image:hover{
+	height: 100%;
+	/*position: relative;*/
+	/*top: 0;*/
+	/*bottom: 0;*/
+	/*left: 0;*/
+	/*right: 0;*/
+	/*max-height: 100%;*/
+}
+
+.quote_image{
+	transition: all 0.2s;
+	/*position: absolute;*/
+	/*top: -100%;*/
+	/*bottom: -100%;*/
+	/*left: -100%;*/
+	/*right: -100%;*/
+	/*margin: auto;*/
 	width: 100%;
+}
+
+.quote_row{
+	position: relative;
+	margin-top: .125em;
+	margin-bottom: .125em;
+	overflow: hidden;
+	/*display: block;*/
+	/*height: 0em;*/
+}
+
+.quote_row a{
+	color: #bbb;
+}
+.quote_row a:hover{
+	text-decoration: underline;
+	overflow: hidden;
+	color: #eee;
+}
+
+.quote_bro{
+	font-size: .5em;
+	background: #f8f8f8;
+	padding: .125em;
+	float: left;
+	margin: 0.125em;
+	padding-left: 0.25em;
+	padding-right: 0.25em;
+
+	transition: all 0.2s;
+}
+
+.quote_bro:hover{
+	background: black;
+}
+
+.quote_icon{
+	font-size: .5em;
+	padding: .125em;
+	position: absolute;
+	left: 0;
+	margin: 0;
+}
+
+.quote_link{
+	font-size: .5em;
+	float: left;
+	transition: all 0.2s;
+}
+
+.quote_link:hover{
+	background: black;
+}
+
+.with_icon{
+	padding-left: 1em;
 }

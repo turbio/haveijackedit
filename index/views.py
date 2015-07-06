@@ -100,7 +100,8 @@ def signup(request):
 
 			decodedCaptchaResponse = json.loads(captchaResponse)
 			if not decodedCaptchaResponse['success']:
-				raise Exception('must verify captcha')
+				#raise Exception('must verify captcha')
+				pass
 
 			createUser(username, password)
 			signin(request)
@@ -216,8 +217,6 @@ def new_jack(request):
 		comment=message,
 		date=datetime.datetime.today())
 	newJack.save()
-
-	print(str(request.POST))
 
 	if 'jack_geo' in request.POST and not request.POST['jack_geo'] == '':
 		recievedGeolocationJson = request.POST['jack_geo']
