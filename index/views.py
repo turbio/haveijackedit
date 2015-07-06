@@ -149,32 +149,6 @@ def dashboard(request):
 
 	userJackList = jack.objects.order_by('date').filter(user_id = userId).reverse()
 
-	for j in userJackList:
-		jackGeolocation = geolocation.objects.filter(jack = j)
-		if not len(jackGeolocation) == 0:
-			j.has_geolocation = True
-			j.lng = jackGeolocation.first().lng
-			j.lat = jackGeolocation.first().lat
-
-		jackImage = image.objects.filter(jack = j)
-		if not len(jackImage) == 0:
-			j.has_image = True
-			j.image_data = jackImage.first().data
-
-		jackLink = link.objects.filter(jack = j)
-		if not len(jackLink) == 0:
-			j.has_link = True
-			j.link_url = jackLink.first().url
-			j.link_text = jackLink.first().url
-
-		jackBro = jack_bro.objects.filter(jack = j)
-		if not len(jackBro) == 0:
-			j.has_bro = True
-			j.bros = []
-
-		for b in jackBro:
-			j.bros.append(b.bro)
-
 	yesWord = yes_word.objects.order_by('?').first()
 
 	if yesWord == None:
@@ -187,7 +161,7 @@ def dashboard(request):
 		'show_date': True,
 		'username': username,
 		'yes_word': yesWord,
-		'jack_list': userJackList,
+		'jack_list': addDetailsToJackList(userJackList),
 		'signed_in': 'user_logged_in' in request.session,
 	}
 
@@ -365,3 +339,32 @@ def validateUrl(url):
 		return False
 
 	return url
+
+def addDetailsToJackList(jackList):
+	for j in jackList:
+		jackGeolocation = geolocation.objects.filter(jack = j)
+		if not len(jackGeolocation) == 0:
+			j.has_geolocation = True
+			j.lng = jackGeolocation.first().lng
+			j.lat = jackGeolocation.first().lat
+
+		jackImage = image.objects.filter(jack = j)
+		if not len(jackImage) == 0:
+			j.has_image = True
+			j.image_data = jackImage.first().data
+
+		jackLink = link.objects.filter(jack = j)
+		if not len(jackLink) == 0:
+			j.has_link = True
+			j.link_url = jackLink.first().url
+			j.link_text = jackLink.first().url
+
+		jackBro = jack_bro.objects.filter(jack = j)
+		if not len(jackBro) == 0:
+			j.has_bro = True
+			j.bros = []
+
+		for b in jackBro:
+			j.bros.append(b.bro)
+
+	return jackList;
