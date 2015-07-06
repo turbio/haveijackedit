@@ -27,6 +27,7 @@ class link(models.Model):
 class image(models.Model):
 	jack = models.ForeignKey(jack)
 	data = models.ImageField(upload_to='./data/jack_image/')
+	data = models.CharField(max_length=50000)
 
 class jack_bro(models.Model):
 	jack = models.ForeignKey(jack)

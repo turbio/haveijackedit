@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `index_yes_word` (
 --
 
 INSERT INTO `index_yes_word` (`id`, `word`) VALUES
-(1, 'affirmative'),
+(5, 'affirmative'),
 (6, 'true'),
 (7, 'yea'),
 (8, 'all right'),
