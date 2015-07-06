@@ -21,7 +21,7 @@ def index(request):
 
 	latest_jack = jack.objects.order_by('date').reverse()
 	if len(latest_jack) > 0:
-		latest_jack = latest_jack[0]
+		latest_jack = addDetailsToJackList(latest_jack)[0]
 	else:
 		latest_jack = None
 
@@ -127,7 +127,7 @@ def feed(request):
 	context = {
 		'show_username': True,
 		'host': "haveijackedit.com",
-		'jack_list': userJackList,
+		'jack_list': addDetailsToJackList(userJackList),
 		'username': subdomain,
 		'title_text_a': 'lmao',
 		'is_user': isUser,
