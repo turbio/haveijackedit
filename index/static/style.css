@@ -628,11 +628,11 @@ form{
 
 .quote_image_container{
 	overflow: auto;
-	/*position: relative;*/
+	position: relative;
 	max-height: 2em;
 	width: 100%;
 	transition: all 0.4s;
-
+	/*height: 2em;*/
 }
 
 .quote_image_container:hover{
@@ -667,7 +667,7 @@ form{
 .quote_row{
 	position: relative;
 	margin-top: .125em;
-	margin-bottom: .125em;
+	/*margin-bottom: .125em;*/
 	overflow: hidden;
 	/*display: block;*/
 	/*height: 0em;*/
@@ -712,8 +712,12 @@ form{
 	transition: all 0.2s;
 }
 
+.quote_link a:hover{
+	color: #888;
+}
+
 .quote_link:hover{
-	background: black;
+	/*background: black;*/
 }
 
 .with_icon{
