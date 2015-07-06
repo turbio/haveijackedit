@@ -26,6 +26,7 @@ def index(request):
 		latest_jack = None
 
 	context = {
+		'version': '0.0.1',
 		'show_username': True,
 		'jack': latest_jack,
 		'host': "haveijackedit.com",
@@ -46,7 +47,9 @@ def signout(request):
 	return HttpResponseRedirect('/dash/')
 
 def signin(request):
-	context = {}
+	context = {
+		'version': '0.0.1',
+	}
 
 	if request.method == 'POST':
 		username = str(request.POST.get('username', ''))
@@ -67,7 +70,9 @@ def signin(request):
 
 
 def signup(request):
-	context = { }
+	context = {
+		'version': '0.0.1',
+	}
 
 	if request.method == 'POST':
 		username = str(request.POST.get('username', ''))
@@ -125,6 +130,7 @@ def feed(request):
 		isUser = False
 
 	context = {
+		'version': '0.0.1',
 		'show_username': True,
 		'host': "haveijackedit.com",
 		'jack_list': addDetailsToJackList(userJackList),
@@ -157,6 +163,7 @@ def dashboard(request):
 		yesWord = yesWord.word
 
 	context = {
+		'version': '0.0.1',
 		'host': "haveijackedit.com",
 		'show_date': True,
 		'username': username,
