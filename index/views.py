@@ -127,7 +127,7 @@ def verifyCaptcha(captcha_response, userIp):
 
 	decodedCaptchaResponse = json.loads(captchaResponse)
 	if not decodedCaptchaResponse['success']:
-		#raise Exception('must verify captcha')
+		raise Exception('must verify captcha')
 		pass
 
 def signup(request):
@@ -149,7 +149,7 @@ def signup(request):
 			else:
 				ip = request.META.get('REMOTE_ADDR')
 
-			#verifyCaptcha(captchaClientResponse, ip)
+			verifyCaptcha(captchaClientResponse, ip)
 
 			createUser(username, password)
 			signin(request)
