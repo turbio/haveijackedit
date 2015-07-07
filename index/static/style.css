@@ -733,7 +733,7 @@ form{
 #settings_container{
 	margin-left: auto;
 	margin-right: auto;
-	padding: 1em;
+	/*padding: 1em;*/
 	width: 12em;
 }
 
@@ -742,9 +742,7 @@ form{
 }
 
 .setting_option{
-	margin: 0.25em;
 	vertical-align: middle;
-	cursor: pointer;
 }
 
 .setting_icon{
@@ -752,6 +750,8 @@ form{
 }
 
 .checkbox_wrapper{
+	padding-left: 24px;
+	display: inline;
 	height: 24px;
 	width: 24px;
 	position: relative;
@@ -781,4 +781,16 @@ input[type="checkbox"] + label{
 
 input[type="checkbox"]:checked + label{
 	background-image: url(/static/check_box.svg);
+}
+
+.checkbox_label{
+	display: inline-block;
+	font-size: .5em;
+	vertical-align: middle;
+	margin-left: .25em;
+}
+
+.setting_section{
+	margin-top: .5em;
+	font-size: 0.75em;
 }
