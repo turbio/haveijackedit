@@ -730,11 +730,22 @@ form{
 	padding-left: 1em;
 }
 
+@media (max-width: 600px){
+	#settings_container input{
+		width: 100%;
+	}
+}
+
+@media (min-width: 600px){
+	#settings_container{
+		width: 10em;
+	}
+}
 #settings_container{
 	margin-left: auto;
 	margin-right: auto;
-	/*padding: 1em;*/
-	width: 12em;
+	padding: .5em;
+	overflow: hidden;
 }
 
 #setting_title{
@@ -796,5 +807,6 @@ input[type="checkbox"]:checked + label{
 }
 
 #submit_settings{
+	margin-top: 1em;
 	float: right;
 }
