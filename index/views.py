@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 from django.template import RequestContext, loader
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
-from .models import jack, user, yes_word, no_word, geolocation, link, image, jack_bro
+from .models import *
 from urllib.parse import urlparse
 import urllib.request
 import urllib.parse
@@ -42,6 +42,47 @@ def index(request):
 	else:
 		return render(request, 'index/index.html', context)
 
+def settings(request):
+	user_options = [
+		{
+			'text': 'make private',
+			'name': 'private',
+			'type': 'check'
+		},
+		{
+			'text': 'show on home page',
+			'name': 'on_home',
+			'type': 'check'
+		},
+		{
+			'text': 'show date on jacks',
+			'name': 'show_date',
+			'type': 'check'
+		},
+		{
+			'text': 'show time on jacks',
+			'name': 'show_time',
+			'type': 'check'
+		},
+		{
+			'text': 'delete account',
+			'name': 'delete_account',
+			'type': 'button'
+		}
+	]
+
+	context = {
+		'version': '0.0.1',
+		'host': "haveijackedit.com",
+		'signed_in': 'user_logged_in' in request.session,
+		'options': user_options
+	}
+
+	if 'user_logged_in' in request.session:
+		context['user_analytic_id'] = request.session['user_name']
+
+	return render(request, 'index/settings.html', context)
+
 def signout(request):
 	request.session.flush()
 	return HttpResponseRedirect('/dash/')
@@ -68,6 +109,26 @@ def signin(request):
 
 	return render(request, 'signin_standalone.html', context)
 
+def verifyCaptcha(captcha_response, userIp):
+	#information to send to google
+	captchaData = {
+		'secret': settings.CAPTCHA_KEY,
+		'response': captchaClientResponse,
+		'remoteip': ip,
+	}
+	encodedPostData = urllib.parse.urlencode(captchaData).encode('utf-8')
+
+	captchaRequest = urllib.request.Request(settings.CAPTCHA_URL)
+	captchaRequest.add_header("Content-Type","application/x-www-form-urlencoded;charset=utf-8")
+
+	captchaResponse = ''
+	with urllib.request.urlopen(captchaRequest, encodedPostData) as f:
+		captchaResponse += f.read().decode('utf-8')
+
+	decodedCaptchaResponse = json.loads(captchaResponse)
+	if not decodedCaptchaResponse['success']:
+		#raise Exception('must verify captcha')
+		pass
 
 def signup(request):
 	context = {
@@ -88,25 +149,7 @@ def signup(request):
 			else:
 				ip = request.META.get('REMOTE_ADDR')
 
-			#information to send to google
-			captchaData = {
-				'secret': settings.CAPTCHA_KEY,
-				'response': captchaClientResponse,
-				'remoteip': ip,
-			}
-			encodedPostData = urllib.parse.urlencode(captchaData).encode('utf-8')
-
-			captchaRequest = urllib.request.Request(settings.CAPTCHA_URL)
-			captchaRequest.add_header("Content-Type","application/x-www-form-urlencoded;charset=utf-8")
-
-			captchaResponse = ''
-			with urllib.request.urlopen(captchaRequest, encodedPostData) as f:
-				captchaResponse += f.read().decode('utf-8')
-
-			decodedCaptchaResponse = json.loads(captchaResponse)
-			if not decodedCaptchaResponse['success']:
-				#raise Exception('must verify captcha')
-				pass
+			#verifyCaptcha(captchaClientResponse, ip)
 
 			createUser(username, password)
 			signin(request)
@@ -304,12 +347,16 @@ def createUser(username, password):
 	hash_salt = hashlib.md5(str(time.time()).encode()).hexdigest()
 	hashed_password = hashlib.sha512((hash_salt + password).encode()).hexdigest()
 
+	newUserSettings = user_settings()
+	newUserSettings.save()
+
 	newUser = user(
 		name=username,
 		password_hash=hashed_password,
 		last_online=datetime.datetime.today(),
 		creation_date=datetime.datetime.today(),
-		password_salt=hash_salt)
+		password_salt=hash_salt,
+		settings=newUserSettings)
 	newUser.save()
 
 #returns an id if username matches password, otherwise throws an exception

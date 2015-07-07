@@ -459,8 +459,8 @@ form{
 	border-style: solid;
 	transition: all .2s;
 	padding: .1em;
-
 }
+
 .button:hover{
 	background-color: #888;
 	color: #fff;
@@ -688,14 +688,17 @@ form{
 	padding: .125em;
 	float: left;
 	margin: 0.125em;
-	padding-left: 0.25em;
+	margin-right: 0.25em;
+	margin-left: 0;
+	/*padding-left: 0.25em;*/
 	padding-right: 0.25em;
 
 	transition: all 0.2s;
 }
 
 .quote_bro:hover{
-	background: black;
+	background: #444;
+	color: white;
 }
 
 .quote_icon{
@@ -725,4 +728,57 @@ form{
 
 .with_icon{
 	padding-left: 1em;
+}
+
+#settings_container{
+	margin-left: auto;
+	margin-right: auto;
+	padding: 1em;
+	width: 12em;
+}
+
+#setting_title{
+	margin-bottom: 0.5em;
+}
+
+.setting_option{
+	margin: 0.25em;
+	vertical-align: middle;
+	cursor: pointer;
+}
+
+.setting_icon{
+	vertical-align: middle;
+}
+
+.checkbox_wrapper{
+	height: 24px;
+	width: 24px;
+	position: relative;
+	font-size: 0.5em;
+}
+
+input[type="checkbox"] {
+	opacity:0;
+	height: 16px;
+	width: 17px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 2;
+}
+
+input[type="checkbox"] + label{
+	background-image: url(/static/check_box_outline.svg);
+	height: 24px;
+	width: 24px;
+	display:inline-block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 1;
+}
+
+input[type="checkbox"]:checked + label{
+	background-image: url(/static/check_box.svg);
 }
