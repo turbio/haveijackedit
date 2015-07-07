@@ -6,45 +6,48 @@
 {% block content %}
 	<div id="wrapper">
 		{% include "titlebar.html" %}
-		<div id="settings_container">
-			<div id="setting_title">settings</div>
-			<div class="setting_option">
-				<div class="checkbox_wrapper">
-					<input type="checkbox" />
-					<label></label>
+		<form>
+			<div id="settings_container">
+				<div id="setting_title">settings</div>
+				<div class="setting_option">
+					<div class="checkbox_wrapper">
+						<input type="checkbox" name="private"/>
+						<label></label>
+					</div>
+					<div class="checkbox_label">make private</div>
 				</div>
-				<div class="checkbox_label">make private</div>
-			</div>
-			<div class="setting_option">
-				<div class="checkbox_wrapper">
-					<input type="checkbox" />
-					<label></label>
+				<div class="setting_option">
+					<div class="checkbox_wrapper">
+						<input type="checkbox" name="show_on_home_page"/>
+						<label></label>
+					</div>
+					<div class="checkbox_label">show jacks on home page</div>
 				</div>
-				<div class="checkbox_label">show jacks on home page</div>
-			</div>
-			<div class="setting_option">
-				<div class="checkbox_wrapper">
-					<input type="checkbox" />
-					<label></label>
+				<div class="setting_option">
+					<div class="checkbox_wrapper">
+						<input type="checkbox" name="show_data"/>
+						<label></label>
+					</div>
+					<div class="checkbox_label">show date on jacks</div>
 				</div>
-				<div class="checkbox_label">show date on jacks</div>
-			</div>
-			<div class="setting_option">
-				<div class="checkbox_wrapper">
-					<input type="checkbox" />
-					<label></label>
+				<div class="setting_option">
+					<div class="checkbox_wrapper">
+						<input type="checkbox" name="show_time"/>
+						<label></label>
+					</div>
+					<div class="checkbox_label">show time on jacks</div>
 				</div>
-				<div class="checkbox_label">show time on jacks</div>
+				<div class="setting_option ">
+					<div class="setting_section">change password</div>
+					<input type="field" name="cur_pass" placeholder="current password"/>
+					<input type="field" name="new_pass" placeholder="new password"/>
+					&nbsp;<input name="change_pass" type="submit" value="change"/>
+				</div>
+				<div class="setting_option">
+					<input type="submit" name="delete_account" value="delete account"/>
+				</div>
+				<input id="submit_settings" type="submit" name="submit" value="submit"/>
 			</div>
-			<div class="setting_option ">
-				<div class="setting_section">change password</div>
-				<input type="field" placeholder="current password"/>
-				<input type="field" placeholder="new password"/>
-				&nbsp;<input type="submit" value="change"/>
-			</div>
-			<div class="setting_option">
-				<input type="submit" value="delete account"/>
-			</div>
-		</div>
+		</form>
 	</div>
 {% endblock %}

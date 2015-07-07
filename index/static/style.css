@@ -794,3 +794,7 @@ input[type="checkbox"]:checked + label{
 	margin-top: .5em;
 	font-size: 0.75em;
 }
+
+#submit_settings{
+	float: right;
+}
