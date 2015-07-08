@@ -43,33 +43,12 @@ def index(request):
 		return render(request, 'index/index.html', context)
 
 def settings(request):
-	user_options = [
-		{
-			'text': 'make private',
-			'name': 'private',
-			'type': 'check'
-		},
-		{
-			'text': 'show on home page',
-			'name': 'on_home',
-			'type': 'check'
-		},
-		{
-			'text': 'show date on jacks',
-			'name': 'show_date',
-			'type': 'check'
-		},
-		{
-			'text': 'show time on jacks',
-			'name': 'show_time',
-			'type': 'check'
-		},
-		{
-			'text': 'delete account',
-			'name': 'delete_account',
-			'type': 'button'
-		}
-	]
+	user_options = {
+			'private': False,
+			'show_on_home_page': True,
+			'show_date': True,
+			'show_time': True
+			}
 
 	context = {
 		'version': '0.0.1',
@@ -82,6 +61,9 @@ def settings(request):
 		context['user_analytic_id'] = request.session['user_name']
 
 	return render(request, 'index/settings.html', context)
+
+def submit_settings(request):
+	return HttpResponseRedirect('/dash/')
 
 def signout(request):
 	request.session.flush()

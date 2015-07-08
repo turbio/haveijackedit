@@ -6,33 +6,33 @@
 {% block content %}
 	<div id="wrapper">
 		{% include "titlebar.html" %}
-		<form>
+		<form method="POST" action="/submit_settings/">
 			<div id="settings_container">
 				<div id="setting_title">settings</div>
 				<div class="setting_option">
 					<div class="checkbox_wrapper">
-						<input type="checkbox" name="private"/>
+						<input type="checkbox" name="private" {% if options.private %}checked="checked"{% endif %}/>
 						<label></label>
 					</div>
 					<div class="checkbox_label">make private</div>
 				</div>
 				<div class="setting_option">
 					<div class="checkbox_wrapper">
-						<input type="checkbox" name="show_on_home_page" checked="checked"/>
+						<input type="checkbox" name="show_on_home_page" {% if options.show_on_home_page %}checked="checked"{% endif %}/>
 						<label></label>
 					</div>
 					<div class="checkbox_label">show jacks on home page</div>
 				</div>
 				<div class="setting_option">
 					<div class="checkbox_wrapper">
-						<input type="checkbox" name="show_data" checked="checked"/>
+						<input type="checkbox" name="show_data" {% if options.show_date %}checked="checked"{% endif %}/>
 						<label></label>
 					</div>
 					<div class="checkbox_label">show date on jacks</div>
 				</div>
 				<div class="setting_option">
 					<div class="checkbox_wrapper">
-						<input type="checkbox" name="show_time" checked="checked"/>
+						<input type="checkbox" name="show_time" {% if options.show_time %}checked="checked"{% endif %}/>
 						<label></label>
 					</div>
 					<div class="checkbox_label">show time on jacks</div>
