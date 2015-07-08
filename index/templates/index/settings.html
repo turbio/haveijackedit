@@ -6,7 +6,7 @@
 {% block content %}
 	<div id="wrapper">
 		{% include "titlebar.html" %}
-		<form method="POST" action="/submit_settings/">
+		<form method="POST" action="/submit_settings/">{% csrf_token %}
 			<div id="settings_container">
 				<div id="setting_title">settings</div>
 				<div class="setting_option">

@@ -43,12 +43,13 @@ def index(request):
 		return render(request, 'index/index.html', context)
 
 def settings(request):
+
 	user_options = {
-			'private': False,
-			'show_on_home_page': True,
-			'show_date': True,
-			'show_time': True
-			}
+		'private': False,
+		'show_on_home_page': True,
+		'show_date': True,
+		'show_time': True
+	}
 
 	context = {
 		'version': '0.0.1',
@@ -63,6 +64,7 @@ def settings(request):
 	return render(request, 'index/settings.html', context)
 
 def submit_settings(request):
+	print(str(request.POST))
 	return HttpResponseRedirect('/dash/')
 
 def signout(request):

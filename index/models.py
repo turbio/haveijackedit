@@ -1,17 +1,18 @@
 from django.db import models
 
-class user_settings(models.Model):
-	private = models.BooleanField(default=False)
-	show_data = models.BooleanField(default=True)
-	show_time = models.BooleanField(default=True)
-
 class user(models.Model):
 	name = models.CharField(max_length=16)
 	password_hash = models.CharField(max_length=128)
 	password_salt = models.CharField(max_length=32)
 	last_online = models.DateTimeField()
 	creation_date = models.DateTimeField()
-	settings = models.ForeignKey(user_settings)
+	settings = models.ForeignKey('user_settings')
+
+class user_settings(models.Model):
+	private = models.BooleanField(default=False)
+	on_homepage = models.BooleanField(default=True)
+	show_data = models.BooleanField(default=True)
+	show_time = models.BooleanField(default=True)
 
 class jack(models.Model):
 	user_id = models.ForeignKey(user)
