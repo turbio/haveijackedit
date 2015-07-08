@@ -78,15 +78,31 @@ def submit_settings(request):
 	print(str(request.POST))
 
 	userObject = user.objects.filter(id = request.session['user_id']).first()
-	userSettings = userObject.settings
 
 	if 'submit' in request.POST:
+		userSettings = userObject.settings
 		userSettings.private = 'private' in request.POST
 		userSettings.on_homepage = 'show_on_home_page' in request.POST
 		userSettings.show_date = 'show_date' in request.POST
 		userSettings.show_time = 'show_time' in request.POST
+		userSettings.save()
 
-	userSettings.save()
+	if 'delete_account' in request.POST:
+		userObject.delete()
+		signout(request)
+
+	if 'change_pass' in request.POST:
+		try:
+			checkCred(userObject.name, request.POST.get('cur_pass', ''))
+		except:
+			return HttpResponseRedirect('/incorrect_password/')
+
+		pass_salt = createPasswordSalt()
+		pass_hash = hashPassword(request.POST.get('new_pass', ''), pass_salt)
+
+		userObject.password_hash = pass_hash
+		userObject.password_salt = pass_salt
+		userObject.save()
 
 	return HttpResponseRedirect('/settings/')
 
@@ -351,8 +367,8 @@ def createUser(username, password):
 	if userExists(username):
 		raise Exception('username already exists')
 
-	hash_salt = hashlib.md5(str(time.time()).encode()).hexdigest()
-	hashed_password = hashlib.sha512((hash_salt + password).encode()).hexdigest()
+	hash_salt = createPasswordSalt()
+	hashed_password = hashPassword(password, hash_salt)
 
 	newUserSettings = user_settings()
 	newUserSettings.save()
@@ -365,6 +381,12 @@ def createUser(username, password):
 		password_salt=hash_salt,
 		settings=newUserSettings)
 	newUser.save()
+
+def createPasswordSalt():
+	return hashlib.md5(str(time.time()).encode()).hexdigest()
+
+def hashPassword(password, salt):
+	return hashlib.sha512((salt + password).encode()).hexdigest()
 
 #returns an id if username matches password, otherwise throws an exception
 def checkCred(username, password):
