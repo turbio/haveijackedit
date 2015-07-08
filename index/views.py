@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.conf import settings
+from django.conf import settings as djangosettings
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.template import RequestContext, loader
@@ -135,13 +135,13 @@ def signin(request):
 def verifyCaptcha(captcha_response, userIp):
 	#information to send to google
 	captchaData = {
-		'secret': settings.CAPTCHA_KEY,
-		'response': captchaClientResponse,
-		'remoteip': ip,
+		'secret': djangosettings.CAPTCHA_KEY,
+		'response': captcha_response,
+		'remoteip': userIp,
 	}
 	encodedPostData = urllib.parse.urlencode(captchaData).encode('utf-8')
 
-	captchaRequest = urllib.request.Request(settings.CAPTCHA_URL)
+	captchaRequest = urllib.request.Request(djangosettings.CAPTCHA_URL)
 	captchaRequest.add_header("Content-Type","application/x-www-form-urlencoded;charset=utf-8")
 
 	captchaResponse = ''
@@ -151,7 +151,6 @@ def verifyCaptcha(captcha_response, userIp):
 	decodedCaptchaResponse = json.loads(captchaResponse)
 	if not decodedCaptchaResponse['success']:
 		raise Exception('must verify captcha')
-		pass
 
 def signup(request):
 	context = {
