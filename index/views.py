@@ -172,7 +172,7 @@ def signup(request):
 			else:
 				ip = request.META.get('REMOTE_ADDR')
 
-			#verifyCaptcha(captchaClientResponse, ip)
+			verifyCaptcha(captchaClientResponse, ip)
 
 			createUser(username, password)
 			signin(request)
