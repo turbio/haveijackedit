@@ -43,12 +43,17 @@ def index(request):
 		return render(request, 'index/index.html', context)
 
 def settings(request):
+	if not 'user_logged_in' in request.session:
+		return HttpResponseRedirect('/dash/')
+
+	userObject = user.objects.filter(id = request.session['user_id']).first()
+	userSettings = userObject.settings
 
 	user_options = {
-		'private': False,
-		'show_on_home_page': True,
-		'show_date': True,
-		'show_time': True
+		'private': userSettings.private,
+		'show_on_home_page': userSettings.on_homepage,
+		'show_date': userSettings.show_date,
+		'show_time': userSettings.show_time
 	}
 
 	context = {
@@ -64,8 +69,26 @@ def settings(request):
 	return render(request, 'index/settings.html', context)
 
 def submit_settings(request):
+	if request.method != 'POST':
+		return HttpResponseRedirect('/dash/')
+
+	if not 'user_logged_in' in request.session:
+		return HttpResponseRedirect('/dash/')
+
 	print(str(request.POST))
-	return HttpResponseRedirect('/dash/')
+
+	userObject = user.objects.filter(id = request.session['user_id']).first()
+	userSettings = userObject.settings
+
+	if 'submit' in request.POST:
+		userSettings.private = 'private' in request.POST
+		userSettings.on_homepage = 'show_on_home_page' in request.POST
+		userSettings.show_date = 'show_date' in request.POST
+		userSettings.show_time = 'show_time' in request.POST
+
+	userSettings.save()
+
+	return HttpResponseRedirect('/settings/')
 
 def signout(request):
 	request.session.flush()
@@ -133,7 +156,7 @@ def signup(request):
 			else:
 				ip = request.META.get('REMOTE_ADDR')
 
-			verifyCaptcha(captchaClientResponse, ip)
+			#verifyCaptcha(captchaClientResponse, ip)
 
 			createUser(username, password)
 			signin(request)

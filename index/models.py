@@ -11,7 +11,7 @@ class user(models.Model):
 class user_settings(models.Model):
 	private = models.BooleanField(default=False)
 	on_homepage = models.BooleanField(default=True)
-	show_data = models.BooleanField(default=True)
+	show_date = models.BooleanField(default=True)
 	show_time = models.BooleanField(default=True)
 
 class jack(models.Model):
