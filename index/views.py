@@ -46,13 +46,9 @@ def index(request):
 		return render(request, 'index/index.html', context)
 
 def upvote(request):
-	print('upvote')
-	print(request.POST)
 	return HttpResponse(status=200)
 
 def downvote(request):
-	print('downvote')
-	print(request.POST)
 	return HttpResponse(status=200)
 
 def settings(request):

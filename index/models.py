@@ -20,7 +20,8 @@ class jack(models.Model):
 	comment = models.CharField(max_length=160)
 
 class vote(models.Model):
-	user = models.ForeignKey(user)
+	user = models.ForeignKey(user, null=True)
+	ip = models.CharField(max_length=24)
 	jack = models.ForeignKey(jack)
 	date = models.DateTimeField()
 	choice = models.IntegerField()
