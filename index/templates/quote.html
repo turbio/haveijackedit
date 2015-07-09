@@ -35,12 +35,12 @@
 			{% endif %}
 			<div class="quote_row">
 				<div class="jack_vote_wrapper">
-					<a href="/nojs" onClick="upvote({{ jack.id }}); return 0;">
+					<a href="/nojs" onClick="upvote({{ jack.id }}); return false;">
 						<div class="quote_up vote_button">
 							<i class="material-icons">thumb_up</i>
 						</div>
 					</a>
-					<a href="/nojs" onClick="downvote({{ jack.id }}); return 0;">
+					<a href="/nojs" onClick="downvote({{ jack.id }}); return false;">
 						<div class="quote_down vote_button">
 							<i class="material-icons">thumb_down</i>
 						</div>

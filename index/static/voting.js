@@ -21,3 +21,11 @@ function post(path, params, method) {
 	document.body.appendChild(form);
 	form.submit();
 }
+
+function downvote(post){
+	console.log(post);
+}
+
+function upvote(post){
+	console.log(post);
+}
