@@ -1,31 +1,26 @@
-function post(path, params, method) {
-	method = method || "post"; // Set method to post by default if not specified.
+function post(path, params, callback){
+	http = new XMLHttpRequest();
+	http.open("POST", path, true);
 
-	// The rest of this code assumes you are not using a library.
-	// It can be made less wordy if you use one.
-	var form = document.createElement("form");
-	form.setAttribute("method", method);
-	form.setAttribute("action", path);
+	//Send the proper header information along with the request
+	http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	http.setRequestHeader("Content-length", params.length);
+	http.setRequestHeader("Connection", "close");
 
-	for(var key in params) {
-		if(params.hasOwnProperty(key)) {
-			var hiddenField = document.createElement("input");
-			hiddenField.setAttribute("type", "hidden");
-			hiddenField.setAttribute("name", key);
-			hiddenField.setAttribute("value", params[key]);
+	http.onreadystatechange = callback
+	http.send(params);
+}
 
-			form.appendChild(hiddenField);
-		}
+function downvote(postid){
+	post("/downvote/", "post=" + postid, cb)
+}
+
+function upvote(postid){
+	post("/upvote/", "post=" + postid, cb)
+}
+
+function cb(){
+	if(http.readyState == 4 && http.status == 200) {
+		alert(http.responseText);
 	}
-
-	document.body.appendChild(form);
-	form.submit();
-}
-
-function downvote(post){
-	console.log(post);
-}
-
-function upvote(post){
-	console.log(post);
 }
