@@ -1,6 +1,6 @@
 {% if jack %}
 <div class="feed_quote {% if jack.shade %}shaded_quote{% endif %}">
-	<div class="quote">
+	<div class="quote" id="jack_{{ jack.id }}">
 		<div class="quote_content">
 			<div class="msg">{{ jack.comment }}</div>
 			{% if jack.has_geolocation  %}
@@ -35,12 +35,17 @@
 			{% endif %}
 			<div class="quote_row">
 				<div class="jack_vote_wrapper">
-					<div class="quote_up vote_button">
-						<i class="material-icons">thumb_up</i>
-					</div>
-					<div class="quote_down vote_button">
-						<i class="material-icons">thumb_down</i>
-					</div>
+					<a href="/nojs" onClick="upvote({{ jack.id }}); return 0;">
+						<div class="quote_up vote_button">
+							<i class="material-icons">thumb_up</i>
+						</div>
+					</a>
+					<a href="/nojs" onClick="downvote({{ jack.id }}); return 0;">
+						<div class="quote_down vote_button">
+							<i class="material-icons">thumb_down</i>
+						</div>
+					</a>
+					<div class="jack_votes">{{ jack.votes }}</div>
 				</div>
 				<a href="http://{{ jack.user_id.name }}.{{ host }}">
 					<div class="name">&ndash;{% if show_username %}{{ jack.user_id.name }}{% else %}you{% endif %}{% if show_date %}, {{ jack.date }}{% endif %}</div>

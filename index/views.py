@@ -462,5 +462,6 @@ def addDetailsToJackList(jackList):
 			j.bros.append(b.bro)
 
 		j.shade = shade = not shade
+		j.votes = int(time.time() / 100000)
 
 	return jackList;
