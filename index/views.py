@@ -286,6 +286,8 @@ def new_jack(request):
 		newImage = image(
 			jack=newJack,
 			data=request.POST['image'])
+		if 'image_source' in request.POST:
+			newImage.source = request.POST['image_source']
 		newImage.save()
 
 	if 'jack_link_url' in request.POST and not request.POST['jack_link_url'] == '':
