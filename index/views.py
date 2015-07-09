@@ -45,10 +45,7 @@ def index(request):
 	else:
 		return render(request, 'index/index.html', context)
 
-def upvote(request):
-	return HttpResponse(status=200)
-
-def downvote(request):
+def vote(request):
 	return HttpResponse(status=200)
 
 def settings(request):

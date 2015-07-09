@@ -1,6 +1,5 @@
 function post(path, params, callback){
 	params = "csrfmiddlewaretoken=" + getCookie('csrftoken') + "&" + params;
-	console.log(params)
 	http = new XMLHttpRequest();
 	http.open("POST", path, true);
 
@@ -14,11 +13,11 @@ function post(path, params, callback){
 }
 
 function downvote(postid){
-	post("/downvote/", "post=" + postid, cb)
+	post("/vote/", "jack=" + postid + "&choice=u", cb)
 }
 
 function upvote(postid){
-	post("/upvote/", "post=" + postid, cb)
+	post("/vote/", "jack=" + postid + "&choice=d", cb)
 }
 
 function cb(){
