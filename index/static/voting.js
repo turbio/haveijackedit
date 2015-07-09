@@ -1,4 +1,6 @@
 function post(path, params, callback){
+	params = "csrfmiddlewaretoken=" + getCookie('csrftoken') + "&" + params;
+	console.log(params)
 	http = new XMLHttpRequest();
 	http.open("POST", path, true);
 
@@ -21,6 +23,22 @@ function upvote(postid){
 
 function cb(){
 	if(http.readyState == 4 && http.status == 200) {
-		alert(http.responseText);
+		//alert(http.responseText);
 	}
+}
+
+function getCookie(name) {
+	var cookieValue = null;
+	if (document.cookie && document.cookie != '') {
+		var cookies = document.cookie.split(';');
+		for (var i = 0; i < cookies.length; i++) {
+			var cookie = cookies[i].trim();
+			// Does this cookie string begin with the name we want?
+			if (cookie.substring(0, name.length + 1) == (name + '=')) {
+				cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+				break;
+			}
+		}
+	}
+	return cookieValue;
 }

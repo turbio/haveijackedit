@@ -24,6 +24,8 @@ urlpatterns = [
 	url(r'^submit_settings/$', views.submit_settings),
 	url(r'^signout/$', views.signout),
 	url(r'^signin/$', views.signin),
+	url(r'^upvote/$', views.upvote),
+	url(r'^downvote/$', views.downvote),
 	url(r'^signup/$', views.signup),
 	url(r'^new_jack/$', views.new_jack),
 	url(r'^$', views.index),
