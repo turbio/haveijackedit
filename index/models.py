@@ -19,6 +19,12 @@ class jack(models.Model):
 	date = models.DateTimeField()
 	comment = models.CharField(max_length=160)
 
+class vote(models.Model):
+	user = models.ForeignKey(user)
+	jack = models.ForeignKey(jack)
+	date = models.DateTimeField()
+	choice = models.IntegerField()
+
 class geolocation(models.Model):
 	jack = models.ForeignKey('jack')
 	lat = models.DecimalField(max_digits=11, decimal_places=8)
