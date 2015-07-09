@@ -169,6 +169,7 @@ function retryImage(){
 
 function saveImage(){
 	Webcam.snap(function(data_uri){
+		document.getElementById("image_source").value = "c";
 		showImage(data_uri);
 	});
 }
@@ -236,6 +237,7 @@ function showUploadedImage(input){
 
 		reader.onload = function(e){
 			showImage(e.target.result);
+			document.getElementById("image_source").value = "f";
 		}
 
 		reader.readAsDataURL(input.files[0]);
