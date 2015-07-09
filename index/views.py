@@ -444,6 +444,7 @@ def addDetailsToJackList(jackList):
 		if not len(jackImage) == 0:
 			j.has_image = True
 			j.image_data = jackImage.first().data
+			j.image_source = jackImage.first().source
 
 		jackLink = link.objects.filter(jack = j)
 		if not len(jackLink) == 0:

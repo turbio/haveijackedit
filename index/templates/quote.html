@@ -9,7 +9,11 @@
 	{% endif %}
 	{% if jack.has_image  %}
 		<div class="quote_image_container quote_row">
-			<div class="quote_icon quote_row"><i class="material-icons">photo</i></div>
+			{% if jack.image_source == "f" %}
+				<div class="quote_icon quote_row"><i class="material-icons">photo</i></div>
+			{% elif jack.image_source == "c" %}
+				<div class="quote_icon quote_row"><i class="material-icons">photo_camera</i></div>
+			{% endif %}
 			<img class="quote_image" src="{{ jack.image_data }}"/>
 		</div>
 	{% endif %}
