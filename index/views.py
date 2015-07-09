@@ -19,7 +19,10 @@ def index(request):
 	#if 'user_logged_in' in request.session:
 		#return HttpResponseRedirect('/dash/')
 
-	latest_jack = jack.objects.order_by('date').reverse()
+	latest_jack = jack.objects.order_by('date').reverse().filter(
+		user_id__settings__on_homepage = True,
+		user_id__settings__private = False)
+
 	if len(latest_jack) > 0:
 		latest_jack = addDetailsToJackList(latest_jack)[0]
 	else:
@@ -182,26 +185,31 @@ def signup(request):
 	return render(request, 'signup_standalone.html', context)
 
 def feed(request):
-	isUser = True
+	isUser = False
+	isPrivate = False
 	userJackList = False
 	subdomain = getSubdomain(request.META['HTTP_HOST'])
 
-	userId = user.objects.filter(name = subdomain)
-	if len(userId) > 0:
-		userId = userId[0].id
-		userJackList = jack.objects.order_by('date').filter(user_id = userId).reverse()
-		isUser = True
-	else:
-		isUser = False
+	userObject = user.objects.filter(name = subdomain)
+
+	if len(userObject) > 0:
+		userObject = userObject.first()
+		isPrivate = userObject.settings.private
+		if not isPrivate:
+			isUser = True
+			userJackList = addDetailsToJackList(
+				jack.objects.order_by('date').filter(
+					user_id = userObject.id).reverse())
 
 	context = {
 		'version': '0.0.1',
 		'show_username': True,
 		'host': "haveijackedit.com",
-		'jack_list': addDetailsToJackList(userJackList),
+		'jack_list': userJackList,
 		'username': subdomain,
 		'title_text_a': 'lmao',
 		'is_user': isUser,
+		'is_private': isPrivate,
 		'signed_in': 'user_logged_in' in request.session,
 	}
 

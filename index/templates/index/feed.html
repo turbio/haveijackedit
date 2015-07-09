@@ -3,35 +3,44 @@
 	<script src="/static/account_action.js"></script>
 {% endblock %}
 {% block content %}
-{% if is_user %}
-	<div id="wrapper">
-		{% include "titlebar.html" %}
-		<div id="feed_title_box">
-			<div id="feed_title_q">
-				Has {{ username }} jacked it today?
-			</div>
-			<div id="feed_title_a">
-				{{ title_text_a }}
-			</div>
+{% if is_private %}
+		<div class="error_page_message">
+			this page is private
+			<div><a href="http://haveijackedit.com">
+				return home
+			</a></div>
 		</div>
-	{% if jack_list %}
-	{% for jack in jack_list %}
-		<div class="feed_quote">
-			{% include "quote.html" %}
-		</div>
-	{% endfor %}
-	{% else %}
-	{% endif %}
-	</div>
 {% else %}
-	<div class="error_page_message">
-		doesn't look like this user exists
-		<div><a href="http://haveijackedit.com?url={{ username }}">
-			take this url
-		</a></div>
-		<div><a href="http://haveijackedit.com">
-			return home
-		</a></div>
-	</div>
+	{% if is_user %}
+		<div id="wrapper">
+			{% include "titlebar.html" %}
+			<div id="feed_title_box">
+				<div id="feed_title_q">
+					Has {{ username }} jacked it today?
+				</div>
+				<div id="feed_title_a">
+					{{ title_text_a }}
+				</div>
+			</div>
+		{% if jack_list %}
+		{% for jack in jack_list %}
+			<div class="feed_quote">
+				{% include "quote.html" %}
+			</div>
+		{% endfor %}
+		{% else %}
+		{% endif %}
+		</div>
+	{% else %}
+		<div class="error_page_message">
+			doesn't look like this user exists
+			<div><a href="http://haveijackedit.com?url={{ username }}">
+				take this url
+			</a></div>
+			<div><a href="http://haveijackedit.com">
+				return home
+			</a></div>
+		</div>
+	{% endif %}
 {% endif %}
 {% endblock %}
