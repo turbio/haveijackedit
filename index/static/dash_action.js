@@ -143,6 +143,7 @@ picFromWebcam = false;
 
 function useWebcam(){
 	document.getElementById("camera_box").style['display'] = "block";
+	Webcam.set({image_format: 'png'})
 	Webcam.attach('#camera_view');
 	picFromWebcam = true;
 }
@@ -167,7 +168,10 @@ function retryImage(){
 }
 
 function saveImage(){
-	alert("TODO: this");
+	Webcam.snap(function(data_uri){
+		//document.getElementById('my_result').innerHTML = '<img src="'+data_uri+'"/>';
+		showImage(data_uri);
+	});
 }
 
 var dropzoneAdded = false;
