@@ -19,14 +19,18 @@ body{
 
 @media (min-width: 600px){
 	.quote{
-		width: 10em;
+		width: 12em;
 	}
 }
 
 .quote{
 	margin-left: auto;
 	margin-right: auto;
-	padding: 1em;
+	padding: .25em;
+}
+
+.shaded_quote{
+	/*background: #f8f8f8;*/
 }
 
 .msg{
@@ -175,7 +179,12 @@ form{
 }
 
 .feed_quote{
+	margin-top: .5em;
 	font-size: 0.75em;
+}
+
+.feed_quote:hover{
+	background-color: #f8f8f8;
 }
 
 .error_page_message{
@@ -809,4 +818,25 @@ input[type="checkbox"]:checked + label{
 #submit_settings{
 	margin-top: 1em;
 	float: right;
+}
+
+.jack_vote_wrapper{
+	float: left;
+}
+
+.vote_button{
+	display: inline-block;
+	/*margin-right: 0.25em;*/
+	width: 1em;
+	text-align: center;
+	vertical-align: middle;
+	cursor: pointer;
+	transition: all .2s;
+}
+.vote_button:hover{
+	color: #fff;
+	background: #000;
+}
+
+.quote_content{
 }

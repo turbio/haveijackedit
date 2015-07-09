@@ -433,6 +433,7 @@ def validateUrl(url):
 	return url
 
 def addDetailsToJackList(jackList):
+	shade = False
 	for j in jackList:
 		jackGeolocation = geolocation.objects.filter(jack = j)
 		if not len(jackGeolocation) == 0:
@@ -459,5 +460,7 @@ def addDetailsToJackList(jackList):
 
 		for b in jackBro:
 			j.bros.append(b.bro)
+
+		j.shade = shade = not shade
 
 	return jackList;

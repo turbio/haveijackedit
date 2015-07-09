@@ -1,40 +1,52 @@
 {% if jack %}
-<div class="quote">
-	<div class="msg">{{ jack.comment }}</div>
-	{% if jack.has_geolocation  %}
-	<div class="quote_image_container quote_row">
-		<div class="quote_icon quote_row"><i class="material-icons">my_location</i></div>
-		<img class="quote_image" src="https://maps.googleapis.com/maps/api/staticmap?center={{ jack.lat }},{{ jack.lng }}&zoom=16&size=600x600&maptype=roadmap&style=element:labels|visibility:off&style=saturation:-100&markers={{ jack.lat }},{{ jack.lng }}"/>
-	</div>
-	{% endif %}
-	{% if jack.has_image  %}
-		<div class="quote_image_container quote_row">
-			{% if jack.image_source == "f" %}
-				<div class="quote_icon quote_row"><i class="material-icons">photo</i></div>
-			{% elif jack.image_source == "c" %}
-				<div class="quote_icon quote_row"><i class="material-icons">photo_camera</i></div>
+<div class="feed_quote {% if jack.shade %}shaded_quote{% endif %}">
+	<div class="quote">
+		<div class="quote_content">
+			<div class="msg">{{ jack.comment }}</div>
+			{% if jack.has_geolocation  %}
+			<div class="quote_image_container quote_row">
+				<div class="quote_icon quote_row"><i class="material-icons">my_location</i></div>
+				<img class="quote_image" src="https://maps.googleapis.com/maps/api/staticmap?center={{ jack.lat }},{{ jack.lng }}&zoom=16&size=600x600&maptype=roadmap&style=element:labels|visibility:off&style=saturation:-100&markers={{ jack.lat }},{{ jack.lng }}"/>
+			</div>
 			{% endif %}
-			<img class="quote_image" src="{{ jack.image_data }}"/>
+			{% if jack.has_image  %}
+				<div class="quote_image_container quote_row">
+					{% if jack.image_source == "f" %}
+						<div class="quote_icon quote_row"><i class="material-icons">photo</i></div>
+					{% elif jack.image_source == "c" %}
+						<div class="quote_icon quote_row"><i class="material-icons">photo_camera</i></div>
+					{% endif %}
+					<img class="quote_image" src="{{ jack.image_data }}"/>
+				</div>
+			{% endif %}
+			{% if jack.has_link  %}
+				<div class="quote_row with_icon">
+					<div class="quote_icon quote_row"><i class="material-icons">link</i></div>
+					<div class="quote_link quote_row"><a href="{{ jack.link_url }}">{{ jack.link_text }}</a></div>
+				</div>
+			{% endif %}
+			{% if jack.has_bro  %}
+				<div class="quote_row with_icon">
+					<div class="quote_icon"><i class="material-icons">people</i></div>
+					{% for bro in jack.bros %}
+						<div class="quote_bro"><a href="http://{{ bro.name }}.{{ host }}">{{ bro.name }}</a></div>
+					{% endfor %}
+				</div>
+			{% endif %}
+			<div class="quote_row">
+				<div class="jack_vote_wrapper">
+					<div class="quote_up vote_button">
+						<i class="material-icons">thumb_up</i>
+					</div>
+					<div class="quote_down vote_button">
+						<i class="material-icons">thumb_down</i>
+					</div>
+				</div>
+				<a href="http://{{ jack.user_id.name }}.{{ host }}">
+					<div class="name">&ndash;{% if show_username %}{{ jack.user_id.name }}{% else %}you{% endif %}{% if show_date %}, {{ jack.date }}{% endif %}</div>
+				</a>
+			</div>
 		</div>
-	{% endif %}
-	{% if jack.has_link  %}
-		<div class="quote_row with_icon">
-			<div class="quote_icon quote_row"><i class="material-icons">link</i></div>
-			<div class="quote_link quote_row"><a href="{{ jack.link_url }}">{{ jack.link_text }}</a></div>
-		</div>
-	{% endif %}
-	{% if jack.has_bro  %}
-		<div class="quote_row with_icon">
-			<div class="quote_icon"><i class="material-icons">people</i></div>
-			{% for bro in jack.bros %}
-				<div class="quote_bro"><a href="http://{{ bro.name }}.{{ host }}">{{ bro.name }}</a></div>
-			{% endfor %}
-		</div>
-	{% endif %}
-	<div class="quote_row">
-		<a href="http://{{ jack.user_id.name }}.{{ host }}">
-			<div class="name">&ndash;{% if show_username %}{{ jack.user_id.name }}{% else %}you{% endif %}{% if show_date %}, {{ jack.date }}{% endif %}</div>
-		</a>
 	</div>
 </div>
 {% endif %}
