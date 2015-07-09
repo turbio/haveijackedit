@@ -169,7 +169,6 @@ function retryImage(){
 
 function saveImage(){
 	Webcam.snap(function(data_uri){
-		//document.getElementById('my_result').innerHTML = '<img src="'+data_uri+'"/>';
 		showImage(data_uri);
 	});
 }
@@ -237,7 +236,6 @@ function showUploadedImage(input){
 
 		reader.onload = function(e){
 			showImage(e.target.result);
-			document.getElementById("image_data").value = e.target.result;
 		}
 
 		reader.readAsDataURL(input.files[0]);
@@ -252,10 +250,12 @@ function hideImage(){
 	document.getElementById("jack_add_picture").setAttribute("class", "empty_box");
 	document.getElementById("jack_add_picture").style.height = "6em";
 	document.getElementById("jack_add_picture").style.margin = ".5em";
+	document.getElementById("image_data").value = "";
 	imageAdded = false;
 }
 
 function showImage(imageData){
+	document.getElementById("image_data").value = imageData;
 	document.getElementById("add_pic_controls").style.display = "none";
 	document.getElementById("selected_image").setAttribute("src", imageData);
 	document.getElementById("selected_image").style.display = "block";
