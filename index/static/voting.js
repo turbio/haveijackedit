@@ -13,20 +13,37 @@ function post(path, params, callback){
 }
 
 function downvote(postid){
-	post("/vote/", "jack=" + postid + "&choice=d", cb);
-	document.getElementById("vote_up_" + postid).className = "vote_button";
-	document.getElementById("vote_down_" + postid).className = "vote_button_selected";
-	//document.getElementById("votes_" + postid).innerHTML--;
+	vote_down = document.getElementById("vote_down_" + postid);
+	vote_up = document.getElementById("vote_up_" + postid);
+
+	if(vote_down.className == "vote_button"){
+		post("/vote/", "jack=" + postid + "&choice=d", updateVotes);
+		vote_down.className = "vote_button_selected";
+		vote_up.className = "vote_button";
+	}else{
+		post("/vote/", "jack=" + postid + "&choice=n", updateVotes);
+		vote_down.className = "vote_button";
+		vote_up.className = "vote_button";
+	}
 }
 
 function upvote(postid){
-	post("/vote/", "jack=" + postid + "&choice=u", cb);
-	document.getElementById("vote_up_" + postid).className = "vote_button_selected";
-	document.getElementById("vote_down_" + postid).className = "vote_button";
-	//document.getElementById("votes_" + postid).innerHTML++;
+	vote_up = document.getElementById("vote_up_" + postid);
+	vote_down = document.getElementById("vote_down_" + postid);
+
+	if(vote_up.className == "vote_button"){
+		post("/vote/", "jack=" + postid + "&choice=u", updateVotes);
+		vote_up.className = "vote_button_selected";
+		vote_down.className = "vote_button";
+	}else{
+		post("/vote/", "jack=" + postid + "&choice=n", updateVotes);
+		vote_up.className = "vote_button";
+		vote_down.className = "vote_button";
+	}
 }
 
-function cb(){
+function updateVotes(){
+	console.log(http.responseText)
 	//alert(http.responseText);
 	//document.getElementById("wrapper").innerHTML = http.responseText
 }

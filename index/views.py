@@ -53,6 +53,8 @@ def handlevote(request):
 		userChoice = -1
 	elif request.POST['choice'] == 'u':
 		userChoice = 1
+	elif request.POST['choice'] == 'n':
+		userChoice = 0
 
 	x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
 	if x_forwarded_for:
@@ -82,7 +84,7 @@ def handlevote(request):
 				choice=userChoice)
 			newVote.save()
 
-	return HttpResponse(status=200)
+	return HttpResponse("test")
 
 def settings(request):
 	if not 'user_logged_in' in request.session:
