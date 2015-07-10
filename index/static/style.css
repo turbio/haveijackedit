@@ -24,6 +24,7 @@ body{
 }
 
 .quote{
+	overflow: hidden;
 	margin-left: auto;
 	margin-right: auto;
 	padding: .25em;
