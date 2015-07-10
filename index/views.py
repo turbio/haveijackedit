@@ -76,15 +76,29 @@ def handlevote(request):
 			voteObject.choice = userChoice
 			voteObject.save()
 		else:
-			newVote = vote(
+			voteObject = vote(
 				ip=clientIp,
 				user=userObject,
 				jack=jackObject,
 				date=datetime.datetime.today(),
 				choice=userChoice)
-			newVote.save()
+			voteObject.save()
 
-	return HttpResponse("test")
+		replyObject = [{
+			'jack': voteObject.jack.id,
+			'votes': jackVotes(voteObject.jack)
+		}]
+		return HttpResponse(json.dumps(replyObject))
+
+	return HttpResponse('lmao')
+
+def jackVotes(jackObject):
+	votes = 0
+	jackVotes = vote.objects.filter(jack=jackObject)
+	for v in jackVotes:
+		votes += v.choice
+
+	return votes
 
 def settings(request):
 	if not 'user_logged_in' in request.session:

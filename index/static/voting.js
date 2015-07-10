@@ -5,8 +5,8 @@ function post(path, params, callback){
 
 	//Send the proper header information along with the request
 	http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	http.setRequestHeader("Content-length", params.length);
-	http.setRequestHeader("Connection", "close");
+	//http.setRequestHeader("Content-length", params.length);
+	//http.setRequestHeader("Connection", "close");
 
 	http.onreadystatechange = callback
 	http.send(params);
@@ -43,9 +43,8 @@ function upvote(postid){
 }
 
 function updateVotes(){
-	console.log(http.responseText)
-	//alert(http.responseText);
-	//document.getElementById("wrapper").innerHTML = http.responseText
+	voteListObject = JSON.parse(http.responseText)
+	document.getElementById("votes_" + voteListObject[0]["jack"]).innerHTML = voteListObject[0]["votes"];
 }
 
 function getCookie(name){
