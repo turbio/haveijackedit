@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect
 from django.template import RequestContext, loader
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 from .models import *
 from urllib.parse import urlparse
 import urllib.request
@@ -14,24 +15,42 @@ import hashlib
 import time
 import datetime
 
+def scoreJack(jackObject):
+	score = 100
+	score += (len(jackObject.comment) / 160) * 50
+	score += -pow(abs((timezone.now() - jackObject.date).total_seconds()) / (60 * 60), 3) * 2
+	votes = jackVotes(jackObject)
+	if votes > 0:
+		score += pow(votes, 2) * 100
+	else:
+		score += votes * 100
+	return score
+
 # Create your views here.
 def index(request):
 	#if 'user_logged_in' in request.session:
 		#return HttpResponseRedirect('/dash/')
 
-	latest_jack = jack.objects.order_by('date').reverse().filter(
+	hotJacks = jack.objects.order_by('date').reverse().filter(
 		user_id__settings__on_homepage = True,
 		user_id__settings__private = False)
 
-	if len(latest_jack) > 0:
-		latest_jack = addDetailsToJackList(latest_jack)[0]
+	if 'user_logged_in' in request.session:
+		userObject = user.objects.filter(id = request.session['user_id']).first()
 	else:
-		latest_jack = None
+		userObject = None
+
+	if len(hotJacks) > 0:
+		hotJacks = addDetailsToJackList(hotJacks, userObject)
+		hotJacks = sorted(hotJacks, key=scoreJack, reverse=True)
+	else:
+		hotJacks = None
+
 
 	context = {
 		'version': '0.0.1',
 		'show_username': True,
-		'jack': latest_jack,
+		'jack_list': hotJacks,
 		'host': "haveijackedit.com",
 		'signed_in': 'user_logged_in' in request.session,
 	}
@@ -49,11 +68,11 @@ def handlevote(request):
 	jackObject = jack.objects.filter(id = request.POST['jack']).first()
 
 	userChoice = 0
-	if request.POST['choice'] == 'd':
+	if request.POST['points'] == 'd':
 		userChoice = -1
-	elif request.POST['choice'] == 'u':
+	elif request.POST['points'] == 'u':
 		userChoice = 1
-	elif request.POST['choice'] == 'n':
+	elif request.POST['points'] == 'n':
 		userChoice = 0
 
 	x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -73,7 +92,7 @@ def handlevote(request):
 			voteObject = voteObject.first()
 			voteObject.ip = clientIp
 			voteObject.date = datetime.datetime.today()
-			voteObject.choice = userChoice
+			voteObject.points = userChoice
 			voteObject.save()
 		else:
 			voteObject = vote(
@@ -81,7 +100,7 @@ def handlevote(request):
 				user=userObject,
 				jack=jackObject,
 				date=datetime.datetime.today(),
-				choice=userChoice)
+				points=userChoice)
 			voteObject.save()
 
 		replyObject = [{
@@ -96,7 +115,7 @@ def jackVotes(jackObject):
 	votes = 0
 	jackVotes = vote.objects.filter(jack=jackObject)
 	for v in jackVotes:
-		votes += v.choice
+		votes += v.points
 
 	return votes
 
@@ -254,7 +273,7 @@ def feed(request):
 			isUser = True
 			userJackList = addDetailsToJackList(
 				jack.objects.order_by('date').filter(
-					user_id = userObject.id).reverse())
+					user_id = userObject.id).reverse(), userObject)
 
 	context = {
 		'version': '0.0.1',
@@ -521,15 +540,15 @@ def addDetailsToJackList(jackList, user=None):
 		j.votes = 0
 		jackVotes = vote.objects.filter(jack = j)
 		for v in jackVotes:
-			j.votes += v.choice
+			j.votes += v.points
 
 		if user is not None:
 			userJackVote = vote.objects.filter(jack=j, user=user)
 			if len(userJackVote) > 0:
 				userJackVote = userJackVote.first()
-				if userJackVote.choice > 0:
+				if userJackVote.points > 0:
 					j.vote_up = True
-				elif userJackVote.choice < 0:
+				elif userJackVote.points < 0:
 					j.vote_down = True
 
 	return jackList;

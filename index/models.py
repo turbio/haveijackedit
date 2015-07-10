@@ -24,7 +24,7 @@ class vote(models.Model):
 	ip = models.CharField(max_length=24)
 	jack = models.ForeignKey(jack)
 	date = models.DateTimeField()
-	choice = models.IntegerField()
+	points = models.IntegerField()
 
 class geolocation(models.Model):
 	jack = models.ForeignKey('jack')

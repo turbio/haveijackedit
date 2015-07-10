@@ -9,9 +9,11 @@
 		<span id="forkongithub"><a href="https://github.com/turbio/haveijackedit">Fork me on GitHub</a></span>
 		{% endif %}
 		{% include "titlebar.html" %}
-		{% if jack %}
+		{% if jack_list %}
 			<div id="title">Have I jacked it?</div>
-			{% include "quote.html" %}
+			{% for jack in jack_list %}
+				{% include "quote.html" %}
+			{% endfor %}
 		{% else %}
 			nothing yet...
 		{% endif %}

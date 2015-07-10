@@ -17,11 +17,11 @@ function downvote(postid){
 	vote_up = document.getElementById("vote_up_" + postid);
 
 	if(vote_down.className == "vote_button"){
-		post("/vote/", "jack=" + postid + "&choice=d", updateVotes);
+		post("/vote/", "jack=" + postid + "&points=d", updateVotes);
 		vote_down.className = "vote_button_selected";
 		vote_up.className = "vote_button";
 	}else{
-		post("/vote/", "jack=" + postid + "&choice=n", updateVotes);
+		post("/vote/", "jack=" + postid + "&points=n", updateVotes);
 		vote_down.className = "vote_button";
 		vote_up.className = "vote_button";
 	}
@@ -32,11 +32,11 @@ function upvote(postid){
 	vote_down = document.getElementById("vote_down_" + postid);
 
 	if(vote_up.className == "vote_button"){
-		post("/vote/", "jack=" + postid + "&choice=u", updateVotes);
+		post("/vote/", "jack=" + postid + "&points=u", updateVotes);
 		vote_up.className = "vote_button_selected";
 		vote_down.className = "vote_button";
 	}else{
-		post("/vote/", "jack=" + postid + "&choice=n", updateVotes);
+		post("/vote/", "jack=" + postid + "&points=n", updateVotes);
 		vote_up.className = "vote_button";
 		vote_down.className = "vote_button";
 	}
