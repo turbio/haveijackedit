@@ -839,6 +839,17 @@ input[type="checkbox"]:checked + label{
 	background: #000;
 }
 
+.vote_button_selected{
+	display: inline-block;
+	/*margin-right: 0.25em;*/
+	width: 1em;
+	text-align: center;
+	vertical-align: middle;
+	cursor: pointer;
+	transition: all .2s;
+	color: #f00;
+}
+
 .quote_content{
 }
 

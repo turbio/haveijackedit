@@ -45,7 +45,43 @@ def index(request):
 	else:
 		return render(request, 'index/index.html', context)
 
-def vote(request):
+def handlevote(request):
+	jackObject = jack.objects.filter(id = request.POST['jack']).first()
+
+	userChoice = 0
+	if request.POST['choice'] == 'd':
+		userChoice = -1
+	elif request.POST['choice'] == 'u':
+		userChoice = 1
+
+	x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+	if x_forwarded_for:
+		clientIp = x_forwarded_for.split(',')[0]
+	else:
+		clientIp = request.META.get('REMOTE_ADDR')
+
+	#first determine if user is logged in
+	if 'user_logged_in' in request.session:
+		userObject = user.objects.filter(id = request.session['user_id']).first()
+
+		voteObject = vote.objects.filter(jack=jackObject, user=userObject)
+
+		#if the user has already voted, simply change the vote
+		if len(voteObject) > 0:
+			voteObject = voteObject.first()
+			voteObject.ip = clientIp
+			voteObject.date = datetime.datetime.today()
+			voteObject.choice = userChoice
+			voteObject.save()
+		else:
+			newVote = vote(
+				ip=clientIp,
+				user=userObject,
+				jack=jackObject,
+				date=datetime.datetime.today(),
+				choice=userChoice)
+			newVote.save()
+
 	return HttpResponse(status=200)
 
 def settings(request):
@@ -244,7 +280,7 @@ def dashboard(request):
 		'show_date': True,
 		'username': username,
 		'yes_word': yesWord,
-		'jack_list': addDetailsToJackList(userJackList),
+		'jack_list': addDetailsToJackList(userJackList, userId),
 		'signed_in': 'user_logged_in' in request.session,
 	}
 
@@ -435,7 +471,7 @@ def validateUrl(url):
 
 	return url
 
-def addDetailsToJackList(jackList):
+def addDetailsToJackList(jackList, user=None):
 	shade = False
 	for j in jackList:
 		jackGeolocation = geolocation.objects.filter(jack = j)
@@ -465,6 +501,19 @@ def addDetailsToJackList(jackList):
 			j.bros.append(b.bro)
 
 		j.shade = shade = not shade
-		j.votes = int(time.time() / 100000)
+
+		j.votes = 0
+		jackVotes = vote.objects.filter(jack = j)
+		for v in jackVotes:
+			j.votes += v.choice
+
+		if user is not None:
+			userJackVote = vote.objects.filter(jack=j, user=user)
+			if len(userJackVote) > 0:
+				userJackVote = userJackVote.first()
+				if userJackVote.choice > 0:
+					j.vote_up = True
+				elif userJackVote.choice < 0:
+					j.vote_down = True
 
 	return jackList;

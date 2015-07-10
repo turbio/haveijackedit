@@ -13,22 +13,27 @@ function post(path, params, callback){
 }
 
 function downvote(postid){
-	post("/vote/", "jack=" + postid + "&choice=u", cb)
+	post("/vote/", "jack=" + postid + "&choice=d", cb);
+	document.getElementById("vote_up_" + postid).className = "vote_button";
+	document.getElementById("vote_down_" + postid).className = "vote_button_selected";
+	//document.getElementById("votes_" + postid).innerHTML--;
 }
 
 function upvote(postid){
-	post("/vote/", "jack=" + postid + "&choice=d", cb)
+	post("/vote/", "jack=" + postid + "&choice=u", cb);
+	document.getElementById("vote_up_" + postid).className = "vote_button_selected";
+	document.getElementById("vote_down_" + postid).className = "vote_button";
+	//document.getElementById("votes_" + postid).innerHTML++;
 }
 
 function cb(){
-	if(http.readyState == 4 && http.status == 200) {
-		//alert(http.responseText);
-	}
+	//alert(http.responseText);
+	//document.getElementById("wrapper").innerHTML = http.responseText
 }
 
-function getCookie(name) {
+function getCookie(name){
 	var cookieValue = null;
-	if (document.cookie && document.cookie != '') {
+	if (document.cookie && document.cookie != ''){
 		var cookies = document.cookie.split(';');
 		for (var i = 0; i < cookies.length; i++) {
 			var cookie = cookies[i].trim();

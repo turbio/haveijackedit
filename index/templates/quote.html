@@ -36,16 +36,12 @@
 			<div class="quote_row">
 				<div class="jack_vote_wrapper">
 					<a onClick="upvote({{ jack.id }}); return false;">
-						<div class="quote_up vote_button">
-							<i class="material-icons">thumb_up</i>
-						</div>
+						<div class="{% if jack.vote_up %}vote_button_selected{% else %}vote_button{% endif %}" id="vote_up_{{ jack.id }}"><i class="material-icons">thumb_up</i></div>
 					</a>
 					<a onClick="downvote({{ jack.id }}); return false;">
-						<div class="quote_down vote_button">
-							<i class="material-icons">thumb_down</i>
-						</div>
+						<div class="{% if jack.vote_down %}vote_button_selected{% else %}vote_button{% endif %}" id="vote_down_{{ jack.id }}"><i class="material-icons">thumb_down</i></div>
 					</a>
-					<div class="jack_votes">{{ jack.votes }}</div>
+					<div class="jack_votes" id="votes_{{ jack.id }}">{{ jack.votes }}</div>
 				</div>
 				<a href="http://{{ jack.user_id.name }}.{{ host }}">
 					<div class="name">&ndash;{% if show_username %}{{ jack.user_id.name }}{% else %}you{% endif %}{% if show_date %}, {{ jack.date }}{% endif %}</div>
