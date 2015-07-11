@@ -46,7 +46,10 @@ body{
 .name{
 	text-align: right;
 	color: #bbb;
-	font-size: 0.75em;
+	font-size: 0.5em;
+	position: absolute;
+	bottom: 0;
+	right: 0;
 }
 
 a{
@@ -172,7 +175,7 @@ form{
 
 #feed_title_q{
 	margin: 0.25em;
-	font-size: 1.5em;
+	font-size: 1.0em;
 }
 
 #feed_title_a{
@@ -833,7 +836,7 @@ input[type="checkbox"]:checked + label{
 	vertical-align: middle;
 	cursor: pointer;
 	transition: all .2s;
-	color: #000;
+	color: #bbb;
 }
 .vote_button:hover{
 	color: #fff;
@@ -848,7 +851,12 @@ input[type="checkbox"]:checked + label{
 	vertical-align: middle;
 	cursor: pointer;
 	transition: all .2s;
-	color: #f00;
+	color: #000;
+	/*background: #000;*/
+}
+.vote_button_selected:hover{
+	color: #fff;
+	background: #000;
 }
 
 .quote_content{
@@ -857,4 +865,6 @@ input[type="checkbox"]:checked + label{
 .jack_votes{
 	font-size: .75em;
 	display: inline-block;
+	margin-left: 0.25em;
+	margin-right: 0.25em;
 }

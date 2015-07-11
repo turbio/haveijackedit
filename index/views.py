@@ -14,6 +14,7 @@ import json
 import hashlib
 import time
 import datetime
+from datetime import timedelta
 
 def scoreJack(jackObject):
 	score = 100
@@ -266,6 +267,7 @@ def feed(request):
 
 	userObject = user.objects.filter(name = subdomain)
 
+	jacked = False
 	if len(userObject) > 0:
 		userObject = userObject.first()
 		isPrivate = userObject.settings.private
@@ -275,13 +277,30 @@ def feed(request):
 				jack.objects.order_by('date').filter(
 					user_id = userObject.id).reverse(), userObject)
 
+			day = timedelta(days=1)
+			lastJacked = (timezone.now() - userJackList.first().date)
+			jacked = lastJacked < day
+
+	jacked_message = ""
+	if jacked:
+		try:
+			jacked_message = yes_word.objects.order_by('?').first().word
+		except:
+			jacked_message = "yes"
+	else:
+		try:
+			jacked_message = no_word.objects.order_by('?').first().word
+		except:
+			jacked_message = "no"
+
+
 	context = {
 		'version': '0.0.1',
 		'show_username': True,
 		'host': "haveijackedit.com",
 		'jack_list': userJackList,
 		'username': subdomain,
-		'title_text_a': 'lmao',
+		'title_text_a': jacked_message,
 		'is_user': isUser,
 		'is_private': isPrivate,
 		'signed_in': 'user_logged_in' in request.session,
@@ -550,5 +569,18 @@ def addDetailsToJackList(jackList, user=None):
 					j.vote_up = True
 				elif userJackVote.points < 0:
 					j.vote_down = True
+
+		jackAgeSeconds = (timezone.now() - j.date).seconds
+		jackAgeMinutes = jackAgeSeconds / 60
+		jackAgeHours = jackAgeMinutes / 60
+		jackAgeDays = jackAgeHours / 24
+		if jackAgeMinutes < 1:
+			j.age = str(int(jackAgeSeconds)) + " seconds ago"
+		elif jackAgeHours < 1:
+			j.age = str(int(jackAgeMinutes)) + " minutes ago"
+		elif jackAgeDays < 1:
+			j.age = str(int(jackAgeHours)) + " hours ago"
+		else:
+			j.age = str(int(jackAgeDays)) + " days ago"
 
 	return jackList;
