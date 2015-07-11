@@ -265,7 +265,7 @@ def feed(request):
 	userJackList = False
 	subdomain = getSubdomain(request.META['HTTP_HOST'])
 
-	userObject = user.objects.filter(name = subdomain)
+	userObject = user.objects.filter(name__iexact = subdomain)
 
 	jacked = False
 	if len(userObject) > 0:
@@ -317,7 +317,7 @@ def dashboard(request):
 
 	username = request.session['user_name']
 
-	userId = user.objects.filter(name = username).first()
+	userId = user.objects.filter(name__iexact = username).first()
 
 	userJackList = jack.objects.order_by('date').filter(user_id = userId).reverse()
 
@@ -396,7 +396,7 @@ def new_jack(request):
 		broStringList = [s.strip(' ') for s in broStringList]
 
 		for b in broStringList:
-			bro = user.objects.filter(name = b)
+			bro = user.objects.filter(name__iexact = b)
 			if not len(bro) <= 0:
 				newJackBro = jack_bro(
 					jack=newJack,
@@ -454,7 +454,7 @@ def getSubdomain(url):
 
 #returns True if a use with username exists, otherwise returns false
 def userExists(username):
-	userObject = user.objects.filter(name = username)
+	userObject = user.objects.filter(name__iexact = username)
 	if len(userObject) == 0:
 		return False
 	else:
@@ -497,7 +497,7 @@ def checkCred(username, password):
 	if(password == None or password == ''):
 		raise Exception('must provide a password')
 
-	userObject = user.objects.filter(name = username)
+	userObject = user.objects.filter(name__iexact = username)
 	if len(userObject) == 0:
 		raise Exception('incorrect credentials')
 	else:
