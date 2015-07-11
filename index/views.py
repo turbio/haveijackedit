@@ -333,12 +333,15 @@ def dashboard(request):
 	else:
 		yesWord = yesWord.word
 
+	fillerUsers = user.objects.order_by('?')[:3]
+
 	context = {
 		'version': '0.0.1',
 		'host': "haveijackedit.com",
 		'show_date': True,
 		'username': username,
 		'yes_word': yesWord,
+		'filler_user': fillerUsers,
 		'jack_list': addDetailsToJackList(userJackList, userId),
 		'signed_in': 'user_logged_in' in request.session,
 	}
