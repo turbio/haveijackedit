@@ -47,7 +47,6 @@ def index(request):
 	else:
 		hotJacks = None
 
-
 	context = {
 		'version': '0.0.1',
 		'show_username': True,
@@ -55,6 +54,10 @@ def index(request):
 		'host': "haveijackedit.com",
 		'signed_in': 'user_logged_in' in request.session,
 	}
+
+	if request.method == 'GET':
+		if 'u' in request.GET:
+			context['claim_url'] = request.GET['u']
 
 	if 'user_logged_in' in request.session:
 		context['user_analytic_id'] = request.session['user_name']

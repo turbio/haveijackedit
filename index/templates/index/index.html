@@ -28,7 +28,7 @@
 		{% include "signin.html" %}
 		<a href="#" onclick="hide_dialog()">back</a>
 	</div>
-	<div id="signup" class="account_dialog">
+	<div id="signup" class="account_dialog" {% if claim_url %}style="display: block;"{% endif %}>
 		{% include "signup.html" %}
 		<a href="#" onclick="hide_dialog()">back</a>
 	</div>

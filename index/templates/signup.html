@@ -1,7 +1,7 @@
 <form method="POST" action="/signup/">{% csrf_token %}sign up<br/>
 	<input type='hidden' name='action' value='signup'/>
 	<div class="error_box" id="signup_error"></div>
-	<input id="signup_username" class="text_box" type="text" name="username" placeholder="username" onchange="username_entered()" autofocus/>
+	<input value="{{ claim_url }}" id="signup_username" class="text_box" type="text" name="username" placeholder="username" onchange="username_entered()" autofocus/>
 	<br/>
 	<input class="text_box" type="password" name="password" placeholder="password"/>
 	<br/>
