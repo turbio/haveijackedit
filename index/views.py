@@ -277,9 +277,12 @@ def feed(request):
 				jack.objects.order_by('date').filter(
 					user_id = userObject.id).reverse(), userObject)
 
-			day = timedelta(days=1)
-			lastJacked = (timezone.now() - userJackList.first().date)
-			jacked = lastJacked < day
+			try:
+				day = timedelta(days=1)
+				lastJacked = (timezone.now() - userJackList.first().date)
+				jacked = lastJacked < day
+			except:
+				pass
 
 	jacked_message = ""
 	if jacked:
@@ -292,7 +295,6 @@ def feed(request):
 			jacked_message = no_word.objects.order_by('?').first().word
 		except:
 			jacked_message = "no"
-
 
 	context = {
 		'version': '0.0.1',
