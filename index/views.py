@@ -48,7 +48,7 @@ def index(request):
 		hotJacks = None
 
 	context = {
-		'version': '0.0.1',
+		'version': '0.0.2',
 		'show_username': True,
 		'jack_list': hotJacks,
 		'host': "haveijackedit.com",
@@ -138,7 +138,7 @@ def settings(request):
 	}
 
 	context = {
-		'version': '0.0.1',
+		'version': '0.0.2',
 		'host': "haveijackedit.com",
 		'signed_in': 'user_logged_in' in request.session,
 		'options': user_options
@@ -193,7 +193,7 @@ def signout(request):
 
 def signin(request):
 	context = {
-		'version': '0.0.1',
+		'version': '0.0.2',
 	}
 
 	if request.method == 'POST':
@@ -235,7 +235,7 @@ def verifyCaptcha(captcha_response, userIp):
 
 def signup(request):
 	context = {
-		'version': '0.0.1',
+		'version': '0.0.2',
 	}
 
 	if request.method == 'POST':
@@ -300,7 +300,7 @@ def feed(request):
 			jacked_message = "no"
 
 	context = {
-		'version': '0.0.1',
+		'version': '0.0.2',
 		'show_username': True,
 		'host': "haveijackedit.com",
 		'jack_list': userJackList,
@@ -336,7 +336,7 @@ def dashboard(request):
 	fillerUsers = user.objects.order_by('?')[:3]
 
 	context = {
-		'version': '0.0.1',
+		'version': '0.0.2',
 		'host': "haveijackedit.com",
 		'show_date': True,
 		'username': username,
