@@ -40,8 +40,7 @@ class link(models.Model):
 
 class image(models.Model):
 	jack = models.ForeignKey('jack')
-	#data = models.ImageField(upload_to='./data/jack_image/')
-	data = models.CharField(max_length=50000)
+	location = models.ImageField(upload_to='media/', default = 'media/none.png')
 
 	SOURCES = (('f', 'file'), ('c', 'camera'))
 	source = models.CharField(max_length='1', choices=SOURCES, default='f')

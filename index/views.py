@@ -6,6 +6,7 @@ from django.template import RequestContext, loader
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+from django.core.files import File
 from .models import *
 from urllib.parse import urlparse
 import urllib.request
@@ -41,8 +42,8 @@ def index(request):
 	else:
 		userObject = None
 
-	if len(hotJacks) > 0:
-		hotJacks = addDetailsToJackList(hotJacks, userObject)
+	if hotJacks.count() > 0:
+		hotJacks = hotJacks
 		hotJacks = sorted(hotJacks, key=scoreJack, reverse=True)
 	else:
 		hotJacks = None
@@ -92,7 +93,7 @@ def handlevote(request):
 		voteObject = vote.objects.filter(jack=jackObject, user=userObject)
 
 		#if the user has already voted, simply change the vote
-		if len(voteObject) > 0:
+		if voteObject.count() > 0:
 			voteObject = voteObject.first()
 			voteObject.ip = clientIp
 			voteObject.date = datetime.datetime.today()
@@ -271,7 +272,7 @@ def feed(request):
 	userObject = user.objects.filter(name__iexact = subdomain)
 
 	jacked = False
-	if len(userObject) > 0:
+	if userObject.count() > 0:
 		userObject = userObject.first()
 		isPrivate = userObject.settings.private
 		if not isPrivate:
@@ -384,12 +385,15 @@ def new_jack(request):
 		newGeolocation.save()
 
 	if 'image' in request.POST and not request.POST['image'] == '':
-		newImage = image(
-			jack=newJack,
-			data=request.POST['image'])
-		if 'image_source' in request.POST:
-			newImage.source = request.POST['image_source']
-		newImage.save()
+		#newImage = image(
+			#jack=newJack,
+			#data=request.POST['image'])
+		#if 'image_source' in request.POST:
+			#newImage.source = request.POST['image_source']
+		#newImage.save()
+		newImage = open('filename.png', 'wb')
+		newImage.write(request.POST['image'].encode('ascii').decode('base64'))
+		newImage.close()
 
 	if 'jack_link_url' in request.POST and not request.POST['jack_link_url'] == '':
 		validUrl = validateUrl(request.POST['jack_link_url'])
@@ -405,7 +409,7 @@ def new_jack(request):
 
 		for b in broStringList:
 			bro = user.objects.filter(name__iexact = b)
-			if not len(bro) <= 0:
+			if not bro.count() <= 0:
 				newJackBro = jack_bro(
 					jack=newJack,
 					bro=bro.first())
@@ -463,7 +467,7 @@ def getSubdomain(url):
 #returns True if a use with username exists, otherwise returns false
 def userExists(username):
 	userObject = user.objects.filter(name__iexact = username)
-	if len(userObject) == 0:
+	if userObject.count() == 0:
 		return False
 	else:
 		return True
@@ -506,7 +510,7 @@ def checkCred(username, password):
 		raise Exception('must provide a password')
 
 	userObject = user.objects.filter(name__iexact = username)
-	if len(userObject) == 0:
+	if userObject.count() == 0:
 		raise Exception('incorrect credentials')
 	else:
 		userObject = userObject[0]
@@ -537,25 +541,25 @@ def addDetailsToJackList(jackList, user=None):
 	shade = False
 	for j in jackList:
 		jackGeolocation = geolocation.objects.filter(jack = j)
-		if not len(jackGeolocation) == 0:
+		if not jackGeolocation.count() == 0:
 			j.has_geolocation = True
 			j.lng = jackGeolocation.first().lng
 			j.lat = jackGeolocation.first().lat
 
 		jackImage = image.objects.filter(jack = j)
-		if not len(jackImage) == 0:
-			j.has_image = True
-			j.image_data = jackImage.first().data
-			j.image_source = jackImage.first().source
+		#if not jackImage.count() == 0:
+			#j.has_image = True
+			#j.image_data = jackImage.first().data
+			#j.image_source = jackImage.first().source
 
 		jackLink = link.objects.filter(jack = j)
-		if not len(jackLink) == 0:
+		if not jackLink.count() == 0:
 			j.has_link = True
 			j.link_url = jackLink.first().url
 			j.link_text = jackLink.first().url
 
 		jackBro = jack_bro.objects.filter(jack = j)
-		if not len(jackBro) == 0:
+		if not jackBro.count() == 0:
 			j.has_bro = True
 			j.bros = []
 
@@ -571,7 +575,7 @@ def addDetailsToJackList(jackList, user=None):
 
 		if user is not None:
 			userJackVote = vote.objects.filter(jack=j, user=user)
-			if len(userJackVote) > 0:
+			if userJackVote.count() > 0:
 				userJackVote = userJackVote.first()
 				if userJackVote.points > 0:
 					j.vote_up = True
