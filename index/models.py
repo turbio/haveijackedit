@@ -1,56 +1,67 @@
 from django.db import models
 
-class user(models.Model):
+class UserSubmitted(models.Model):
+	user = models.ForeignKey('User')
+	ip = models.ForeignKey('Ip')
+	private = models.BooleanField(default=False)
+	hidden = models.BooleanField(default=False)
+
+class User(models.Model):
 	name = models.CharField(max_length=16)
 	password_hash = models.CharField(max_length=128)
 	password_salt = models.CharField(max_length=32)
 	last_online = models.DateTimeField()
 	creation_date = models.DateTimeField()
-	settings = models.ForeignKey('user_settings')
+	settings = models.OneToOneField('UserSettings')
 
-class user_settings(models.Model):
+class UserSettings(models.Model):
 	private = models.BooleanField(default=False)
 	on_homepage = models.BooleanField(default=True)
 	show_date = models.BooleanField(default=True)
 	show_time = models.BooleanField(default=True)
 
-class jack(models.Model):
-	user_id = models.ForeignKey(user)
+class Jack(UserSubmitted):
 	date = models.DateTimeField()
 	comment = models.CharField(max_length=160)
+	location = models.ForeignKey('Geolocation', null=True)
+	link = models.ForeignKey('Link', null=True)
+	image = models.ForeignKey('Image', null=True)
+	bros = models.ManyToManyField('User', related_name='jack_bros')
 
-class vote(models.Model):
-	user = models.ForeignKey(user, null=True)
-	ip = models.CharField(max_length=24)
-	jack = models.ForeignKey(jack)
+class Vote(UserSubmitted):
+	jack = models.ForeignKey('Jack')
 	date = models.DateTimeField()
 	points = models.IntegerField()
 
-class geolocation(models.Model):
-	jack = models.ForeignKey('jack')
+class Ip(models.Model):
+	address = models.CharField(max_length=24)
+
+class Geolocation(UserSubmitted):
 	lat = models.DecimalField(max_digits=11, decimal_places=8)
 	lng = models.DecimalField(max_digits=11, decimal_places=8)
 
-class link(models.Model):
-	jack = models.ForeignKey('jack')
+class Link(UserSubmitted):
 	url = models.CharField(max_length=512)
-	#scheme = models.CharField(max_length=8)
-	#host = models.CharField(max_length=255)
-	#path = models.CharField(max_length=256)
 
-class image(models.Model):
-	jack = models.ForeignKey('jack')
+class Image(UserSubmitted):
 	location = models.ImageField(upload_to='media/', default = 'media/none.png')
 
 	SOURCES = (('f', 'file'), ('c', 'camera'))
 	source = models.CharField(max_length='1', choices=SOURCES, default='f')
 
-class jack_bro(models.Model):
-	jack = models.ForeignKey('jack')
-	bro = models.ForeignKey(user)
-
-class yes_word(models.Model):
+#this is just the different' words to show, these models shouldn't be edited
+class YesWords(models.Model):
 	word = models.CharField(max_length=32)
 
-class no_word(models.Model):
+	def save(self, *args, **kwargs):
+		pass
+	def delete(self):
+		pass
+
+class NoWords(models.Model):
 	word = models.CharField(max_length=32)
+
+	def save(self, *args, **kwargs):
+		pass
+	def delete(self):
+		pass

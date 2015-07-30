@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.db.models import Sum
 from django.conf import settings as djangosettings
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
@@ -33,9 +34,9 @@ def index(request):
 	#if 'user_logged_in' in request.session:
 		#return HttpResponseRedirect('/dash/')
 
-	hotJacks = jack.objects.order_by('date').reverse().filter(
-		user_id__settings__on_homepage = True,
-		user_id__settings__private = False)
+	hotJacks = Jack.objects.order_by('date').reverse().filter(
+		user__settings__on_homepage = True,
+		user__settings__private = False)
 
 	if 'user_logged_in' in request.session:
 		userObject = user.objects.filter(id = request.session['user_id']).first()
@@ -117,18 +118,14 @@ def handlevote(request):
 	return HttpResponse('lmao')
 
 def jackVotes(jackObject):
-	votes = 0
-	jackVotes = vote.objects.filter(jack=jackObject)
-	for v in jackVotes:
-		votes += v.points
-
-	return votes
+	votes = vote.objects.filter(jack=jackObject).aggregate(Sum('points'))['points__sum']
+	return 0 if votes is None else votes
 
 def settings(request):
 	if not 'user_logged_in' in request.session:
 		return HttpResponseRedirect('/dash/')
 
-	userObject = user.objects.filter(id = request.session['user_id']).first()
+	userObject = user.objects.filter(id = request.session['user_id']).select_related('settings').first()
 	userSettings = userObject.settings
 
 	user_options = {
@@ -159,7 +156,7 @@ def submit_settings(request):
 
 	print(str(request.POST))
 
-	userObject = user.objects.filter(id = request.session['user_id']).first()
+	userObject = user.objects.filter(id = request.session['user_id']).select_related('settings').first()
 
 	if 'submit' in request.POST:
 		userSettings = userObject.settings
@@ -269,7 +266,7 @@ def feed(request):
 	userJackList = False
 	subdomain = getSubdomain(request.META['HTTP_HOST'])
 
-	userObject = user.objects.filter(name__iexact = subdomain)
+	userObject = user.objects.filter(name__iexact = subdomain).select_related('settings')
 
 	jacked = False
 	if userObject.count() > 0:
@@ -279,7 +276,7 @@ def feed(request):
 			isUser = True
 			userJackList = addDetailsToJackList(
 				jack.objects.order_by('date').filter(
-					user_id = userObject.id).reverse(), userObject)
+					user = userObject.id).reverse(), userObject)
 
 			try:
 				day = timedelta(days=1)
@@ -325,7 +322,7 @@ def dashboard(request):
 
 	userId = user.objects.filter(name__iexact = username).first()
 
-	userJackList = jack.objects.order_by('date').filter(user_id = userId).reverse()
+	userJackList = jack.objects.order_by('date').filter(user = userId).reverse()
 
 	yesWord = yes_word.objects.order_by('?').first()
 
@@ -369,7 +366,7 @@ def new_jack(request):
 	userObject = user.objects.filter(id = request.session['user_id']).first()
 
 	newJack = jack(
-		user_id=userObject,
+		user=userObject,
 		comment=message,
 		date=datetime.datetime.today())
 	newJack.save()
@@ -466,11 +463,7 @@ def getSubdomain(url):
 
 #returns True if a use with username exists, otherwise returns false
 def userExists(username):
-	userObject = user.objects.filter(name__iexact = username)
-	if userObject.count() == 0:
-		return False
-	else:
-		return True
+	return False if User.objects.filter(name__iexact = username).count() == 0 else True
 
 #creates user or raises exception detailing what went wrong
 def createUser(username, password):
@@ -484,10 +477,10 @@ def createUser(username, password):
 	hash_salt = createPasswordSalt()
 	hashed_password = hashPassword(password, hash_salt)
 
-	newUserSettings = user_settings()
+	newUserSettings = UserSettings()
 	newUserSettings.save()
 
-	newUser = user(
+	newUser = User(
 		name=username,
 		password_hash=hashed_password,
 		last_online=datetime.datetime.today(),
@@ -509,11 +502,11 @@ def checkCred(username, password):
 	if(password == None or password == ''):
 		raise Exception('must provide a password')
 
-	userObject = user.objects.filter(name__iexact = username)
+	userObject = User.objects.filter(name__iexact = username)
 	if userObject.count() == 0:
 		raise Exception('incorrect credentials')
 	else:
-		userObject = userObject[0]
+		userObject = userObject.first()
 
 	hashed_password = hashlib.sha512((
 		userObject.password_salt + password).encode()).hexdigest()
