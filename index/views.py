@@ -355,7 +355,7 @@ def getUserIp(request):
 
 	return ipObject
 
-def new_jack(request):
+def submit_jack(request):
 	if request.method != 'POST':
 		return HttpResponseRedirect('/dash/')
 
@@ -533,7 +533,6 @@ def addDetailsToJackList(jackList, user=None):
 	for j in jackList:
 		try:
 			jackGeolocation = geolocation.objects.get(jack = j)
-			j.has_geolocation = True
 			j.lng = jackGeolocation.lng
 			j.lat = jackGeolocation.lat
 		except:

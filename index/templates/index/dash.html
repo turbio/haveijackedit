@@ -12,7 +12,7 @@
 			<div id="feed_title_q">Have you jacked it today?</div>
 		</div>
 		<div id="new_jack_form">
-			<form method="POST" action="/new_jack/">{% csrf_token %}
+			<form method="POST" action="/submit_jack/">{% csrf_token %}
 				<input id="new_jack_post_box" type="hidden" name="new_jack" value="{{ yes_word }}"/>
 				<input id="jack_geo" type="hidden" name="jack_geo" value=""/>
 				<div contentEditable="true" id="new_jack_box" name="new_jack_editable" onKeyDown="textChange()" onKeyUp="textChange()" onchange="textChange()" onClick="add_punc(); textChange()">{{ yes_word }}</div>

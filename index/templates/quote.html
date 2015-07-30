@@ -1,38 +1,37 @@
-{% if jack %}
 <div class="feed_quote {% if jack.shade %}shaded_quote{% endif %}">
 	<div class="quote" id="jack_{{ jack.id }}">
 		<div class="quote_content">
 			<div class="msg">{{ jack.comment }}</div>
-			{% if jack.has_geolocation  %}
+			{% if jack.location  %}
 			<div class="quote_image_container quote_row">
 				<div class="quote_icon quote_row"><i class="material-icons">my_location</i></div>
-				<img class="quote_image" src="https://maps.googleapis.com/maps/api/staticmap?center={{ jack.lat }},{{ jack.lng }}&zoom=16&size=600x600&maptype=roadmap&style=element:labels|visibility:off&style=saturation:-100&markers={{ jack.lat }},{{ jack.lng }}"/>
+				<img class="quote_image" src="https://maps.googleapis.com/maps/api/staticmap?center={{ jack.lat }},{{ jack.lng }}&zoom=16&size=600x600&maptype=roadmap&style=element:labels|visibility:off&style=saturation:-100&markers={{ jack.location.lat }},{{ jack.location.lng }}"/>
 			</div>
 			{% endif %}
-			{% if jack.has_image  %}
+			{% if jack.image  %}
 				<div class="quote_image_container quote_row">
-					{% if jack.image_source == "f" %}
+					{% if jack.image.source == "f" %}
 						<div class="quote_icon quote_row"><i class="material-icons">photo</i></div>
-					{% elif jack.image_source == "c" %}
+					{% elif jack.image.source == "c" %}
 						<div class="quote_icon quote_row"><i class="material-icons">photo_camera</i></div>
 					{% endif %}
-					<img class="quote_image" src="{{ jack.image_data }}"/>
+					<img class="quote_image" src="{{ jack.image.location }}"/>
 				</div>
 			{% endif %}
-			{% if jack.has_link  %}
+			{% if jack.link  %}
 				<div class="quote_row with_icon">
 					<div class="quote_icon quote_row"><i class="material-icons">link</i></div>
-					<div class="quote_link quote_row"><a href="{{ jack.link_url }}">{{ jack.link_text }}</a></div>
+					<div class="quote_link quote_row"><a href="{{ jack.link.url }}">{{ jack.link_text }}</a></div>
 				</div>
 			{% endif %}
-			{% if jack.has_bro  %}
-				<div class="quote_row with_icon">
-					<div class="quote_icon"><i class="material-icons">people</i></div>
-					{% for bro in jack.bros %}
-						<div class="quote_bro"><a href="http://{{ bro.name }}.{{ host }}">{{ bro.name }}</a></div>
-					{% endfor %}
-				</div>
-			{% endif %}
+			<!--{% if jack.has_bro  %}-->
+				<!--<div class="quote_row with_icon">-->
+					<!--<div class="quote_icon"><i class="material-icons">people</i></div>-->
+					<!--{% for bro in jack.bros %}-->
+						<!--<div class="quote_bro"><a href="http://{{ bro.name }}.{{ host }}">{{ bro.name }}</a></div>-->
+					<!--{% endfor %}-->
+				<!--</div>-->
+			<!--{% endif %}-->
 			<div class="quote_row">
 				<div class="jack_vote_wrapper">
 					<div class="jack_votes" id="votes_{{ jack.id }}">{{ jack.votes }}</div>
@@ -50,4 +49,3 @@
 		</div>
 	</div>
 </div>
-{% endif %}

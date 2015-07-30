@@ -26,6 +26,6 @@ urlpatterns = [
 	url(r'^signin/$', views.signin),
 	url(r'^vote/$', views.handlevote),
 	url(r'^signup/$', views.signup),
-	url(r'^new_jack/$', views.new_jack),
+	url(r'^submit_jack/$', views.submit_jack),
 	url(r'^$', views.index),
 ]
