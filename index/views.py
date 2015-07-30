@@ -314,7 +314,7 @@ def feed(request):
 
 	return render(request, 'index/feed.html', context)
 
-def dashboard(request):
+def dash(request):
 	if not 'user_logged_in' in request.session:
 		return HttpResponseRedirect('/')
 

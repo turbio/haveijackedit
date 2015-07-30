@@ -19,7 +19,7 @@ from index import views
 
 urlpatterns = [
 	url(r'^admin/', include(admin.site.urls)),
-	url(r'^dash/$', views.dashboard),
+	url(r'^dash/$', views.dash),
 	url(r'^settings/$', views.settings),
 	url(r'^submit_settings/$', views.submit_settings),
 	url(r'^signout/$', views.signout),
