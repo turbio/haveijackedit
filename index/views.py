@@ -22,7 +22,7 @@ def scoreJack(jackObject):
 	score = 100
 	score += (len(jackObject.comment) / 160) * 50
 	score += -pow(abs((timezone.now() - jackObject.date).total_seconds()) / (60 * 60), 3) * 2
-	votes = jackVotes(jackObject)
+	votes = 0 #jackVotes(jackObject)
 	if votes > 0:
 		score += pow(votes, 2) * 100
 	else:
@@ -38,9 +38,9 @@ def index(request):
 		user__settings__on_homepage = True,
 		user__settings__private = False)
 
-	if 'user_logged_in' in request.session:
-		userObject = user.objects.filter(id = request.session['user_id']).first()
-	else:
+	try:
+		userObject = user.objects.get(id = request.session['user_id'])
+	except:
 		userObject = None
 
 	if hotJacks.count() > 0:
@@ -71,7 +71,7 @@ def index(request):
 		return render(request, 'index/index.html', context)
 
 def handlevote(request):
-	jackObject = jack.objects.filter(id = request.POST['jack']).first()
+	jackObject = jack.objects.get(id = request.POST['jack'])
 
 	userChoice = 0
 	if request.POST['points'] == 'd':
@@ -89,25 +89,14 @@ def handlevote(request):
 
 	#first determine if user is logged in
 	if 'user_logged_in' in request.session:
-		userObject = user.objects.filter(id = request.session['user_id']).first()
+		userObject = user.objects.get(id = request.session['user_id'])
 
-		voteObject = vote.objects.filter(jack=jackObject, user=userObject)
+		voteObject = vote.objects.get_or_create(jack=jackObject, user=userObject)
 
-		#if the user has already voted, simply change the vote
-		if voteObject.count() > 0:
-			voteObject = voteObject.first()
-			voteObject.ip = clientIp
-			voteObject.date = datetime.datetime.today()
-			voteObject.points = userChoice
-			voteObject.save()
-		else:
-			voteObject = vote(
-				ip=clientIp,
-				user=userObject,
-				jack=jackObject,
-				date=datetime.datetime.today(),
-				points=userChoice)
-			voteObject.save()
+		voteObject.ip = getUserIp(request)
+		voteObject.date = datetime.datetime.today()
+		voteObject.points = userChoice
+		voteObject.save()
 
 		replyObject = [{
 			'jack': voteObject.jack.id,
@@ -125,7 +114,8 @@ def settings(request):
 	if not 'user_logged_in' in request.session:
 		return HttpResponseRedirect('/dash/')
 
-	userObject = user.objects.filter(id = request.session['user_id']).select_related('settings').first()
+	userObject = user.objects.get(
+		id = request.session['user_id']).select_related('settings')
 	userSettings = userObject.settings
 
 	user_options = {
@@ -156,7 +146,8 @@ def submit_settings(request):
 
 	print(str(request.POST))
 
-	userObject = user.objects.filter(id = request.session['user_id']).select_related('settings').first()
+	userObject = User.objects.get(
+		id = request.session['user_id']).select_related('settings')
 
 	if 'submit' in request.POST:
 		userSettings = userObject.settings
@@ -266,26 +257,24 @@ def feed(request):
 	userJackList = False
 	subdomain = getSubdomain(request.META['HTTP_HOST'])
 
-	userObject = user.objects.filter(name__iexact = subdomain).select_related('settings')
-
 	jacked = False
-	if userObject.count() > 0:
-		userObject = userObject.first()
+	try:
+		userObject = user.objects.get(
+			name__iexact = subdomain).select_related('settings')
+		isUser = True
+
 		isPrivate = userObject.settings.private
+
 		if not isPrivate:
-			isUser = True
-			userJackList = addDetailsToJackList(
-				jack.objects.order_by('date').filter(
-					user = userObject.id).reverse(), userObject)
+			#userJackList = addDetailsToJackList(
+				#jack.objects.order_by('date').filter(
+					#user = userObject.id).reverse(), userObject)
+			day = timedelta(days=1)
+			lastJacked = (timezone.now() - userJackList.first().date)
+			jacked = lastJacked < day
+	except:
+		pass
 
-			try:
-				day = timedelta(days=1)
-				lastJacked = (timezone.now() - userJackList.first().date)
-				jacked = lastJacked < day
-			except:
-				pass
-
-	jacked_message = ""
 	if jacked:
 		try:
 			jacked_message = yes_word.objects.order_by('?').first().word
@@ -320,18 +309,17 @@ def dash(request):
 
 	username = request.session['user_name']
 
-	userId = user.objects.filter(name__iexact = username).first()
+	userJackList = Jack.objects.order_by('date').filter(
+		user__name = request.session['user_name']).reverse()
 
-	userJackList = jack.objects.order_by('date').filter(user = userId).reverse()
-
-	yesWord = yes_word.objects.order_by('?').first()
+	yesWord = YesWords.objects.order_by('?').first()
 
 	if yesWord == None:
 		yesWord = 'yes'
 	else:
 		yesWord = yesWord.word
 
-	fillerUsers = user.objects.order_by('?')[:3]
+	fillerUsers = User.objects.order_by('?')[:3]
 
 	context = {
 		'version': '0.0.2',
@@ -340,7 +328,7 @@ def dash(request):
 		'username': username,
 		'yes_word': yesWord,
 		'filler_user': fillerUsers,
-		'jack_list': addDetailsToJackList(userJackList, userId),
+		'jack_list': userJackList,
 		'signed_in': 'user_logged_in' in request.session,
 	}
 
@@ -355,6 +343,18 @@ def dash(request):
 	#jacks = []
 	#return jacklist
 
+def getUserIp(request):
+	x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+	if x_forwarded_for:
+		clientIp = x_forwarded_for.split(',')[0]
+	else:
+		clientIp = request.META.get('REMOTE_ADDR')
+
+	#if an ip alread exists, no need to create another entry for it
+	ipObject, created = Ip.objects.get_or_create(address=clientIp)
+
+	return ipObject
+
 def new_jack(request):
 	if request.method != 'POST':
 		return HttpResponseRedirect('/dash/')
@@ -363,54 +363,53 @@ def new_jack(request):
 	if message == '':
 		return HttpResponseRedirect('/dash/')
 
-	userObject = user.objects.filter(id = request.session['user_id']).first()
-
-	newJack = jack(
-		user=userObject,
+	newJack = Jack(
+		user=User.objects.get(id = request.session['user_id']),
 		comment=message,
-		date=datetime.datetime.today())
+		date=datetime.datetime.today(),
+		ip=getUserIp(request))
 	newJack.save()
 
-	if 'jack_geo' in request.POST and not request.POST['jack_geo'] == '':
-		recievedGeolocationJson = request.POST['jack_geo']
-		recievedGeolocation = json.loads(recievedGeolocationJson)
+	#if 'jack_geo' in request.POST and not request.POST['jack_geo'] == '':
+		#recievedGeolocationJson = request.POST['jack_geo']
+		#recievedGeolocation = json.loads(recievedGeolocationJson)
 
-		newGeolocation = geolocation(
-			jack=newJack,
-			lat=recievedGeolocation['lat'],
-			lng=recievedGeolocation['long'])
-		newGeolocation.save()
-
-	if 'image' in request.POST and not request.POST['image'] == '':
-		#newImage = image(
+		#newGeolocation = geolocation(
 			#jack=newJack,
-			#data=request.POST['image'])
-		#if 'image_source' in request.POST:
-			#newImage.source = request.POST['image_source']
-		#newImage.save()
-		newImage = open('filename.png', 'wb')
-		newImage.write(request.POST['image'].encode('ascii').decode('base64'))
-		newImage.close()
+			#lat=recievedGeolocation['lat'],
+			#lng=recievedGeolocation['long'])
+		#newGeolocation.save()
 
-	if 'jack_link_url' in request.POST and not request.POST['jack_link_url'] == '':
-		validUrl = validateUrl(request.POST['jack_link_url'])
-		if(validUrl):
-			newLink = link(
-				jack=newJack,
-				url=validUrl)
-			newLink.save()
+	#if 'image' in request.POST and not request.POST['image'] == '':
+		##newImage = image(
+			##jack=newJack,
+			##data=request.POST['image'])
+		##if 'image_source' in request.POST:
+			##newImage.source = request.POST['image_source']
+		##newImage.save()
+		#newImage = open('filename.png', 'wb')
+		#newImage.write(request.POST['image'].encode('ascii').decode('base64'))
+		#newImage.close()
 
-	if 'jack_bro' in request.POST and not request.POST['jack_bro'] == '':
-		broStringList = request.POST['jack_bro'].split(",")
-		broStringList = [s.strip(' ') for s in broStringList]
+	#if 'jack_link_url' in request.POST and not request.POST['jack_link_url'] == '':
+		#validUrl = validateUrl(request.POST['jack_link_url'])
+		#if(validUrl):
+			#newLink = link(
+				#jack=newJack,
+				#url=validUrl)
+			#newLink.save()
 
-		for b in broStringList:
-			bro = user.objects.filter(name__iexact = b)
-			if not bro.count() <= 0:
-				newJackBro = jack_bro(
-					jack=newJack,
-					bro=bro.first())
-				newJackBro.save()
+	#if 'jack_bro' in request.POST and not request.POST['jack_bro'] == '':
+		#broStringList = request.POST['jack_bro'].split(",")
+		#broStringList = [s.strip(' ') for s in broStringList]
+
+		#for b in broStringList:
+			#bro = user.objects.filter(name__iexact = b)
+			#if not bro.count() <= 0:
+				#newJackBro = jack_bro(
+					#jack=newJack,
+					#bro=bro.first())
+				#newJackBro.save()
 
 	return HttpResponseRedirect('/dash/')
 
@@ -502,11 +501,10 @@ def checkCred(username, password):
 	if(password == None or password == ''):
 		raise Exception('must provide a password')
 
-	userObject = User.objects.filter(name__iexact = username)
-	if userObject.count() == 0:
+	try:
+		userObject = User.objects.get(name__iexact = username)
+	except:
 		raise Exception('incorrect credentials')
-	else:
-		userObject = userObject.first()
 
 	hashed_password = hashlib.sha512((
 		userObject.password_salt + password).encode()).hexdigest()
@@ -533,11 +531,13 @@ def validateUrl(url):
 def addDetailsToJackList(jackList, user=None):
 	shade = False
 	for j in jackList:
-		jackGeolocation = geolocation.objects.filter(jack = j)
-		if not jackGeolocation.count() == 0:
+		try:
+			jackGeolocation = geolocation.objects.get(jack = j)
 			j.has_geolocation = True
-			j.lng = jackGeolocation.first().lng
-			j.lat = jackGeolocation.first().lat
+			j.lng = jackGeolocation.lng
+			j.lat = jackGeolocation.lat
+		except:
+			pass
 
 		jackImage = image.objects.filter(jack = j)
 		#if not jackImage.count() == 0:
