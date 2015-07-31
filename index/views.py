@@ -16,6 +16,7 @@ import json
 import hashlib
 import time
 import datetime
+import cStringIO
 from datetime import timedelta
 
 def scoreJack(jackObject):
@@ -363,33 +364,32 @@ def submit_jack(request):
 	if message == '':
 		return HttpResponseRedirect('/dash/')
 
+	userIp = getUserIp(request)
+
 	newJack = Jack(
 		user=User.objects.get(id = request.session['user_id']),
 		comment=message,
 		date=datetime.datetime.today(),
-		ip=getUserIp(request))
-	newJack.save()
+		ip=userIp)
 
-	#if 'jack_geo' in request.POST and not request.POST['jack_geo'] == '':
-		#recievedGeolocationJson = request.POST['jack_geo']
-		#recievedGeolocation = json.loads(recievedGeolocationJson)
+	if 'jack_geo' in request.POST and not request.POST['jack_geo'] == '':
+		recievedGeolocationJson = request.POST['jack_geo']
+		recievedGeolocation = json.loads(recievedGeolocationJson)
 
-		#newGeolocation = geolocation(
-			#jack=newJack,
-			#lat=recievedGeolocation['lat'],
-			#lng=recievedGeolocation['long'])
-		#newGeolocation.save()
+		newGeolocation = Geolocation(
+			ip=userIp,
+			lat=recievedGeolocation['lat'],
+			lng=recievedGeolocation['long'])
+		newGeolocation.save()
+		newJack.location = newGeolocation
 
-	#if 'image' in request.POST and not request.POST['image'] == '':
-		##newImage = image(
-			##jack=newJack,
-			##data=request.POST['image'])
-		##if 'image_source' in request.POST:
-			##newImage.source = request.POST['image_source']
-		##newImage.save()
-		#newImage = open('filename.png', 'wb')
+	if 'image' in request.POST and not request.POST['image'] == '' and 'image_source' in request.POST:
+		newImage = Image(ip=userIp)
+		newImage.source.save('filename.png', File())
+		#newImage.save()
+
+		#newImageFile = open(djangosettings.MEDIA_ROOT + 'filename.png', 'wb')
 		#newImage.write(request.POST['image'].encode('ascii').decode('base64'))
-		#newImage.close()
 
 	#if 'jack_link_url' in request.POST and not request.POST['jack_link_url'] == '':
 		#validUrl = validateUrl(request.POST['jack_link_url'])
@@ -410,6 +410,7 @@ def submit_jack(request):
 					#jack=newJack,
 					#bro=bro.first())
 				#newJackBro.save()
+	newJack.save()
 
 	return HttpResponseRedirect('/dash/')
 

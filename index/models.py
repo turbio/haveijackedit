@@ -1,7 +1,7 @@
 from django.db import models
 
 class UserSubmitted(models.Model):
-	user = models.ForeignKey('User')
+	user = models.ForeignKey('User', null=True)
 	ip = models.ForeignKey('Ip')
 	private = models.BooleanField(default=False)
 	hidden = models.BooleanField(default=False)
