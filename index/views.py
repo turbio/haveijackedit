@@ -312,14 +312,13 @@ def dash(request):
 	username = request.session['user_name']
 
 	userJackList = Jack.objects.order_by('date').filter(
-		user__name = request.session['user_name']).reverse()
+		user__name = request.session['user_name']).reverse() \
+		.select_related('image', 'link', 'location') \
+		.prefetch_related('bros')
 
 	yesWord = YesWords.objects.order_by('?').first()
 
-	if yesWord == None:
-		yesWord = 'yes'
-	else:
-		yesWord = yesWord.word
+	'yes' if yesWord == None else yesWord.word
 
 	fillerUsers = User.objects.order_by('?')[:3]
 
