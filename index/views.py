@@ -412,18 +412,14 @@ def submit_jack(request):
 			newLink.save()
 			newJack.link = newLink
 
-	#if 'jack_bro' in request.POST and not request.POST['jack_bro'] == '':
-		#broStringList = request.POST['jack_bro'].split(",")
-		#broStringList = [s.strip(' ') for s in broStringList]
-
-		#for b in broStringList:
-			#bro = user.objects.filter(name__iexact = b)
-			#if not bro.count() <= 0:
-				#newJackBro = jack_bro(
-					#jack=newJack,
-					#bro=bro.first())
-				#newJackBro.save()
 	newJack.save()
+
+	if 'jack_bro' in request.POST and not request.POST['jack_bro'] == '':
+		broStrings = request.POST['jack_bro'].split(",")
+		broStrings = [s.strip(' ') for s in broStrings]
+
+		for broString in broStrings:
+			newJack.bros.add(User.objects.get(name__iexact=broString))
 
 	return HttpResponseRedirect('/dash/')
 
