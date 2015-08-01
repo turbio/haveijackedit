@@ -15,7 +15,7 @@
 					{% elif jack.image.source == "c" %}
 						<div class="quote_icon quote_row"><i class="material-icons">photo_camera</i></div>
 					{% endif %}
-					<img class="quote_image" src="{{ jack.image.location }}"/>
+					<img class="quote_image" src="{{ jack.image.data.url }}"/>
 				</div>
 			{% endif %}
 			{% if jack.link  %}

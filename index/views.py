@@ -398,6 +398,7 @@ def submit_jack(request):
 
 		newImage.data.save(filename, File(imageFile))
 		newImage.save()
+		newJack.image = newImage
 
 	#if 'jack_link_url' in request.POST and not request.POST['jack_link_url'] == '':
 		#validUrl = validateUrl(request.POST['jack_link_url'])
