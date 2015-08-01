@@ -385,7 +385,10 @@ def submit_jack(request):
 		newJack.location = newGeolocation
 
 	if 'image' in request.POST and not request.POST['image'] == '':
-		newImage = Image(ip=userIp)
+		newImage = Image(
+			ip=userIp,
+			source=request.POST['image_source']
+		)
 		uri = DataURI(request.POST['image'])
 		filename = ''.join([
 				word.capitalize()
@@ -400,13 +403,14 @@ def submit_jack(request):
 		newImage.save()
 		newJack.image = newImage
 
-	#if 'jack_link_url' in request.POST and not request.POST['jack_link_url'] == '':
-		#validUrl = validateUrl(request.POST['jack_link_url'])
-		#if(validUrl):
-			#newLink = link(
-				#jack=newJack,
-				#url=validUrl)
-			#newLink.save()
+	if 'jack_link_url' in request.POST and not request.POST['jack_link_url'] == '':
+		validUrl = validateUrl(request.POST['jack_link_url'])
+		if(validUrl):
+			newLink = Link(
+				ip=getUserIp(request),
+				url=validUrl)
+			newLink.save()
+			newJack.link = newLink
 
 	#if 'jack_bro' in request.POST and not request.POST['jack_bro'] == '':
 		#broStringList = request.POST['jack_bro'].split(",")
