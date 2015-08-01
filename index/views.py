@@ -407,8 +407,8 @@ def submit_jack(request):
 		validUrl = validateUrl(request.POST['jack_link_url'])
 		if(validUrl):
 			newLink = Link(
-				ip=getUserIp(request),
-				url=validUrl)
+				url=validUrl,
+				ip=getUserIp(request))
 			newLink.save()
 			newJack.link = newLink
 

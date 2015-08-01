@@ -288,6 +288,7 @@ form{
 }
 
 #title_bar{
+	font-size: .5em;
 	position: relative;
 	top: 0;
 	left: 0;
@@ -295,7 +296,8 @@ form{
 
 	background: #000;
 	color: #fff;
-	height: .75em;
+	height: 1.5em;
+	padding-right: 1em;
 }
 
 .titlebar_button:hover{
@@ -306,8 +308,10 @@ form{
 
 .titlebar_button{
 	transition: all .2s;
-	width: 0.75em;
-	height: 0.75em;
+	/*width: 1.5em;*/
+	padding-left: .25em;
+	padding-right: .25em;
+	height: 1.5em;
 	background-repeat: no-repeat;
 	background-size: 100%;
 	float: left;
