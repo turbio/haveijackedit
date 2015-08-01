@@ -44,7 +44,7 @@ class Link(UserSubmitted):
 	url = models.CharField(max_length=512)
 
 class Image(UserSubmitted):
-	location = models.ImageField(upload_to='media/', default = 'media/none.png')
+	data = models.ImageField(upload_to='.', default = 'media/none.png')
 
 	SOURCES = (('f', 'file'), ('c', 'camera'))
 	source = models.CharField(max_length='1', choices=SOURCES, default='f')

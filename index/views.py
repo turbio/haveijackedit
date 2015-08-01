@@ -16,8 +16,11 @@ import json
 import hashlib
 import time
 import datetime
-import cStringIO
+import io
+from .data_uri import DataURI
 from datetime import timedelta
+from random_words import RandomWords
+from django.core.files.temp import NamedTemporaryFile
 
 def scoreJack(jackObject):
 	score = 100
@@ -144,8 +147,6 @@ def submit_settings(request):
 
 	if not 'user_logged_in' in request.session:
 		return HttpResponseRedirect('/dash/')
-
-	print(str(request.POST))
 
 	userObject = User.objects.get(
 		id = request.session['user_id']).select_related('settings')
@@ -383,13 +384,20 @@ def submit_jack(request):
 		newGeolocation.save()
 		newJack.location = newGeolocation
 
-	if 'image' in request.POST and not request.POST['image'] == '' and 'image_source' in request.POST:
+	if 'image' in request.POST and not request.POST['image'] == '':
 		newImage = Image(ip=userIp)
-		newImage.source.save('filename.png', File())
-		#newImage.save()
+		uri = DataURI(request.POST['image'])
+		filename = ''.join([
+				word.capitalize()
+				for word in RandomWords().random_words(count=5)
+			])
 
-		#newImageFile = open(djangosettings.MEDIA_ROOT + 'filename.png', 'wb')
-		#newImage.write(request.POST['image'].encode('ascii').decode('base64'))
+		imageFile = NamedTemporaryFile(delete=True)
+		imageFile.write(uri.data)
+		imageFile.flush()
+
+		newImage.data.save(filename, File(imageFile))
+		newImage.save()
 
 	#if 'jack_link_url' in request.POST and not request.POST['jack_link_url'] == '':
 		#validUrl = validateUrl(request.POST['jack_link_url'])
