@@ -43,6 +43,8 @@ function upvote(postid){
 }
 
 function updateVotes(){
+	//var newWindow = window.open();
+	//newWindow.document.write(http.responseText);
 	voteListObject = JSON.parse(http.responseText)
 	document.getElementById("votes_" + voteListObject[0]["jack"]).innerHTML = voteListObject[0]["votes"];
 }

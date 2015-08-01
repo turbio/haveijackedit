@@ -29,6 +29,10 @@ class Jack(UserSubmitted):
 	image = models.ForeignKey('Image', null=True)
 	bros = models.ManyToManyField('User', related_name='jack_bros')
 
+	#def votes(self):
+		#votesum = self.vote_set.all().aggregate(Sum('points'))['points__sum']
+		#return 0 if votesum is None else votesum
+
 class Vote(UserSubmitted):
 	jack = models.ForeignKey('Jack')
 	date = models.DateTimeField()

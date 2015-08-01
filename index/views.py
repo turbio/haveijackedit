@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.db.models import Sum
+from django.db.models import Sum, Count
 from django.conf import settings as djangosettings
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
@@ -75,7 +75,7 @@ def index(request):
 		return render(request, 'index/index.html', context)
 
 def handlevote(request):
-	jackObject = jack.objects.get(id = request.POST['jack'])
+	jackObject = Jack.objects.get(id = request.POST['jack'])
 
 	userChoice = 0
 	if request.POST['points'] == 'd':
@@ -93,9 +93,12 @@ def handlevote(request):
 
 	#first determine if user is logged in
 	if 'user_logged_in' in request.session:
-		userObject = user.objects.get(id = request.session['user_id'])
+		userObject = User.objects.get(id = request.session['user_id'])
 
-		voteObject = vote.objects.get_or_create(jack=jackObject, user=userObject)
+		try:
+			voteObject = Vote.objects.get(jack=jackObject, user=userObject)
+		except:
+			voteObject = Vote(jack=jackObject, user=userObject)
 
 		voteObject.ip = getUserIp(request)
 		voteObject.date = datetime.datetime.today()
@@ -104,15 +107,15 @@ def handlevote(request):
 
 		replyObject = [{
 			'jack': voteObject.jack.id,
-			'votes': jackVotes(voteObject.jack)
+			'votes': 123 #TODO
 		}]
 		return HttpResponse(json.dumps(replyObject))
 
 	return HttpResponse('lmao')
 
-def jackVotes(jackObject):
-	votes = vote.objects.filter(jack=jackObject).aggregate(Sum('points'))['points__sum']
-	return 0 if votes is None else votes
+#def jackVotes(jackObject):
+	#votes = vote.objects.filter(jack=jackObject).aggregate(Sum('points'))['points__sum']
+	#return 0 if votes is None else votes
 
 def settings(request):
 	if not 'user_logged_in' in request.session:
@@ -318,9 +321,15 @@ def dash(request):
 
 	yesWord = YesWords.objects.order_by('?').first()
 
-	'yes' if yesWord == None else yesWord.word
+	#yesword = 'yes' if yesWord == None else yesWord.word
 
 	fillerUsers = User.objects.order_by('?')[:3]
+
+	#for i in userJackList):
+		#print(i.comment)
+	print(userJackList.annotate(Sum('vote__points')).first()._meta.get_all_field_names())
+	#print(userJackList.first()._meta.get_all_field_names())
+	#print(userJackList.first().vote)
 
 	context = {
 		'version': djangosettings.APP_VERSION,

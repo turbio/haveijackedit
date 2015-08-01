@@ -32,6 +32,7 @@
 					{% endfor %}
 				</div>
 			{% endif %}
+
 			<div class="quote_row">
 				<div class="jack_vote_wrapper">
 					<div class="jack_votes" id="votes_{{ jack.id }}">{{ jack.votes }}</div>
@@ -42,6 +43,7 @@
 						<div class="{% if jack.vote_down %}vote_button_selected{% else %}vote_button{% endif %}" id="vote_down_{{ jack.id }}"><i class="material-icons">thumb_down</i></div>
 					</a>
 				</div>
+
 				<a href="http://{{ jack.user_id.name }}.{{ host }}">
 					<div class="name">&ndash;{% if show_username %}{{ jack.user_id.name }}{% else %}you{% endif %}, {{ jack.age }}</div>
 				</a>
