@@ -35,9 +35,6 @@ def scoreJack(jackObject):
 
 # Create your views here.
 def index(request):
-	#if 'user_logged_in' in request.session:
-		#return HttpResponseRedirect('/dash/')
-
 	hotJacks = Jack.objects.order_by('date').reverse().filter(
 		user__settings__on_homepage = True,
 		user__settings__private = False)
