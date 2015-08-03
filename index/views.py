@@ -321,7 +321,7 @@ def dash(request):
 
 	yesWord = YesWords.objects.order_by('?').first()
 
-	#yesword = 'yes' if yesWord == None else yesWord.word
+	yesWord = 'yes' if yesWord == None else yesWord.word
 
 	fillerUsers = User.objects.order_by('?')[:3]
 
