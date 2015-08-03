@@ -34,8 +34,9 @@
 			{% endif %}
 
 			<div class="quote_row">
+				{{ jack.user_vote }}
 				<div class="jack_vote_wrapper">
-					<div class="jack_votes" id="votes_{{ jack.id }}">{{ jack.votes }}</div>
+					<div class="jack_votes" id="votes_{{ jack.id }}">{% if jack.votes %}{{ jack.votes }}{% else %}0{% endif %}</div>
 					<a onClick="upvote({{ jack.id }}); return false;">
 						<div class="{% if jack.vote_up %}vote_button_selected{% else %}vote_button{% endif %}" id="vote_up_{{ jack.id }}"><i class="material-icons">thumb_up</i></div>
 					</a>

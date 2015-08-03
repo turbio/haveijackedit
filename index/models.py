@@ -14,7 +14,6 @@ class User(models.Model):
 	last_online = models.DateTimeField()
 	creation_date = models.DateTimeField()
 	settings = models.OneToOneField('UserSettings')
-	#ips = models.ManyToManyField('Ip')
 
 class UserSettings(models.Model):
 	private = models.BooleanField(default=False)

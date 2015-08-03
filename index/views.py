@@ -1,8 +1,7 @@
 from django.shortcuts import render
-from django.db.models import Sum
+from django.db.models import Sum, F, When, Case, Value, IntegerField, Q
 from django.conf import settings as djangosettings
-from django.http import HttpResponse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext, loader
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
@@ -308,9 +307,22 @@ def dash(request):
 	username = request.session['user_name']
 
 	userJackList = Jack.objects.order_by('date').filter(
-		user__name = request.session['user_name']).reverse() \
+		user__name = username).reverse() \
 		.select_related('image', 'link', 'location') \
-		.prefetch_related('bros').annotate(votes=Sum('vote__points'))
+		.prefetch_related('bros', 'vote') \
+		.annotate(votes=Sum('vote__points'))
+		#.annotate(user_vote=Case(
+				#When(
+					#vote__in=Vote.objects.filter(),
+					#then=Value(1)),
+				#When(
+					#votes=-1,
+					#then=Value(-1)),
+				#default=Value(0),
+				#output_field=IntegerField())
+			#)
+
+	userVotes = Vote.objects.filter(user__name=username)
 
 	yesWord = YesWords.objects.order_by('?').first()
 
