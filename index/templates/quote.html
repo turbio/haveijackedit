@@ -15,26 +15,28 @@
 					{% elif jack.image.source == "c" %}
 						<div class="quote_icon quote_row"><i class="material-icons">photo_camera</i></div>
 					{% endif %}
-					<img class="quote_image" src="{{ jack.image.location }}"/>
+					<img class="quote_image" src="{{ jack.image.data.url }}"/>
 				</div>
 			{% endif %}
 			{% if jack.link  %}
 				<div class="quote_row with_icon">
 					<div class="quote_icon quote_row"><i class="material-icons">link</i></div>
-					<div class="quote_link quote_row"><a href="{{ jack.link.url }}">{{ jack.link_text }}</a></div>
+					<div class="quote_link quote_row"><a href="{{ jack.link.url }}">{{ jack.link.url }}</a></div>
 				</div>
 			{% endif %}
-			<!--{% if jack.has_bro  %}-->
-				<!--<div class="quote_row with_icon">-->
-					<!--<div class="quote_icon"><i class="material-icons">people</i></div>-->
-					<!--{% for bro in jack.bros %}-->
-						<!--<div class="quote_bro"><a href="http://{{ bro.name }}.{{ host }}">{{ bro.name }}</a></div>-->
-					<!--{% endfor %}-->
-				<!--</div>-->
-			<!--{% endif %}-->
+			{% if jack.bros.count > 0  %}
+				<div class="quote_row with_icon">
+					<div class="quote_icon"><i class="material-icons">people</i></div>
+					{% for bro in jack.bros.all %}
+						<div class="quote_bro"><a href="http://{{ bro.name }}.{{ host }}">{{ bro.name }}</a></div>
+					{% endfor %}
+				</div>
+			{% endif %}
+
 			<div class="quote_row">
+				{{ jack.user_vote }}
 				<div class="jack_vote_wrapper">
-					<div class="jack_votes" id="votes_{{ jack.id }}">{{ jack.votes }}</div>
+					<div class="jack_votes" id="votes_{{ jack.id }}">{% if jack.votes %}{{ jack.votes }}{% else %}0{% endif %}</div>
 					<a onClick="upvote({{ jack.id }}); return false;">
 						<div class="{% if jack.vote_up %}vote_button_selected{% else %}vote_button{% endif %}" id="vote_up_{{ jack.id }}"><i class="material-icons">thumb_up</i></div>
 					</a>
@@ -42,6 +44,7 @@
 						<div class="{% if jack.vote_down %}vote_button_selected{% else %}vote_button{% endif %}" id="vote_down_{{ jack.id }}"><i class="material-icons">thumb_down</i></div>
 					</a>
 				</div>
+
 				<a href="http://{{ jack.user_id.name }}.{{ host }}">
 					<div class="name">&ndash;{% if show_username %}{{ jack.user_id.name }}{% else %}you{% endif %}, {{ jack.age }}</div>
 				</a>

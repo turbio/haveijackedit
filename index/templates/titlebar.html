@@ -1,8 +1,10 @@
 {% if signed_in %}
 <div id="title_bar">
-	<a href="/"><div class="titlebar_button" id="home_icon"><i class="material-icons">home</i></div></a>
-	<a href="/signout"><div class="titlebar_button  btn_right" id="exit_icon"><i class="material-icons">exit_to_app</i></div></a>
-	<a href="/settings"><div class="titlebar_button btn_right" id="settings_icon"><i class="material-icons">settings</i></div></a>
-	<a href="/dash"><div class="titlebar_button btn_right" id="dash_icon"><i class="material-icons">dashboard</i></div></a>
+	<a href="http://{{ host }}"><div class="titlebar_button" id="home_icon"><i class="material-icons">home</i></div></a>
+	<!--<a href="http://{{ host }}/signout"><div class="titlebar_button  btn_right" id="exit_icon"><i class="material-icons">exit_to_app</i></div></a>-->
+	<!--<a href="http://{{ host }}/settings"><div class="titlebar_button btn_right" id="settings_icon"><i class="material-icons">settings</i></div></a>-->
+	<a href="http://{{ host }}/signout"><div class="titlebar_button  btn_right" id="exit_icon">TODO<i class="material-icons">person</i></div></a>
+	<a href="http://{{ host }}/dash"><div class="titlebar_button btn_right" id="dash_icon"><i class="material-icons">dashboard</i></div></a>
+	<a href="http://test.{{ host }}"><div class="titlebar_button btn_right" id="dash_icon"><i class="material-icons">view_agenda</i></div></a>
 </div>
 {% endif %}

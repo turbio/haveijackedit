@@ -1,8 +1,7 @@
 from django.shortcuts import render
-from django.db.models import Sum
+from django.db.models import Sum, F, When, Case, Value, IntegerField, Q
 from django.conf import settings as djangosettings
-from django.http import HttpResponse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext, loader
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
@@ -19,6 +18,8 @@ import datetime
 import io
 from .data_uri import DataURI
 from datetime import timedelta
+from random_words import RandomWords
+from django.core.files.temp import NamedTemporaryFile
 
 def scoreJack(jackObject):
 	score = 100
@@ -33,9 +34,6 @@ def scoreJack(jackObject):
 
 # Create your views here.
 def index(request):
-	#if 'user_logged_in' in request.session:
-		#return HttpResponseRedirect('/dash/')
-
 	hotJacks = Jack.objects.order_by('date').reverse().filter(
 		user__settings__on_homepage = True,
 		user__settings__private = False)
@@ -73,7 +71,7 @@ def index(request):
 		return render(request, 'index/index.html', context)
 
 def handlevote(request):
-	jackObject = jack.objects.get(id = request.POST['jack'])
+	jackObject = Jack.objects.get(id = request.POST['jack'])
 
 	userChoice = 0
 	if request.POST['points'] == 'd':
@@ -91,9 +89,12 @@ def handlevote(request):
 
 	#first determine if user is logged in
 	if 'user_logged_in' in request.session:
-		userObject = user.objects.get(id = request.session['user_id'])
+		userObject = User.objects.get(id = request.session['user_id'])
 
-		voteObject = vote.objects.get_or_create(jack=jackObject, user=userObject)
+		try:
+			voteObject = Vote.objects.get(jack=jackObject, user=userObject)
+		except:
+			voteObject = Vote(jack=jackObject, user=userObject)
 
 		voteObject.ip = getUserIp(request)
 		voteObject.date = datetime.datetime.today()
@@ -101,16 +102,12 @@ def handlevote(request):
 		voteObject.save()
 
 		replyObject = [{
-			'jack': voteObject.jack.id,
-			'votes': jackVotes(voteObject.jack)
+			'jack': jackObject.id,
+			'votes': jackObject.votes()
 		}]
 		return HttpResponse(json.dumps(replyObject))
 
 	return HttpResponse('lmao')
-
-def jackVotes(jackObject):
-	votes = vote.objects.filter(jack=jackObject).aggregate(Sum('points'))['points__sum']
-	return 0 if votes is None else votes
 
 def settings(request):
 	if not 'user_logged_in' in request.session:
@@ -310,14 +307,26 @@ def dash(request):
 	username = request.session['user_name']
 
 	userJackList = Jack.objects.order_by('date').filter(
-		user__name = request.session['user_name']).reverse()
+		user__name = username).reverse() \
+		.select_related('image', 'link', 'location') \
+		.prefetch_related('bros', 'vote') \
+		.annotate(votes=Sum('vote__points'))
+		#.annotate(user_vote=Case(
+				#When(
+					#vote__in=Vote.objects.filter(),
+					#then=Value(1)),
+				#When(
+					#votes=-1,
+					#then=Value(-1)),
+				#default=Value(0),
+				#output_field=IntegerField())
+			#)
+
+	userVotes = Vote.objects.filter(user__name=username)
 
 	yesWord = YesWords.objects.order_by('?').first()
 
-	if yesWord == None:
-		yesWord = 'yes'
-	else:
-		yesWord = yesWord.word
+	yesWord = 'yes' if yesWord == None else yesWord.word
 
 	fillerUsers = User.objects.order_by('?')[:3]
 
@@ -336,12 +345,6 @@ def dash(request):
 		context['user_analytic_id'] = request.session['user_name']
 
 	return render(request, 'index/dash.html', context)
-
-#takes a django jack object list and turns it into something that can be put
-#into the template
-#def constructJackList(jacklist):
-	#jacks = []
-	#return jacklist
 
 def getUserIp(request):
 	x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -383,34 +386,41 @@ def submit_jack(request):
 		newJack.location = newGeolocation
 
 	if 'image' in request.POST and not request.POST['image'] == '':
-		newImage = Image(ip=userIp)
+		newImage = Image(
+			ip=userIp,
+			source=request.POST['image_source']
+		)
 		uri = DataURI(request.POST['image'])
-		newImage.location.save('filename.png', io.BytesIO(uri.data))
-		#newImage.save()
+		filename = ''.join([
+				word.capitalize()
+				for word in RandomWords().random_words(count=5)
+			])
 
-		#newImageFile = open(djangosettings.MEDIA_ROOT + 'filename.png', 'wb')
-		#newImage.write(request.POST['image'].encode('ascii').decode('base64'))
+		imageFile = NamedTemporaryFile(delete=True)
+		imageFile.write(uri.data)
+		imageFile.flush()
 
-	#if 'jack_link_url' in request.POST and not request.POST['jack_link_url'] == '':
-		#validUrl = validateUrl(request.POST['jack_link_url'])
-		#if(validUrl):
-			#newLink = link(
-				#jack=newJack,
-				#url=validUrl)
-			#newLink.save()
+		newImage.data.save(filename, File(imageFile))
+		newImage.save()
+		newJack.image = newImage
 
-	#if 'jack_bro' in request.POST and not request.POST['jack_bro'] == '':
-		#broStringList = request.POST['jack_bro'].split(",")
-		#broStringList = [s.strip(' ') for s in broStringList]
+	if 'jack_link_url' in request.POST and not request.POST['jack_link_url'] == '':
+		validUrl = validateUrl(request.POST['jack_link_url'])
+		if(validUrl):
+			newLink = Link(
+				url=validUrl,
+				ip=getUserIp(request))
+			newLink.save()
+			newJack.link = newLink
 
-		#for b in broStringList:
-			#bro = user.objects.filter(name__iexact = b)
-			#if not bro.count() <= 0:
-				#newJackBro = jack_bro(
-					#jack=newJack,
-					#bro=bro.first())
-				#newJackBro.save()
 	newJack.save()
+
+	if 'jack_bro' in request.POST and not request.POST['jack_bro'] == '':
+		broStrings = request.POST['jack_bro'].split(",")
+		broStrings = [s.strip(' ') for s in broStrings]
+
+		for broString in broStrings:
+			newJack.bros.add(User.objects.get(name__iexact=broString))
 
 	return HttpResponseRedirect('/dash/')
 
@@ -427,39 +437,6 @@ def getSubdomain(url):
 		return splitUrl[0]
 
 	return False
-
-#def handleUsercredentials(request):
-	#username = str(request.POST.get('username', ''))
-	#password = str(request.POST.get('password', ''))
-	#action = str(request.POST.get('action', ''))
-
-	#if username == '':
-		#raise Exception('most provide a username')
-	#if password == '':
-		#raise Exception('most provide a password')
-
-	#if action == 'signup':
-		##check captcha
-		#captchaClientResponse = str(request.POST.get('g-recaptcha-response', ''))
-		#x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-		#if x_forwarded_for:
-			#ip = x_forwarded_for.split(',')[0]
-		#else:
-			#ip = request.META.get('REMOTE_ADDR')
-		#post_data = [
-			#('secret', settings.CAPTCHA_KEY),
-			#('response', captchaClientResponse),
-			#('remoteip', ip),
-		#]
-		##result = urllib.urlopen('https://www.google.com/recaptcha/api/siteverify', urllib.urlencode(post_data))
-		##content = result.read()
-		##print(content)
-		#signup(username, password)
-	#elif action == 'signin':
-		#userId = signin(username, password)
-		#request.session['user_logged_in'] = True
-		#request.session['user_id'] = userId
-		#request.session['user_name'] = username
 
 #returns True if a use with username exists, otherwise returns false
 def userExists(username):

@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Sum
 
 class UserSubmitted(models.Model):
 	user = models.ForeignKey('User', null=True)
@@ -28,6 +29,10 @@ class Jack(UserSubmitted):
 	image = models.ForeignKey('Image', null=True)
 	bros = models.ManyToManyField('User', related_name='jack_bros')
 
+	def votes(self):
+		votesum = self.vote_set.all().aggregate(Sum('points'))['points__sum']
+		return 0 if votesum is None else votesum
+
 class Vote(UserSubmitted):
 	jack = models.ForeignKey('Jack')
 	date = models.DateTimeField()
@@ -44,7 +49,7 @@ class Link(UserSubmitted):
 	url = models.CharField(max_length=512)
 
 class Image(UserSubmitted):
-	location = models.ImageField(upload_to='media/', default = 'media/none.png')
+	data = models.ImageField(upload_to='.', default = 'media/none.png')
 
 	SOURCES = (('f', 'file'), ('c', 'camera'))
 	source = models.CharField(max_length='1', choices=SOURCES, default='f')
