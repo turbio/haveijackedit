@@ -110,10 +110,6 @@ def handlevote(request):
 
 	return HttpResponse('lmao')
 
-#def jackVotes(jackObject):
-	#votes = vote.objects.filter(jack=jackObject).aggregate(Sum('points'))['points__sum']
-	#return 0 if votes is None else votes
-
 def settings(request):
 	if not 'user_logged_in' in request.session:
 		return HttpResponseRedirect('/dash/')
