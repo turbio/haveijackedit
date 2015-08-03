@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.db.models import Sum, Count
+from django.db.models import Sum
 from django.conf import settings as djangosettings
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
@@ -103,8 +103,8 @@ def handlevote(request):
 		voteObject.save()
 
 		replyObject = [{
-			'jack': voteObject.jack.id,
-			'votes': 123 #TODO
+			'jack': jackObject.id,
+			'votes': jackObject.votes()
 		}]
 		return HttpResponse(json.dumps(replyObject))
 
@@ -334,12 +334,6 @@ def dash(request):
 
 	return render(request, 'index/dash.html', context)
 
-#takes a django jack object list and turns it into something that can be put
-#into the template
-#def constructJackList(jacklist):
-	#jacks = []
-	#return jacklist
-
 def getUserIp(request):
 	x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
 	if x_forwarded_for:
@@ -431,39 +425,6 @@ def getSubdomain(url):
 		return splitUrl[0]
 
 	return False
-
-#def handleUsercredentials(request):
-	#username = str(request.POST.get('username', ''))
-	#password = str(request.POST.get('password', ''))
-	#action = str(request.POST.get('action', ''))
-
-	#if username == '':
-		#raise Exception('most provide a username')
-	#if password == '':
-		#raise Exception('most provide a password')
-
-	#if action == 'signup':
-		##check captcha
-		#captchaClientResponse = str(request.POST.get('g-recaptcha-response', ''))
-		#x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-		#if x_forwarded_for:
-			#ip = x_forwarded_for.split(',')[0]
-		#else:
-			#ip = request.META.get('REMOTE_ADDR')
-		#post_data = [
-			#('secret', settings.CAPTCHA_KEY),
-			#('response', captchaClientResponse),
-			#('remoteip', ip),
-		#]
-		##result = urllib.urlopen('https://www.google.com/recaptcha/api/siteverify', urllib.urlencode(post_data))
-		##content = result.read()
-		##print(content)
-		#signup(username, password)
-	#elif action == 'signin':
-		#userId = signin(username, password)
-		#request.session['user_logged_in'] = True
-		#request.session['user_id'] = userId
-		#request.session['user_name'] = username
 
 #returns True if a use with username exists, otherwise returns false
 def userExists(username):
