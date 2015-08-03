@@ -317,19 +317,13 @@ def dash(request):
 	userJackList = Jack.objects.order_by('date').filter(
 		user__name = request.session['user_name']).reverse() \
 		.select_related('image', 'link', 'location') \
-		.prefetch_related('bros')
+		.prefetch_related('bros').annotate(votes=Sum('vote__points'))
 
 	yesWord = YesWords.objects.order_by('?').first()
 
 	#yesword = 'yes' if yesWord == None else yesWord.word
 
 	fillerUsers = User.objects.order_by('?')[:3]
-
-	#for i in userJackList):
-		#print(i.comment)
-	print(userJackList.annotate(Sum('vote__points')).first()._meta.get_all_field_names())
-	#print(userJackList.first()._meta.get_all_field_names())
-	#print(userJackList.first().vote)
 
 	context = {
 		'version': djangosettings.APP_VERSION,
