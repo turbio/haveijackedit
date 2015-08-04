@@ -314,7 +314,7 @@ def dash(request):
 		'username': username,
 		'yes_word': YesWords.objects.random_word('yes'),
 		'filler_user': User.objects.order_by('?')[:3],
-		'jack_list': Jack.objects.with_details().filter(user__name=username),
+		'jack_list': Jack.objects.with_details(username).filter(user__name=username),
 		'signed_in': 'user_logged_in' in request.session,
 	}
 
