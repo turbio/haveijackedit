@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from django.db.models import Sum, F, When, Case, Value, CharField, Q
 from django.conf import settings as djangosettings
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext, loader
@@ -301,43 +300,21 @@ def feed(request):
 	return render(request, 'index/feed.html', context)
 
 def dash(request):
+	#dash is basically useless if you're not logged in, so instead of throwing
+	#errors or something, it's easier if we just redirect to the front page
 	if not 'user_logged_in' in request.session:
 		return HttpResponseRedirect('/')
 
 	username = request.session['user_name']
-
-	votesByUser = votesByUser = Vote.objects.filter(user__name=username)
-
-	userJackList = Jack.objects.order_by('date').filter(
-		user__name = username) \
-		.reverse() \
-		.select_related('image', 'link', 'location') \
-		.prefetch_related('bros', 'vote') \
-		.annotate(votes=Sum('vote__points'))
-
-	jacksVotedUp = userJackList.filter(
-			Q(vote__in=votesByUser) | Q(vote__ip=getUserIp(request)),
-			vote__points__gt=0) \
-		.annotate(user_vote=Value('1', output_field=CharField()))
-
-	jacksVotedDown = userJackList.filter(
-			Q(vote__in=votesByUser) | Q(vote__ip=getUserIp(request)),
-			vote__points__lt=0) \
-		.annotate(user_vote=Value('0', output_field=CharField()))
-
-	yesWord = YesWords.objects.order_by('?').first()
-	yesWord = 'yes' if yesWord == None else yesWord.word
-
-	fillerUsers = User.objects.order_by('?')[:3]
 
 	context = {
 		'version': djangosettings.APP_VERSION,
 		'host': "haveijackedit.com",
 		'show_date': True,
 		'username': username,
-		'yes_word': yesWord,
-		'filler_user': fillerUsers,
-		'jack_list': userJackList,
+		'yes_word': YesWords.objects.random_word('yes'),
+		'filler_user': User.objects.order_by('?')[:3],
+		'jack_list': Jack.objects.with_details(username),
 		'signed_in': 'user_logged_in' in request.session,
 	}
 

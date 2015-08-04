@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models import Sum, F, When, Case, Value, CharField, Q
+
 class UserSubmitted(models.Model):
 	user = models.ForeignKey('User', null=True)
 	ip = models.ForeignKey('Ip')
@@ -19,6 +21,17 @@ class UserSettings(models.Model):
 	show_date = models.BooleanField(default=True)
 	show_time = models.BooleanField(default=True)
 
+class JackManager(models.Manager):
+	def with_details(self, user=None):
+		query = self.order_by('date').reverse() \
+			.select_related('image', 'link', 'location', 'user', 'ip') \
+			.prefetch_related('bros', 'vote', 'vote__user') \
+			.annotate(votes=Sum('vote__points'))
+		if user is not None:
+			query = query.filter(user__name=user)
+
+		return query
+
 class Jack(UserSubmitted):
 	date = models.DateTimeField()
 	comment = models.CharField(max_length=160)
@@ -26,6 +39,7 @@ class Jack(UserSubmitted):
 	link = models.ForeignKey('Link', null=True)
 	image = models.ForeignKey('Image', null=True)
 	bros = models.ManyToManyField('User', related_name='jack_bros')
+	objects = JackManager()
 
 	def votes(self):
 		votesum = self.vote_set.all().aggregate(Sum('points'))['points__sum']
@@ -53,8 +67,22 @@ class Image(UserSubmitted):
 	source = models.CharField(max_length='1', choices=SOURCES, default='f')
 
 #this is just the different' words to show, these models shouldn't be edited
+class RandomWordManager(models.Manager):
+	def random_word(self, default=None):
+		word = self.order_by('?').first()
+		if word is not None:
+			word = word.word
+		elif default is not None:
+			word = default
+		else:
+			word = None
+
+		return word
+
+
 class YesWords(models.Model):
 	word = models.CharField(max_length=32)
+	objects = RandomWordManager()
 
 	def save(self, *args, **kwargs):
 		pass
@@ -63,6 +91,7 @@ class YesWords(models.Model):
 
 class NoWords(models.Model):
 	word = models.CharField(max_length=32)
+	objects = RandomWordManager()
 
 	def save(self, *args, **kwargs):
 		pass
