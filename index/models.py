@@ -1,6 +1,4 @@
 from django.db import models
-from django.db.models import Sum
-
 class UserSubmitted(models.Model):
 	user = models.ForeignKey('User', null=True)
 	ip = models.ForeignKey('Ip')

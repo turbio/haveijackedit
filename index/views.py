@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.db.models import Sum, F, When, Case, Value, IntegerField, Q
+from django.db.models import Sum, F, When, Case, Value, CharField, Q
 from django.conf import settings as djangosettings
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext, loader
@@ -306,26 +306,26 @@ def dash(request):
 
 	username = request.session['user_name']
 
+	votesByUser = votesByUser = Vote.objects.filter(user__name=username)
+
 	userJackList = Jack.objects.order_by('date').filter(
-		user__name = username).reverse() \
+		user__name = username) \
+		.reverse() \
 		.select_related('image', 'link', 'location') \
 		.prefetch_related('bros', 'vote') \
 		.annotate(votes=Sum('vote__points'))
-		#.annotate(user_vote=Case(
-				#When(
-					#vote__in=Vote.objects.filter(),
-					#then=Value(1)),
-				#When(
-					#votes=-1,
-					#then=Value(-1)),
-				#default=Value(0),
-				#output_field=IntegerField())
-			#)
 
-	userVotes = Vote.objects.filter(user__name=username)
+	jacksVotedUp = userJackList.filter(
+			Q(vote__in=votesByUser) | Q(vote__ip=getUserIp(request)),
+			vote__points__gt=0) \
+		.annotate(user_vote=Value('1', output_field=CharField()))
+
+	jacksVotedDown = userJackList.filter(
+			Q(vote__in=votesByUser) | Q(vote__ip=getUserIp(request)),
+			vote__points__lt=0) \
+		.annotate(user_vote=Value('0', output_field=CharField()))
 
 	yesWord = YesWords.objects.order_by('?').first()
-
 	yesWord = 'yes' if yesWord == None else yesWord.word
 
 	fillerUsers = User.objects.order_by('?')[:3]
@@ -346,7 +346,14 @@ def dash(request):
 
 	return render(request, 'index/dash.html', context)
 
+#if multiple parts of the application need the user's ip object, this prevents
+#multiple database querys
+userIpObject = None
 def getUserIp(request):
+	global userIpObject
+	if userIpObject is not None:
+		return userIpObject
+
 	x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
 	if x_forwarded_for:
 		clientIp = x_forwarded_for.split(',')[0]
@@ -354,9 +361,9 @@ def getUserIp(request):
 		clientIp = request.META.get('REMOTE_ADDR')
 
 	#if an ip alread exists, no need to create another entry for it
-	ipObject, created = Ip.objects.get_or_create(address=clientIp)
+	userIpObject, created = Ip.objects.get_or_create(address=clientIp)
 
-	return ipObject
+	return userIpObject
 
 def submit_jack(request):
 	if request.method != 'POST':
