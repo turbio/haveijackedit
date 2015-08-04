@@ -22,13 +22,12 @@ class UserSettings(models.Model):
 	show_time = models.BooleanField(default=True)
 
 class JackManager(models.Manager):
-	def with_details(self, user=None):
-		query = self.order_by('date').reverse() \
+	def with_details(self):
+		return self.order_by('date').reverse() \
 			.select_related('image', 'link', 'location', 'user', 'ip') \
 			.prefetch_related('bros', 'vote', 'vote__user') \
 			.annotate(votes=Sum('vote__points'))
 
-		return query
 
 class Jack(UserSubmitted):
 	date = models.DateTimeField()
