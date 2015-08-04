@@ -27,8 +27,6 @@ class JackManager(models.Manager):
 			.select_related('image', 'link', 'location', 'user', 'ip') \
 			.prefetch_related('bros', 'vote', 'vote__user') \
 			.annotate(votes=Sum('vote__points'))
-		if user is not None:
-			query = query.filter(user__name=user)
 
 		return query
 
