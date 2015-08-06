@@ -1,29 +1,44 @@
-<div class="feed_quote {% if jack.shade %}shaded_quote{% endif %}">
+<div class="feed_quote">
+	<!--<hr/>-->
+	<!--id:{{ jack.id }}<br/>-->
+	<!--comment:{{ jack.comment }}<br/>-->
+	<!--vote:	{{ jack.votes }}<br/>-->
+	<!--link:	{{ jack.url }}<br/>-->
+	<!--user:	{{ jack.user_name }}<br/>-->
+	<!--ip:		{{ jack.ip_address }}<br/>-->
+	<!--priv:	{{ jack.private }}<br/>-->
+	<!--lat:	{{ jack.location_lat }}<br/>-->
+	<!--lng:	{{ jack.location_lng }}<br/>-->
+	<!--img:	<img src="{{ jack.image_file }}"/><br/>-->
+	<!--imgsrc:{{ jack.image_source }}<br/>-->
+	<!--<hr/>-->
+
 	<div class="quote" id="jack_{{ jack.id }}">
 		<div class="quote_content">
 			<div class="msg">{{ jack.comment }}</div>
-			{% if jack.location  %}
+			{% if jack.location_lat  %}
 			<div class="quote_image_container quote_row">
 				<div class="quote_icon quote_row"><i class="material-icons">my_location</i></div>
-				<img class="quote_image" src="https://maps.googleapis.com/maps/api/staticmap?center={{ jack.lat }},{{ jack.lng }}&zoom=16&size=600x600&maptype=roadmap&style=element:labels|visibility:off&style=saturation:-100&markers={{ jack.location.lat }},{{ jack.location.lng }}"/>
+				<img class="quote_image" src="https://maps.googleapis.com/maps/api/staticmap?center={{ jack.location_lat }},{{ jack.location_lng }}&zoom=16&size=600x600&maptype=roadmap&style=element:labels|visibility:off&style=saturation:-100&markers={{ jack.location_lat }},{{ jack.location_lng }}"/>
 			</div>
 			{% endif %}
-			{% if jack.image  %}
+			{% if jack.image_file  %}
 				<div class="quote_image_container quote_row">
-					{% if jack.image.source == "f" %}
+					{% if jack.image_source == "f" %}
 						<div class="quote_icon quote_row"><i class="material-icons">photo</i></div>
-					{% elif jack.image.source == "c" %}
+					{% elif jack.image_source == "c" %}
 						<div class="quote_icon quote_row"><i class="material-icons">photo_camera</i></div>
 					{% endif %}
-					<img class="quote_image" src="{{ jack.image.data.url }}"/>
+					<img class="quote_image" src="{{ jack.image_file }}"/>
 				</div>
 			{% endif %}
-			{% if jack.link  %}
+			{% if jack.url  %}
 				<div class="quote_row with_icon">
 					<div class="quote_icon quote_row"><i class="material-icons">link</i></div>
-					<div class="quote_link quote_row"><a href="{{ jack.link.url }}">{{ jack.link.url }}</a></div>
+					<div class="quote_link quote_row"><a href="{{ jack.url }}">{{ jack.url }}</a></div>
 				</div>
 			{% endif %}
+			{%comment%}
 			{% if jack.bros.count > 0  %}
 				<div class="quote_row with_icon">
 					<div class="quote_icon"><i class="material-icons">people</i></div>
@@ -32,10 +47,11 @@
 					{% endfor %}
 				</div>
 			{% endif %}
+			{%endcomment%}
 
 			<div class="quote_row">
 				<div class="jack_vote_wrapper">
-					<div class="jack_votes" id="votes_{{ jack.id }}">{% if jack.votes %}{{ jack.votes }}{% else %}0{% endif %}</div>
+					<div class="jack_votes" id="votes_{{ jack.id }}">{{ jack.votes }}</div>
 					<a onClick="upvote({{ jack.id }}); return false;">
 						<div class="{% if jack.vote_up %}vote_button_selected{% else %}vote_button{% endif %}" id="vote_up_{{ jack.id }}"><i class="material-icons">thumb_up</i></div>
 					</a>
@@ -44,8 +60,8 @@
 					</a>
 				</div>
 
-				<a href="http://{{ jack.user_id.name }}.{{ host }}">
-					<div class="name">&ndash;{% if show_username %}{{ jack.user_id.name }}{% else %}you{% endif %}, {{ jack.age }}</div>
+				<a href="http://{{ jack.user_name }}.{{ host }}">
+					<div class="name">&ndash;{{ jack.user_name }}, {{ jack.age }}</div>
 				</a>
 			</div>
 		</div>

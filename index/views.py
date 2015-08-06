@@ -33,41 +33,31 @@ def scoreJack(jackObject):
 
 # Create your views here.
 def index(request):
-	hotJacks = Jack.objects.order_by('date').reverse().filter(
-		user__settings__on_homepage = True,
-		user__settings__private = False)
+	subdomain = getSubdomain(request.META['HTTP_HOST'])
+	if subdomain:
+		return feed(request)
+
+	jacks = Jack.objects.with_details()
 
 	try:
 		userObject = user.objects.get(id = request.session['user_id'])
 	except:
 		userObject = None
 
-	if hotJacks.count() > 0:
-		hotJacks = hotJacks
-		hotJacks = sorted(hotJacks, key=scoreJack, reverse=True)
-	else:
-		hotJacks = None
+	#jacks = sorted(jacks, key=lambda j: j.score, reverse=True)
 
 	context = {
 		'version': djangosettings.APP_VERSION,
 		'show_username': True,
-		'jack_list': hotJacks,
+		'jack_list': jacks,
 		'host': "haveijackedit.com",
 		'signed_in': 'user_logged_in' in request.session,
 	}
 
-	if request.method == 'GET':
-		if 'u' in request.GET:
-			context['claim_url'] = request.GET['u']
-
 	if 'user_logged_in' in request.session:
 		context['user_analytic_id'] = request.session['user_name']
 
-	subdomain = getSubdomain(request.META['HTTP_HOST'])
-	if subdomain:
-		return feed(request)
-	else:
-		return render(request, 'index/index.html', context)
+	return render(request, 'index/index.html', context)
 
 def handlevote(request):
 	jackObject = Jack.objects.get(id = request.POST['jack'])

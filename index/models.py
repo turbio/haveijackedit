@@ -23,11 +23,12 @@ class UserSettings(models.Model):
 
 class JackManager(models.Manager):
 	def with_details(self):
-		return self.order_by('date').reverse() \
-			.select_related('image', 'link', 'location', 'user', 'ip') \
-			.prefetch_related('bros', 'vote', 'vote__user') \
-			.annotate(votes=Sum('vote__points'))
+		#return self.order_by('date').reverse() \
+			#.select_related('image', 'link', 'location', 'user', 'ip') \
+			#.prefetch_related('bros', 'vote', 'vote__user') \
+			#.annotate(votes=Sum('vote__points'))
 
+		return self.raw(open('./index/jack_detail.sql', 'r').read())
 
 class Jack(UserSubmitted):
 	date = models.DateTimeField()
