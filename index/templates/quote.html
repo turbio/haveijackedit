@@ -39,10 +39,10 @@
 				<div class="jack_vote_wrapper">
 					<div class="jack_votes" id="votes_{{ jack.id }}">{{ jack.votes }}</div>
 					<a onClick="upvote({{ jack.id }}); return false;">
-						<div class="{% if jack.vote_up %}vote_button_selected{% else %}vote_button{% endif %}" id="vote_up_{{ jack.id }}"><i class="material-icons">thumb_up</i></div>
+						<div class="{% if jack.vote_direction > 0 %}vote_button_selected{% else %}vote_button{% endif %}" id="vote_up_{{ jack.id }}"><i class="material-icons">thumb_up</i></div>
 					</a>
 					<a onClick="downvote({{ jack.id }}); return false;">
-						<div class="{% if jack.vote_down %}vote_button_selected{% else %}vote_button{% endif %}" id="vote_down_{{ jack.id }}"><i class="material-icons">thumb_down</i></div>
+						<div class="{% if jack.vote_direction < 0 %}vote_button_selected{% else %}vote_button{% endif %}" id="vote_down_{{ jack.id }}"><i class="material-icons">thumb_down</i></div>
 					</a>
 				</div>
 

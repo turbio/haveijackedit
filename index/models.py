@@ -29,7 +29,6 @@ class JackManager(models.Manager):
 			#.annotate(votes=Sum('vote__points'))
 
 		q = open('./index/jack_detail.sql', 'r').read()
-		print(q)
 		return self.raw(q)
 
 class Jack(UserSubmitted):

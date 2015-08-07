@@ -19,7 +19,20 @@ SELECT
 		THEN CONCAT(TIMESTAMPDIFF(HOUR,`index_jack`.`date`,UTC_TIMESTAMP())," hours ago")
 	ELSE
 		CONCAT(TIMESTAMPDIFF(DAY,`index_jack`.`date`,UTC_TIMESTAMP())," days ago")
-	END AS age
+	END AS age,
+	(
+		SELECT
+			`index_vote`.`points`
+		FROM
+			`index_vote`
+		INNER JOIN `index_usersubmitted` ON
+			`index_vote`.`usersubmitted_ptr_id` = `index_usersubmitted`.`id`
+		INNER JOIN `index_user` ON
+			`index_usersubmitted`.`user_id` = `index_user`.`id`
+		WHERE
+			`index_vote`.`jack_id` = `index_jack`.`usersubmitted_ptr_id`
+			AND `index_user`.`name` = "test"
+	) AS vote_direction
 FROM
 	`index_jack`
 LEFT OUTER JOIN `index_vote` ON
