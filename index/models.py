@@ -28,7 +28,9 @@ class JackManager(models.Manager):
 			#.prefetch_related('bros', 'vote', 'vote__user') \
 			#.annotate(votes=Sum('vote__points'))
 
-		return self.raw(open('./index/jack_detail.sql', 'r').read())
+		q = open('./index/jack_detail.sql', 'r').read()
+		print(q)
+		return self.raw(q)
 
 class Jack(UserSubmitted):
 	date = models.DateTimeField()

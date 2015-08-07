@@ -51,11 +51,13 @@ def index(request):
 		'show_username': True,
 		'jack_list': jacks,
 		'host': "haveijackedit.com",
-		'signed_in': 'user_logged_in' in request.session,
 	}
 
 	if 'user_logged_in' in request.session:
+		context['signed_in'] = True,
 		context['user_analytic_id'] = request.session['user_name']
+	else:
+		context['signed_in'] = False,
 
 	return render(request, 'index/index.html', context)
 
@@ -304,7 +306,7 @@ def dash(request):
 		'username': username,
 		'yes_word': YesWords.objects.random_word('yes'),
 		'filler_user': User.objects.order_by('?')[:3],
-		'jack_list': Jack.objects.with_details().filter(user__name=username),
+		'jack_list': Jack.objects.filter(user__name=username),
 		'signed_in': 'user_logged_in' in request.session,
 	}
 
