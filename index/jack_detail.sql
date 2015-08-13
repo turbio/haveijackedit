@@ -55,7 +55,12 @@ SELECT
 		WHERE
 			`index_vote`.`jack_id` = `index_jack`.`usersubmitted_ptr_id`
 			AND `index_user`.`name` = "test"
-	) AS vote_direction
+	) AS vote_direction,
+	CASE
+		WHEN `index_user`.`name` = "test"
+			THEN 1
+		ELSE 0
+	END AS isowner
 FROM
 	`index_jack`
 LEFT OUTER JOIN `index_vote` ON

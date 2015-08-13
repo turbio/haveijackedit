@@ -45,6 +45,9 @@
 				<a href="http://{{ jack.user_name }}.{{ host }}">
 					<div class="name">&ndash;{{ jack.user_name }}, {{ jack.age }}</div>
 				</a>
+				{% if jack.isowner %}
+					<!--TODO show controls-->
+				{% endif %}
 			</div>
 		</div>
 	</div>
