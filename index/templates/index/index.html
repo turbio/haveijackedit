@@ -6,7 +6,7 @@
 {% block content %}
 	<div id="wrapper">
 		{% if not signed_in %}
-		<span id="forkongithub"><a href="https://github.com/turbio/haveijackedit">Fork me on GitHub</a></span>
+			<span id="forkongithub"><a href="https://github.com/turbio/haveijackedit">Fork me on GitHub</a></span>
 		{% endif %}
 		{% include "titlebar.html" %}
 		{% if jack_list %}
@@ -24,12 +24,14 @@
 			{% endif %}
 		</div>
 	</div>
-	<div id="signin" class="account_dialog">
-		{% include "signin.html" %}
-		<a href="#" onclick="hide_dialog()">back</a>
-	</div>
-	<div id="signup" class="account_dialog" {% if claim_url %}style="display: block;"{% endif %}>
-		{% include "signup.html" %}
-		<a href="#" onclick="hide_dialog()">back</a>
-	</div>
+	{% if not signed_in %}
+		<div id="signin" class="account_dialog">
+			{% include "signin.html" %}
+			<a href="#" onclick="hide_dialog()">back</a>
+		</div>
+		<div id="signup" class="account_dialog" {% if claim_url %}style="display: block;"{% endif %}>
+			{% include "signup.html" %}
+			<a href="#" onclick="hide_dialog()">back</a>
+		</div>
+	{% endif %}
 {% endblock %}
