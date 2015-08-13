@@ -54,10 +54,9 @@ def index(request):
 	}
 
 	if 'user_logged_in' in request.session:
-		context['signed_in'] = True,
+		print(request.session)
+		context['signed_in'] = True
 		context['user_analytic_id'] = request.session['user_name']
-	else:
-		context['signed_in'] = False,
 
 	return render(request, 'index/index.html', context)
 

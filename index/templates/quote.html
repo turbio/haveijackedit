@@ -24,16 +24,12 @@
 					<div class="quote_link quote_row"><a href="{{ jack.url }}">{{ jack.url }}</a></div>
 				</div>
 			{% endif %}
-			{%comment%}
-			{% if jack.bros.count > 0  %}
-				<div class="quote_row with_icon">
-					<div class="quote_icon"><i class="material-icons">people</i></div>
-					{% for bro in jack.bros.all %}
-						<div class="quote_bro"><a href="http://{{ bro.name }}.{{ host }}">{{ bro.name }}</a></div>
-					{% endfor %}
-				</div>
+			{% if jack.bro %}
+			<div class="quote_row with_icon">
+				<div class="quote_icon"><i class="material-icons">people</i></div>
+				<div class="quote_bro"><a href="#">{{ jack.bro }}</a></div>
+			</div>
 			{% endif %}
-			{%endcomment%}
 
 			<div class="quote_row">
 				<div class="jack_vote_wrapper">

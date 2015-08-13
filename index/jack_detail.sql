@@ -22,6 +22,16 @@ SELECT
 	END AS age,
 	(
 		SELECT
+			GROUP_CONCAT(`index_user`.`name` SEPARATOR ', ')
+		FROM
+			`index_jack_bros`
+		INNER JOIN `index_user` ON
+			`index_jack_bros`.`user_id` = `index_user`.`id`
+		WHERE
+			`index_jack_bros`.`jack_id` = `index_jack`.`usersubmitted_ptr_id`
+	) AS bro,
+	(
+		SELECT
 			`index_vote`.`points`
 		FROM
 			`index_vote`
