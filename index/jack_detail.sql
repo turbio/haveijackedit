@@ -31,6 +31,19 @@ SELECT
 			`index_jack_bros`.`jack_id` = `index_jack`.`usersubmitted_ptr_id`
 	) AS bro,
 	(
+		100
+		+ ((CHAR_LENGTH(`index_jack`.`comment`) / 160) * 200)
+		- (POW(TIMESTAMPDIFF(SECOND,`index_jack`.`date`,UTC_TIMESTAMP()) / (60 * 60), 3) * 2)
+		+ (CASE
+		WHEN IFNULL(SUM(index_vote.points), 0) > 0
+			THEN POW(IFNULL(SUM(index_vote.points), 0), 2) * 100
+		ELSE
+			IFNULL(SUM(index_vote.points), 0) * 100
+		END)
+
+	)
+	AS score,
+	(
 		SELECT
 			`index_vote`.`points`
 		FROM
@@ -62,4 +75,5 @@ LEFT OUTER JOIN `index_image` ON
 GROUP BY
 	`index_jack`.`usersubmitted_ptr_id`
 ORDER BY
-	`index_jack`.`date` DESC
+	-- `index_jack`.`date` DESC
+	score DESC
