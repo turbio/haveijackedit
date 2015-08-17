@@ -100,8 +100,8 @@ def settings(request):
 	if not 'user_logged_in' in request.session:
 		return HttpResponseRedirect('/dash/')
 
-	userObject = user.objects.get(
-		id = request.session['user_id']).select_related('settings')
+	userObject = User.objects.get(
+		id = request.session['user_id'])
 	userSettings = userObject.settings
 
 	user_options = {
@@ -131,7 +131,7 @@ def submit_settings(request):
 		return HttpResponseRedirect('/dash/')
 
 	userObject = User.objects.get(
-		id = request.session['user_id']).select_related('settings')
+		id = request.session['user_id'])
 
 	if 'submit' in request.POST:
 		userSettings = userObject.settings
