@@ -37,12 +37,9 @@ def index(request):
 	if subdomain:
 		return feed(request)
 
-	jacks = Jack.objects.with_details()
-
-	try:
-		userObject = user.objects.get(id = request.session['user_id'])
-	except:
-		userObject = None
+	jacks = Jack.objects.with_details(
+		score=True,
+		perspective=request.session['user_id'])
 
 	#jacks = sorted(jacks, key=lambda j: j.score, reverse=True)
 

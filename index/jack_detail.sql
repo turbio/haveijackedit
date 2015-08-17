@@ -1,3 +1,4 @@
+--the queries inside the model are based on what is in this file
 SELECT
 	`index_jack`.`usersubmitted_ptr_id`,
 	`index_usersubmitted`.`private` AS private,
@@ -82,3 +83,4 @@ GROUP BY
 ORDER BY
 	-- `index_jack`.`date` DESC
 	score DESC
+LIMIT 25
