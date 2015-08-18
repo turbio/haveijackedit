@@ -42,7 +42,7 @@
 					</a>
 				</div>
 
-				<a href="http://{{ jack.user_name }}.{{ host }}">
+				<a href="http://{{ jack.user_name }}.{{ request.META.HTTP_HOST }}">
 					<div class="name">&ndash;{{ jack.user_name }}, {{ jack.age }}</div>
 				</a>
 				{% if jack.isowner %}
