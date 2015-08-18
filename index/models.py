@@ -28,22 +28,6 @@ class JackManager(models.Manager):
 		baseQuery = """
 SELECT
 	index_jack.usersubmitted_ptr_id,
-	(
-		index_usersubmitted.private
-		OR
-		(
-			SELECT
-				index_usersettings.private
-			FROM
-				index_usersettings
-			INNER JOIN index_user ON
-				index_user.settings_id = index_usersettings.id
-			INNER JOIN index_usersubmitted ON
-				index_user.id = index_usersubmitted.user_id
-			WHERE
-				index_jack.usersubmitted_ptr_id = index_usersubmitted.id
-		)
-	) AS private,
 	index_jack.comment AS comment,
 	IFNULL(SUM(index_vote.points), 0) AS votes,
 	index_user.name AS user_name,
@@ -53,6 +37,7 @@ SELECT
 	index_link.url AS url,
 	index_image.data AS image_file,
 	index_image.source AS image_source,
+	private.private AS private,
 	CASE
 	WHEN TIMESTAMPDIFF(SECOND,index_jack.date,UTC_TIMESTAMP()) < 60
 		THEN CONCAT(TIMESTAMPDIFF(SECOND,index_jack.date,UTC_TIMESTAMP())," seconds ago")
@@ -75,6 +60,21 @@ FROM
 	index_jack
 LEFT OUTER JOIN index_vote ON
 	( index_jack.usersubmitted_ptr_id = index_vote.jack_id )
+LEFT JOIN
+	(
+		SELECT
+			(index_usersettings.private OR index_usersubmitted.private) AS private,
+			index_jack.usersubmitted_ptr_id AS jack_id
+		FROM
+			index_jack
+		INNER JOIN index_usersubmitted ON
+			index_jack.usersubmitted_ptr_id = index_usersubmitted.id
+		INNER JOIN index_user ON
+			index_user.id = index_usersubmitted.user_id
+		INNER JOIN index_usersettings ON
+			index_usersettings.id = index_user.settings_id
+	) AS private
+	ON private.jack_id = index_jack.usersubmitted_ptr_id
 INNER JOIN index_usersubmitted ON
 	( index_jack.usersubmitted_ptr_id = index_usersubmitted.id )
 LEFT OUTER JOIN index_user ON
@@ -87,6 +87,8 @@ LEFT OUTER JOIN index_link ON
 	( index_jack.link_id = index_link.usersubmitted_ptr_id )
 LEFT OUTER JOIN index_image ON
 	( index_jack.image_id = index_image.usersubmitted_ptr_id )
+WHERE
+	(NOT private.private OR index_user.id = %s)
 GROUP BY
 	index_jack.usersubmitted_ptr_id
 ORDER BY %s LIMIT %s"""
@@ -102,6 +104,7 @@ ORDER BY %s LIMIT %s"""
 				ownerQuery if perspective is not None else "",
 				voteDirectionQuery if perspective is not None else "",
 				scoreQuery if score else "",
+				perspective if perspective is not None else "",
 				orderScoreQuery if score else orderDateQuery,
 				limit
 			)
