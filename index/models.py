@@ -17,6 +17,7 @@ class User(models.Model):
 
 class UserSettings(models.Model):
 	private = models.BooleanField(default=False)
+	hidden = models.BooleanField(default=False)
 	on_homepage = models.BooleanField(default=True)
 	show_date = models.BooleanField(default=True)
 	show_time = models.BooleanField(default=True)
@@ -37,7 +38,7 @@ SELECT
 	index_link.url AS url,
 	index_image.data AS image_file,
 	index_image.source AS image_source,
-	private.private AS private,
+	visibility.private AS private,
 	CASE
 	WHEN TIMESTAMPDIFF(SECOND,index_jack.date,UTC_TIMESTAMP()) < 60
 		THEN CONCAT(TIMESTAMPDIFF(SECOND,index_jack.date,UTC_TIMESTAMP())," seconds ago")
@@ -64,6 +65,8 @@ LEFT JOIN
 	(
 		SELECT
 			(index_usersettings.private OR index_usersubmitted.private) AS private,
+			(index_usersettings.hidden OR index_usersubmitted.hidden) AS hidden,
+			index_usersettings.on_homepage AS on_homepage,
 			index_jack.usersubmitted_ptr_id AS jack_id
 		FROM
 			index_jack
@@ -73,8 +76,8 @@ LEFT JOIN
 			index_user.id = index_usersubmitted.user_id
 		INNER JOIN index_usersettings ON
 			index_usersettings.id = index_user.settings_id
-	) AS private
-	ON private.jack_id = index_jack.usersubmitted_ptr_id
+	) AS visibility
+	ON visibility.jack_id = index_jack.usersubmitted_ptr_id
 INNER JOIN index_usersubmitted ON
 	( index_jack.usersubmitted_ptr_id = index_usersubmitted.id )
 LEFT OUTER JOIN index_user ON
@@ -88,7 +91,8 @@ LEFT OUTER JOIN index_link ON
 LEFT OUTER JOIN index_image ON
 	( index_jack.image_id = index_image.usersubmitted_ptr_id )
 WHERE
-	(NOT private.private OR index_user.id = %s)
+	(NOT visibility.private OR index_user.id = "%s")
+	AND (NOT visibility.hidden)
 GROUP BY
 	index_jack.usersubmitted_ptr_id
 ORDER BY %s LIMIT %s"""
