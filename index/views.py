@@ -397,10 +397,6 @@ def getSubdomain(url):
 
 	urlParts = len(splitUrl)
 
-	#for dealing with localhost
-	if 'localhost' in splitUrl[-1]:
-		urlParts += 1
-
 	if urlParts == 3:
 		return splitUrl[0]
 
