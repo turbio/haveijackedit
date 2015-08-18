@@ -48,17 +48,25 @@
 				{% if jack.private %}<div class="private_jack">only you can see this</div>{% endif %}
 			</div>
 			{% if jack.isowner %}
-				<div class="quote_row jack_controls">
-					<a href="#">
-						{% if jack.private %}
-							<i class="material-icons">visibility</i>
-						{% else %}
-							<i class="material-icons">visibility_off</i>
-						{% endif %}
-					</a>
-					<a href="#"><i class="material-icons">mode_edit</i></a>
-					<a href="#"><i class="material-icons">delete</i></a>
-				</div>
+				<form action="/modify/" method="POST">{% csrf_token %}
+					<input type="hidden" name="return_location" value="{{ request.build_absolute_uri }}{{ object.get_absolute_url }}"/>
+					<input type="hidden" name="jack_id" value="{{ jack.id }}"/>
+					<div class="quote_row jack_controls">
+						<button type="submit" name="operation" value="visibility">
+							{% if jack.private %}
+								<i class="material-icons">visibility</i>
+							{% else %}
+								<i class="material-icons">visibility_off</i>
+							{% endif %}
+						</button>
+						<button type="submit" name="operation" value="edit">
+							<i class="material-icons">mode_edit</i>
+						</button>
+						<button type="submit" name="operation" value="delete">
+							<i class="material-icons">delete</i>
+						</button>
+					</div>
+				</form>
 			{% endif %}
 		</div>
 	</div>

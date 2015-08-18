@@ -43,6 +43,27 @@ def index(request):
 
 	return render(request, 'index/index.html', context)
 
+def modifyjack(request):
+	jackObject = Jack.objects.filter(id = request.POST['jack_id']) \
+		.select_related('user').first()
+
+	#verify ownership before doing anything with the post
+	if not jackObject.user.id == request.session['user_id']:
+		raise Exception('nice try')
+
+	if request.POST['operation'] == 'visibility':
+		jackObject.private = not jackObject.private
+		jackObject.save()
+
+	elif request.POST['operation'] == 'edit':
+		#TODO
+		pass
+
+	elif request.POST['operation'] == 'delete':
+		jackObject.delete()
+
+	return HttpResponseRedirect(request.POST['return_location'])
+
 def handlevote(request):
 	jackObject = Jack.objects.get(id = request.POST['jack'])
 

@@ -888,6 +888,14 @@ input[type="checkbox"]:checked + label{
 	justify-content: space-around;
 }
 
-.jack_controls a:hover{
+.jack_controls button{
+	background: none;
+	border: none;
+	color: rgba(0, 0, 0, .25);
+	cursor: pointer;
+	outline: 0;
+}
+
+.jack_controls button:hover{
 	color: black;
 }
