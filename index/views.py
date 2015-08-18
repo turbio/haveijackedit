@@ -39,7 +39,7 @@ def index(request):
 
 	jacks = Jack.objects.with_details(
 		score=True,
-		perspective=request.session['user_id'])
+		perspective=request.session['user_id'] if 'user_id' in request.session else None)
 
 	#jacks = sorted(jacks, key=lambda j: j.score, reverse=True)
 
