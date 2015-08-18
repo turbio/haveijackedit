@@ -47,7 +47,7 @@ def index(request):
 		'version': djangosettings.APP_VERSION,
 		'show_username': True,
 		'jack_list': jacks,
-		'host': "haveijackedit.com",
+		'host': request.META['HTTP_HOST'],
 	}
 
 	if 'user_logged_in' in request.session:
@@ -113,7 +113,7 @@ def settings(request):
 
 	context = {
 		'version': djangosettings.APP_VERSION,
-		'host': "haveijackedit.com",
+		'host': request.META['HTTP_HOST'],
 		'signed_in': 'user_logged_in' in request.session,
 		'options': user_options
 	}
@@ -273,7 +273,7 @@ def feed(request):
 	context = {
 		'version': djangosettings.APP_VERSION,
 		'show_username': True,
-		'host': "haveijackedit.com",
+		'host': request.META['HTTP_HOST'],
 		'jack_list': userJackList,
 		'username': subdomain,
 		'title_text_a': jacked_message,
@@ -297,7 +297,7 @@ def dash(request):
 
 	context = {
 		'version': djangosettings.APP_VERSION,
-		'host': "haveijackedit.com",
+		'host': request.META['HTTP_HOST'],
 		'show_date': True,
 		'username': username,
 		'yes_word': YesWords.objects.random_word('yes'),
