@@ -20,7 +20,6 @@ from datetime import timedelta
 from random_words import RandomWords
 from django.core.files.temp import NamedTemporaryFile
 
-# Create your views here.
 def index(request):
 	subdomain = getSubdomain(request.META['HTTP_HOST'])
 	if subdomain:
@@ -30,8 +29,6 @@ def index(request):
 		score=True,
 		homepage=True,
 		perspective=request.session['user_id'] if 'user_id' in request.session else None)
-
-	#jacks = sorted(jacks, key=lambda j: j.score, reverse=True)
 
 	context = {
 		'version': djangosettings.APP_VERSION,
