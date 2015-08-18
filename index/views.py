@@ -20,17 +20,6 @@ from datetime import timedelta
 from random_words import RandomWords
 from django.core.files.temp import NamedTemporaryFile
 
-def scoreJack(jackObject):
-	score = 100
-	score += (len(jackObject.comment) / 160) * 50
-	score += -pow(abs((timezone.now() - jackObject.date).total_seconds()) / (60 * 60), 3) * 2
-	votes = 0 #jackVotes(jackObject)
-	if votes > 0:
-		score += pow(votes, 2) * 100
-	else:
-		score += votes * 100
-	return score
-
 # Create your views here.
 def index(request):
 	subdomain = getSubdomain(request.META['HTTP_HOST'])
