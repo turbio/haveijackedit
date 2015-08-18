@@ -115,11 +115,6 @@ ORDER BY %s LIMIT %s"""
 				limit
 			)
 
-		#return self.order_by('date').reverse() \
-			#.select_related('image', 'link', 'location', 'user', 'ip') \
-			#.prefetch_related('bros', 'vote', 'vote__user') \
-			#.annotate(votes=Sum('vote__points'))
-
 		return self.raw(query)
 
 class Jack(UserSubmitted):
