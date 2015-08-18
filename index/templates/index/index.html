@@ -11,18 +11,19 @@
 		{% include "titlebar.html" %}
 		{% if jack_list %}
 			<div id="title">Have I jacked it?</div>
+			{% if not signed_in %}
+				<div id="sign_links">
+					<div class="sign_link"><a id="signup_link" href="#" onclick="show_signup()">get your own</a></div>
+					<div id="sign_sep">|</div>
+					<div class="sign_link"><a id="signin_link" href="#" onclick="show_signin()">sign in</a></div>
+				</div>
+			{% endif %}
 			{% for jack in jack_list %}
 				{% include "quote.html" %}
 			{% endfor %}
 		{% else %}
 			nothing yet...
 		{% endif %}
-		<div id="footer">
-			{% if not signed_in %}
-			<div><a id="signup_link" href="#" onclick="show_signup()">get your own</a></div>
-			<div><a id="signin_link" href="#" onclick="show_signin()">sign in</a></div>
-			{% endif %}
-		</div>
 	</div>
 	{% if not signed_in %}
 		<div id="signin" class="account_dialog">
