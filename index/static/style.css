@@ -887,3 +887,7 @@ input[type="checkbox"]:checked + label{
 	flex-direction: row;
 	justify-content: space-around;
 }
+
+.jack_controls a:hover{
+	color: black;
+}
