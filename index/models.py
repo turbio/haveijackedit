@@ -23,7 +23,7 @@ class UserSettings(models.Model):
 	show_time = models.BooleanField(default=True)
 
 class JackManager(models.Manager):
-	def with_details(self, user=None, perspective=None, score=False, limit=25):
+	def with_details(self, user=None, perspective=None, score=False, limit=25, homepage=False):
 		print("lmao: " + str([user, perspective, score, limit]))
 
 		baseQuery = """
@@ -92,7 +92,7 @@ LEFT OUTER JOIN index_image ON
 	( index_jack.image_id = index_image.usersubmitted_ptr_id )
 WHERE
 	(NOT visibility.private OR index_user.id = "%s")
-	AND (NOT visibility.hidden)
+	AND (NOT visibility.hidden) %s
 GROUP BY
 	index_jack.usersubmitted_ptr_id
 ORDER BY %s LIMIT %s"""
@@ -103,12 +103,14 @@ ORDER BY %s LIMIT %s"""
 
 		orderDateQuery = """index_jack.date DESC"""
 		orderScoreQuery = """score DESC"""
+		homepageQuery = """AND visibility.on_homepage"""
 
 		query = baseQuery % (
 				ownerQuery if perspective is not None else "",
 				voteDirectionQuery if perspective is not None else "",
 				scoreQuery if score else "",
 				perspective if perspective is not None else "",
+				homepageQuery if homepage else "",
 				orderScoreQuery if score else orderDateQuery,
 				limit
 			)
