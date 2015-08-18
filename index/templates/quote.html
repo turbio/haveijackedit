@@ -45,11 +45,21 @@
 				<a href="http://{{ jack.user_name }}.{{ request.META.HTTP_HOST }}">
 					<div class="name">&ndash;{{ jack.user_name }}, {{ jack.age }}</div>
 				</a>
-				{% if jack.isowner %}
-					<!--TODO show controls-->
-				{% endif %}
 				{% if jack.private %}<div class="private_jack">only you can see this</div>{% endif %}
 			</div>
+			{% if jack.isowner %}
+				<div class="quote_row jack_controls">
+					<a href="#">
+						{% if jack.private %}
+							<i class="material-icons">visibility</i>
+						{% else %}
+							<i class="material-icons">visibility_off</i>
+						{% endif %}
+					</a>
+					<a href="#"><i class="material-icons">mode_edit</i></a>
+					<a href="#"><i class="material-icons">delete</i></a>
+				</div>
+			{% endif %}
 		</div>
 	</div>
 </div>
