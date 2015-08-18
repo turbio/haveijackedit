@@ -872,3 +872,10 @@ input[type="checkbox"]:checked + label{
 	margin-left: 0.25em;
 	margin-right: 0.25em;
 }
+
+.private_jack{
+	font-size: .5em;
+	position: absolute;
+	right: 0;
+	color: rgba(255, 0, 0, .5);
+}
