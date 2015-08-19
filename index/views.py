@@ -323,16 +323,20 @@ def getUserIp(request):
 	if userIpObject is not None:
 		return userIpObject
 
+	#if an ip alread exists, no need to create another entry for it
+	userIpObject, created = Ip.objects.get_or_create(address=getIp(request))
+
+	return userIpObject
+
+def getIp(request):
 	x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
 	if x_forwarded_for:
 		clientIp = x_forwarded_for.split(',')[0]
 	else:
 		clientIp = request.META.get('REMOTE_ADDR')
 
-	#if an ip alread exists, no need to create another entry for it
-	userIpObject, created = Ip.objects.get_or_create(address=clientIp)
+	return clientIp
 
-	return userIpObject
 
 def submit_jack(request):
 	if request.method != 'POST':
