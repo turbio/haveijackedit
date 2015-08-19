@@ -102,7 +102,28 @@ def handlevote(request):
 		}]
 		return HttpResponse(json.dumps(replyObject))
 
-	return HttpResponse('lmao')
+	else:
+		voteObjects = Vote.objects.filter(
+			jack=jackObject,
+			ip=getUserIp(request),
+			user__isnull=True)
+
+		if voteObjects.count() >= 1:
+			voteObject = voteObjects.first()
+		else:
+			voteObject = Vote(
+				ip=getUserIp(request),
+				jack=jackObject)
+
+		voteObject.date = datetime.datetime.today()
+		voteObject.points = userChoice
+		voteObject.save()
+
+		replyObject = [{
+			'jack': jackObject.id,
+			'votes': jackObject.votes()
+		}]
+		return HttpResponse(json.dumps(replyObject))
 
 def settings(request):
 	if not 'user_logged_in' in request.session:

@@ -45,6 +45,7 @@ function upvote(postid){
 function updateVotes(){
 	voteListObject = JSON.parse(http.responseText)
 	document.getElementById("votes_" + voteListObject[0]["jack"]).innerHTML = voteListObject[0]["votes"];
+	//document.write(http.responseText);
 }
 
 function getCookie(name){

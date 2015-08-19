@@ -77,7 +77,7 @@ LEFT OUTER JOIN index_vote ON
 LEFT JOIN
 	(
 		SELECT
-			(index_usersettings.private OR index_usersubmitted.private) AS private,
+			((index_usersettings.private) OR (index_usersubmitted.private)) AS private,
 			(index_usersettings.hidden OR index_usersubmitted.hidden) AS hidden,
 			index_usersettings.on_homepage AS on_homepage,
 			index_jack.usersubmitted_ptr_id AS jack_id
@@ -111,7 +111,7 @@ GROUP BY
 ORDER BY %s LIMIT %s"""
 
 		ownerQuery = """,CASE WHEN index_user.id = "%s" THEN 1 ELSE 0 END AS isowner""" % perspective
-		voteDirectionQuery = """,( SELECT index_vote.points FROM index_vote INNER JOIN index_usersubmitted ON index_vote.usersubmitted_ptr_id = index_usersubmitted.id INNER JOIN index_user ON index_usersubmitted.user_id = index_user.id INNER JOIN index_ip ON index_usersubmitted.ip_id = index_ip.id WHERE (index_vote.jack_id = index_jack.usersubmitted_ptr_id) AND %s LIMIT 1) AS vote_direction""" % ( ("""(index_ip.address = "%s")""" % perspective) if perspective_ip else ("""(index_usersubmitted.user_id = "%s")""" % perspective))
+		voteDirectionQuery = """,( SELECT index_vote.points FROM index_vote INNER JOIN index_usersubmitted ON index_vote.usersubmitted_ptr_id = index_usersubmitted.id LEFT JOIN index_user ON index_usersubmitted.user_id = index_user.id INNER JOIN index_ip ON index_usersubmitted.ip_id = index_ip.id WHERE (index_vote.jack_id = index_jack.usersubmitted_ptr_id) AND %s) AS vote_direction""" % ( ("""(index_ip.address = "%s") AND (index_usersubmitted.user_id IS NULL)""" % perspective) if perspective_ip else ("""(index_usersubmitted.user_id = "%s")""" % perspective))
 		scoreQuery = """,( 100 + ((CHAR_LENGTH(index_jack.comment) / 160) * 200) - (POW(TIMESTAMPDIFF(SECOND,index_jack.date,UTC_TIMESTAMP()) / (60 * 60), 3) * 2) + (CASE WHEN IFNULL(SUM(index_vote.points), 0) > 0 THEN POW(IFNULL(SUM(index_vote.points), 0), 2) * 100 ELSE IFNULL(SUM(index_vote.points), 0) * 100 END) ) AS score"""
 
 		orderDateQuery = """index_jack.date DESC"""
