@@ -29,8 +29,15 @@ class JackManager(models.Manager):
 	#score: wether or not to sort the jacks by their score, if False: sorty by date
 	#limit: number of posts to show
 	#homepage: only show jacks that would normally appear on homepage
-	def with_details(self, user=None, perspective=None, score=False, limit=25, homepage=False):
-		print("lmao: " + str([user, perspective, score, limit]))
+	#perspective_ip: if the perspective is an ip or user id
+	def with_details(
+			self,
+			user=None,
+			perspective=None,
+			score=False,
+			limit=25,
+			homepage=False,
+			perspective_ip=False):
 
 		baseQuery = """
 SELECT
@@ -104,7 +111,7 @@ GROUP BY
 ORDER BY %s LIMIT %s"""
 
 		ownerQuery = """,CASE WHEN index_user.id = "%s" THEN 1 ELSE 0 END AS isowner""" % perspective
-		voteDirectionQuery = """,( SELECT index_vote.points FROM index_vote INNER JOIN index_usersubmitted ON index_vote.usersubmitted_ptr_id = index_usersubmitted.id INNER JOIN index_user ON index_usersubmitted.user_id = index_user.id WHERE index_vote.jack_id = index_jack.usersubmitted_ptr_id AND index_user.id = "%s") AS vote_direction""" % perspective
+		voteDirectionQuery = """,( SELECT index_vote.points FROM index_vote INNER JOIN index_usersubmitted ON index_vote.usersubmitted_ptr_id = index_usersubmitted.id INNER JOIN index_user ON index_usersubmitted.user_id = index_user.id INNER JOIN index_ip ON index_usersubmitted.ip_id = index_ip.id WHERE (index_vote.jack_id = index_jack.usersubmitted_ptr_id) AND %s LIMIT 1) AS vote_direction""" % ( ("""(index_ip.address = "%s")""" % perspective) if perspective_ip else ("""(index_usersubmitted.user_id = "%s")""" % perspective))
 		scoreQuery = """,( 100 + ((CHAR_LENGTH(index_jack.comment) / 160) * 200) - (POW(TIMESTAMPDIFF(SECOND,index_jack.date,UTC_TIMESTAMP()) / (60 * 60), 3) * 2) + (CASE WHEN IFNULL(SUM(index_vote.points), 0) > 0 THEN POW(IFNULL(SUM(index_vote.points), 0), 2) * 100 ELSE IFNULL(SUM(index_vote.points), 0) * 100 END) ) AS score"""
 
 		orderDateQuery = """index_jack.date DESC"""

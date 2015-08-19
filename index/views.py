@@ -28,7 +28,8 @@ def index(request):
 	jacks = Jack.objects.with_details(
 		score=True,
 		homepage=True,
-		perspective=request.session['user_id'] if 'user_id' in request.session else None)
+		perspective=request.session['user_id'] if 'user_id' in request.session else getIp(request),
+		perspective_ip=False if 'user_id' in request.session else True)
 
 	context = {
 		'version': djangosettings.APP_VERSION,
