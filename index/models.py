@@ -23,6 +23,12 @@ class UserSettings(models.Model):
 	show_time = models.BooleanField(default=True)
 
 class JackManager(models.Manager):
+	#adds a lot of details to jacks
+	#user: to only show jacks by a single user id or ip address
+	#perspective: show from a particular user id or ip address' perspective
+	#score: wether or not to sort the jacks by their score, if False: sorty by date
+	#limit: number of posts to show
+	#homepage: only show jacks that would normally appear on homepage
 	def with_details(self, user=None, perspective=None, score=False, limit=25, homepage=False):
 		print("lmao: " + str([user, perspective, score, limit]))
 
@@ -92,7 +98,7 @@ LEFT OUTER JOIN index_image ON
 	( index_jack.image_id = index_image.usersubmitted_ptr_id )
 WHERE
 	(NOT visibility.private OR index_user.id = "%s")
-	AND (NOT visibility.hidden) %s
+	AND (NOT visibility.hidden) %s %s
 GROUP BY
 	index_jack.usersubmitted_ptr_id
 ORDER BY %s LIMIT %s"""
@@ -104,6 +110,7 @@ ORDER BY %s LIMIT %s"""
 		orderDateQuery = """index_jack.date DESC"""
 		orderScoreQuery = """score DESC"""
 		homepageQuery = """AND visibility.on_homepage"""
+		singleUserQuery = """AND index_user.name = "%s" """ % user
 
 		query = baseQuery % (
 				ownerQuery if perspective is not None else "",
@@ -111,6 +118,7 @@ ORDER BY %s LIMIT %s"""
 				scoreQuery if score else "",
 				perspective if perspective is not None else "",
 				homepageQuery if homepage else "",
+				singleUserQuery if user is not None else "",
 				orderScoreQuery if score else orderDateQuery,
 				limit
 			)
