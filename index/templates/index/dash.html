@@ -11,96 +11,11 @@
 		<div id="feed_title_box">
 			<div id="feed_title_q">Have you jacked it today?</div>
 		</div>
-		<div id="new_jack_form">
-			<form method="POST" action="/submit_jack/">{% csrf_token %}
-				<input id="new_jack_post_box" type="hidden" name="new_jack" value="{{ yes_word }}"/>
-				<input id="jack_geo" type="hidden" name="jack_geo" value=""/>
-				<div contentEditable="true" id="new_jack_box" name="new_jack_editable" onKeyDown="textChange()" onKeyUp="textChange()" onchange="textChange()" onClick="add_punc(); textChange()">{{ yes_word }}</div>
-
-				<div id="geobox" class="jack_field">
-					<a href="/nojs" onClick="removeGeo(); return false;"><div class="button close_button"><i class="material-icons">close</i></div></a>
-					<div id="geolocation_map">
-						<div class="loading_bar">
-							<div class="loading_segment">
-								<div class="dot dot_creator"></div>
-								<div class="dot dot_creator dot_second"></div>
-							</div>
-							<div class="loading_segment">
-								<div class="dot loading_dot"></div>
-								<div class="dot loading_dot dot_second"></div>
-							</div>
-							<div class="loading_segment">
-								<div class="dot dot_destroyer"></div>
-								<div class="dot dot_destroyer dot_second"></div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div id="jack_add_picture" class="empty_box">
-					<img id="selected_image" src=""/>
-					<input id="image_input" type="file" accept="image/*"/>
-					<input type="hidden" id="image_data" name="image" value=""/>
-					<input id="image_source" type="hidden" name="image_source"/>
-					<a href="#" onClick="removePicture(); return false;"><div class="button close_button"><i class="material-icons">close</i></div></a>
-
-					<div id="add_pic_controls"/>
-						<div class="bg_text add_pic_instruction">drag image here</div>
-						<div class="or">or</div>
-						<div class="add_pic_instruction"><a href="/nojs" onClick="useWebcam(); return false;" id="picture_from_webcam">use webcam</a></div>
-						<div class="or">or</div>
-						<div class="add_pic_instruction"><a href="/nojs" onClick="uploadFromFS(); return false;">upload image</a></div>
-
-						<div id="camera_box">
-							<div id="camera_view"></div>
-							<div id="camera_controls">
-								<div class="button" id="cam_cap" onClick="captureImage()">capture</div>
-								<div class="button" id="cam_retry" onClick="retryImage()">retry</div>
-								<div class="button" id="cam_save" onClick="saveImage()">save</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div id="jack_add_link" class="jack_field">
-					<a href="/nojs" onClick="removeLink(); return false;"><div class="button close_button"><i class="material-icons">close</i></div></a>
-					<div id="jack_link_title">found some sweet jacking material?</div>
-					<input id="jack_link_url" name="jack_link_url" type="text" value="" placeholder="http://rms.sexy"/>
-				</div>
-
-				<div id="jack_add_bro" class="jack_field">
-					<a href="/nojs" onClick="removeBro(); return false;"> <div class="button close_button"><i class="material-icons">close</i></div></a>
-					<div id="jack_link_title">jacked it with a bro?</div>
-					<input id="jack_bro" name="jack_bro" type="text" value="" placeholder="{{ filler_user.0.name }}, {{ filler_user.1.name }}, {{ filler_user.2.name }}..."/>
-				</div>
-
-				<input id="submit_jack_submit" type="submit" value="submit"/>
-
-				<a href="/nojs" onClick="addLocation(); return false;">
-					<div class="jack_box_button" id="location_button"><i class="material-icons">location_on</i></div>
-				</a>
-				<a href="#" onClick="addImage(); return false;">
-					<div class="jack_box_button" id="image_button"><i class="material-icons">insert_photo</i></div>
-				</a>
-				<a href="/nojs" onClick="addLink(); return false;">
-					<div class="jack_box_button" id="link_button"><i class="material-icons">link</i></div>
-				</a>
-				<a href="/nojs" onClick="addBro(); return false;">
-					<div class="jack_box_button" id="link_button"><i class="material-icons">person_add</i></div>
-				</a>
-				<!--<div class="jack_box_button">b</div>-->
-				<!--<div class="jack_box_button">c</div>-->
-				<div id="remaining_chars"></div>
-			</form>
-			<div id="bottom_box">
-				<!--<div class="button on_bottom">about to jack?</div>-->
-				<div class="button on_bottom">didn't finish</div>
-			</div>
-		</div>
-	{% if jack_list %}
-		{% for jack in jack_list %}
+		{% include "new_jack.html" %}
+		{% if jack_list %}
+			{% for jack in jack_list %}
 				{% include "jack.html" %}
-		{% endfor %}
-	{% endif %}
+			{% endfor %}
+		{% endif %}
 	</div>
 {% endblock %}
