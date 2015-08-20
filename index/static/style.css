@@ -18,19 +18,19 @@ body{
 }
 
 @media (min-width: 600px){
-	.quote{
+	.jack{
 		width: 12em;
 	}
 }
 
-.quote{
+.jack{
 	overflow: hidden;
 	margin-left: auto;
 	margin-right: auto;
 	padding: .25em;
 }
 
-.shaded_quote{
+.shaded_jack{
 	/*background: #f8f8f8;*/
 }
 
@@ -183,12 +183,12 @@ form{
 	font-size: 2em;
 }
 
-.feed_quote{
+.feed_jack{
 	margin-top: .5em;
 	font-size: 0.75em;
 }
 
-.feed_quote:hover{
+.feed_jack:hover{
 	background-color: #f8f8f8;
 }
 
@@ -644,7 +644,7 @@ form{
 	width: 100%;
 }
 
-.quote_image_container{
+.jack_image_container{
 	overflow: auto;
 	position: relative;
 	max-height: 2em;
@@ -653,7 +653,7 @@ form{
 	/*height: 2em;*/
 }
 
-.quote_image_container:hover{
+.jack_image_container:hover{
 	/*overflow: visible;*/
 	/*height: auto;*/
 	max-height: 20em;
@@ -661,7 +661,7 @@ form{
 	/*width: 150%;*/
 }
 
-.quote_image:hover{
+.jack_image:hover{
 	height: 100%;
 	/*position: relative;*/
 	/*top: 0;*/
@@ -671,7 +671,7 @@ form{
 	/*max-height: 100%;*/
 }
 
-.quote_image{
+.jack_image{
 	transition: all 0.2s;
 	/*position: absolute;*/
 	/*top: -100%;*/
@@ -682,7 +682,7 @@ form{
 	width: 100%;
 }
 
-.quote_row{
+.jack_row{
 	position: relative;
 	margin-top: .125em;
 	/*margin-bottom: .125em;*/
@@ -691,16 +691,16 @@ form{
 	/*height: 0em;*/
 }
 
-.quote_row a{
+.jack_row a{
 	color: #bbb;
 }
-.quote_row a:hover{
+.jack_row a:hover{
 	text-decoration: underline;
 	overflow: hidden;
 	color: #eee;
 }
 
-.quote_bro{
+.jack_bro{
 	font-size: .5em;
 	background: #f8f8f8;
 	padding: .125em;
@@ -714,12 +714,12 @@ form{
 	transition: all 0.2s;
 }
 
-.quote_bro:hover{
+.jack_bro:hover{
 	background: #444;
 	color: white;
 }
 
-.quote_icon{
+.jack_icon{
 	background-color: rgba(255, 255, 255, .5);
 	font-size: .5em;
 	padding: .125em;
@@ -730,17 +730,17 @@ form{
 	height: 24px;
 }
 
-.quote_link{
+.jack_link{
 	font-size: .5em;
 	float: left;
 	transition: all 0.2s;
 }
 
-.quote_link a:hover{
+.jack_link a:hover{
 	color: #888;
 }
 
-.quote_link:hover{
+.jack_link:hover{
 	/*background: black;*/
 }
 
@@ -864,7 +864,7 @@ input[type="checkbox"]:checked + label{
 	background: #000;
 }
 
-.quote_content{
+.jack_content{
 }
 
 .jack_votes{
