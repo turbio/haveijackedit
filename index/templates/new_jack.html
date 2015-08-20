@@ -62,23 +62,25 @@
 		</div>
 
 		<input id="submit_jack_submit" type="submit" value="submit"/>
-
-		<a href="/nojs" onClick="addLocation(); return false;">
-			<div class="jack_box_button" id="location_button"><i class="material-icons">location_on</i></div>
-		</a>
-		<a href="#" onClick="addImage(); return false;">
-			<div class="jack_box_button" id="image_button"><i class="material-icons">insert_photo</i></div>
-		</a>
-		<a href="/nojs" onClick="addLink(); return false;">
-			<div class="jack_box_button" id="link_button"><i class="material-icons">link</i></div>
-		</a>
-		<a href="/nojs" onClick="addBro(); return false;">
-			<div class="jack_box_button" id="link_button"><i class="material-icons">person_add</i></div>
-		</a>
-		<div id="remaining_chars"></div>
 	</form>
-	<div id="bottom_box">
-		<!--<div class="button on_bottom">about to jack?</div>-->
-		<div class="button on_bottom">didn't finish</div>
-	</div>
+
+	<a href="/nojs" onClick="addLocation(); return false;">
+		<div class="jack_box_button" id="location_button"><i class="material-icons">location_on</i></div>
+	</a>
+	<a href="#" onClick="addImage(); return false;">
+		<div class="jack_box_button" id="image_button"><i class="material-icons">insert_photo</i></div>
+	</a>
+	<a href="/nojs" onClick="addLink(); return false;">
+		<div class="jack_box_button" id="link_button"><i class="material-icons">link</i></div>
+	</a>
+	<a href="/nojs" onClick="addBro(); return false;">
+		<div class="jack_box_button" id="link_button"><i class="material-icons">person_add</i></div>
+	</a>
+
+	<div id="remaining_chars"></div>
+	<form action="/submit_jack/" method="POST">{% csrf_token %}
+		<div id="bottom_action_box">
+			<input id="bottom_button" type="submit" value="about to jack?"/>
+		</div>
+	</form>
 </div>
