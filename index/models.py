@@ -117,7 +117,7 @@ ORDER BY %s LIMIT %s"""
 		orderDateQuery = """index_jack.date DESC"""
 		orderScoreQuery = """score DESC"""
 		homepageQuery = """AND visibility.on_homepage"""
-		singleUserQuery = """AND index_user.name = "%s" """ % user
+		singleUserQuery = """AND index_user.id = "%s" """ % user
 
 		query = baseQuery % (
 				ownerQuery if perspective is not None else "",
@@ -139,6 +139,7 @@ class Jack(UserSubmitted):
 	link = models.ForeignKey('Link', null=True)
 	image = models.ForeignKey('Image', null=True)
 	bros = models.ManyToManyField('User', related_name='jack_bros')
+	start = models.DateTimeField(null=True)
 	objects = JackManager()
 
 	def votes(self):

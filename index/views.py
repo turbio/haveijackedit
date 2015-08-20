@@ -328,7 +328,9 @@ def dash(request):
 		'username': username,
 		'yes_word': YesWords.objects.random_word('yes'),
 		'filler_user': User.objects.order_by('?')[:3],
-		'jack_list': Jack.objects.filter(user__name=username),
+		'jack_list': Jack.objects.with_details(
+			user=request.session['user_id'],
+			perspective=request.session['user_id']),
 		'signed_in': 'user_logged_in' in request.session,
 	}
 
