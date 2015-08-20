@@ -206,18 +206,18 @@ form{
 }
 
 @media (max-width: 600px){
-	#new_jack_form{
+	#new_jack_box{
 		/*width: 100%;*/
 	}
 }
 
 @media (min-width: 600px){
-	#new_jack_form{
+	#new_jack_box{
 		width: 10em;
 	}
 }
 
-#new_jack_form{
+#new_jack_box{
 	transition: all .2s;
 	text-align: center;
 	margin-right: auto;
@@ -228,7 +228,7 @@ form{
 	/*height: 1.5em;*/
 }
 
-#new_jack_form a{
+#new_jack_box a{
 	color: black;
 }
 
@@ -254,7 +254,7 @@ form{
 	align-items: center;
 }
 
-#new_jack_box{
+#new_jack_text{
 	margin: .25em;
 	resize: none;
 	font-size: 0.5em;
@@ -265,7 +265,7 @@ form{
 	text-align: left;
 }
 
-#new_jack_box br{
+#new_jack_text br{
 	display: none
 }
 

@@ -2,17 +2,17 @@ var addedPunc = false;
 
 function add_punc(){
 	if(!addedPunc){
-		document.getElementById("new_jack_box").innerHTML += ',&nbsp;';
+		document.getElementById("new_jack_text").innerHTML += ',&nbsp;';
 		addedPunc = true;
 
-		jack_box = document.getElementById("new_jack_box");
+		jack_box = document.getElementById("new_jack_text");
 		setEndOfContenteditable(jack_box);
 	}
 }
 
 function textChange(){
 	//var contenteditable = document.querySelector('[contenteditable]'),
-	text = document.getElementById("new_jack_box").textContent;
+	text = document.getElementById("new_jack_text").textContent;
 	document.getElementById("new_jack_post_box").value = text;
 	usedChars = text.length;
 	document.getElementById("remaining_chars").innerHTML = (usedChars + '/160');
@@ -50,7 +50,7 @@ function addLocation(){
 		if (navigator.geolocation){
 			navigator.geolocation.getCurrentPosition(showPosition);
 		}else{
-			document.getElementById("new_jack_box").textContent += "no geolocation";
+			document.getElementById("new_jack_text").textContent += "no geolocation";
 		}
 
 		document.getElementById("geolocation_map").style.display = 'flex';
@@ -247,7 +247,7 @@ function showUploadedImage(input){
 var imageAdded = false;
 
 function hideImage(){
-	document.getElementById("add_pic_controls").style.display = "block";
+	document.getElementById("add_pic").style.display = "block";
 	document.getElementById("selected_image").style.display = "none";
 	document.getElementById("jack_add_picture").setAttribute("class", "empty_box");
 	document.getElementById("jack_add_picture").style.height = "6em";
@@ -258,7 +258,7 @@ function hideImage(){
 
 function showImage(imageData){
 	document.getElementById("image_data").value = imageData;
-	document.getElementById("add_pic_controls").style.display = "none";
+	document.getElementById("add_pic").style.display = "none";
 	document.getElementById("selected_image").setAttribute("src", imageData);
 	document.getElementById("selected_image").style.display = "block";
 	document.getElementById("jack_add_picture").setAttribute("class", "jack_field");

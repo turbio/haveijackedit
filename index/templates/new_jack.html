@@ -1,8 +1,8 @@
-<div id="new_jack_form">
+<div id="new_jack_box">
 	<form method="POST" action="/submit_jack/">{% csrf_token %}
 		<input id="new_jack_post_box" type="hidden" name="new_jack" value="{{ yes_word }}"/>
 		<input id="jack_geo" type="hidden" name="jack_geo" value=""/>
-		<div contentEditable="true" id="new_jack_box" name="new_jack_editable" onKeyDown="textChange()" onKeyUp="textChange()" onchange="textChange()" onClick="add_punc(); textChange()">{{ yes_word }}</div>
+		<div contentEditable="true" id="new_jack_text" name="new_jack_editable" onKeyDown="textChange()" onKeyUp="textChange()" onchange="textChange()" onClick="add_punc(); textChange()">{{ yes_word }}</div>
 
 		<div id="geobox" class="jack_field">
 			<a href="/nojs" onClick="removeGeo(); return false;"><div class="button close_button"><i class="material-icons">close</i></div></a>
@@ -31,7 +31,7 @@
 			<input id="image_source" type="hidden" name="image_source"/>
 			<a href="#" onClick="removePicture(); return false;"><div class="button close_button"><i class="material-icons">close</i></div></a>
 
-			<div id="add_pic_controls"/>
+			<div id="add_pic"/>
 				<div class="bg_text add_pic_instruction">drag image here</div>
 				<div class="or">or</div>
 				<div class="add_pic_instruction"><a href="/nojs" onClick="useWebcam(); return false;" id="picture_from_webcam">use webcam</a></div>
@@ -75,8 +75,6 @@
 		<a href="/nojs" onClick="addBro(); return false;">
 			<div class="jack_box_button" id="link_button"><i class="material-icons">person_add</i></div>
 		</a>
-		<!--<div class="jack_box_button">b</div>-->
-		<!--<div class="jack_box_button">c</div>-->
 		<div id="remaining_chars"></div>
 	</form>
 	<div id="bottom_box">
