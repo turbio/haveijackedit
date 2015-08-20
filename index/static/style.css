@@ -900,3 +900,17 @@ input[type="checkbox"]:checked + label{
 .jack_controls button:hover{
 	color: black;
 }
+
+#bottom_box{
+	width: 100%;
+	display: flex;
+}
+
+.on_bottom{
+	width: 100%;
+	margin: 0;
+	border-right: 0;
+	border-left: 0;
+	border-bottom: 0;
+	/*float: left;*/
+}
