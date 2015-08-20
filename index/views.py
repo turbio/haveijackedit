@@ -361,13 +361,16 @@ def getIp(request):
 
 	return clientIp
 
-
 def submit_jack(request):
 	if request.method != 'POST':
 		return HttpResponseRedirect('/dash/')
 
-	message = str(request.POST.get('new_jack', ''))
-	if message == '':
+	if 'new_jack' in request.POST and request.POST['new_jack'] != '':
+		message = str(request.POST.get('new_jack', ''))
+	elif 'start_time' in request.POST:
+		print('starting jack time')
+		return HttpResponseRedirect('/dash/')
+	else:
 		return HttpResponseRedirect('/dash/')
 
 	userIp = getUserIp(request)
