@@ -13,12 +13,11 @@ import urllib.parse
 import json
 import hashlib
 import time
-import datetime
 import io
 from .data_uri import DataURI
-from datetime import timedelta
 from random_words import RandomWords
 from django.core.files.temp import NamedTemporaryFile
+from datetime import datetime, timezone, timedelta
 
 def index(request):
 	subdomain = getSubdomain(request.META['HTTP_HOST'])
@@ -253,36 +252,32 @@ def feed(request):
 	isUser = False
 	isPrivate = False
 	userJackList = False
+	hasJacked = False
 	subdomain = getSubdomain(request.META['HTTP_HOST'])
 
-	jacked = False
-	try:
-		userObject = user.objects.get(
-			name__iexact = subdomain).select_related('settings')
-		isUser = True
 
-		isPrivate = userObject.settings.private
+	#try:
+	userObject = User.objects.get(name__iexact = subdomain)
 
-		if not isPrivate:
-			#userJackList = addDetailsToJackList(
-				#jack.objects.order_by('date').filter(
-					#user = userObject.id).reverse(), userObject)
+	print(userObject.name)
+
+	isUser = True
+
+	isPrivate = userObject.settings.private
+
+	if not isPrivate:
+		userJackList = Jack.objects.with_details(
+			user=userObject.id,
+			perspective=request.session.get('user_id'))
+
+		if len(list(userJackList)) > 0:
 			day = timedelta(days=1)
-			lastJacked = (timezone.now() - userJackList.first().date)
-			jacked = lastJacked < day
-	except:
-		pass
+			hasJacked = datetime.now(timezone.utc) - userJackList[0].date < day
 
-	if jacked:
-		try:
-			jacked_message = yes_word.objects.order_by('?').first().word
-		except:
-			jacked_message = "yes"
+	if hasJacked:
+		jacked_message = YesWords.objects.random_word('yes')
 	else:
-		try:
-			jacked_message = no_word.objects.order_by('?').first().word
-		except:
-			jacked_message = "no"
+		jacked_message = YesWords.objects.random_word('no')
 
 	context = {
 		'jack_list': userJackList,
@@ -422,7 +417,7 @@ def getSubdomain(url):
 
 	urlParts = len(splitUrl)
 
-	if urlParts == 3:
+	if urlParts >= 3:
 		return splitUrl[0]
 
 	return False
