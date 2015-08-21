@@ -35,20 +35,23 @@
 			<div class="jack_row with_icon">
 				<div class="jack_icon"><i class="material-icons">timer</i></div>
 				<div class="jack_bro">
-					<!--{% if jack.duration_day > 0 %}-->
-						<!--{{ jack.duration_day }} day{{ jack.duration_day|pluralize }}-->
-						<!--{{ jack.duration_hour }} hour{{ jack.duration_hour|pluralize }}-->
-						<!--{{ jack.duration_minute }} minute{{ jack.duration_minute|pluralize }}-->
-					<!--{% elif jack.duration_hour > 0 %}-->
-						<!--{{ jack.duration_hour }} hour{{ jack.duration_hour|pluralize }}-->
-						<!--{{ jack.duration_minute }} minute{{ jack.duration_minute|pluralize }}-->
-						<!--{{ jack.duration_second }} second{{ jack.duration_second|pluralize }}-->
-					<!--{% elif jack.duration_minute > 0 %}-->
-						<!--{{ jack.duration_minute }} minute{{ jack.duration_minute|pluralize }}-->
-						<!--{{ jack.duration_second }} second{{ jack.duration_second|pluralize }}-->
-					<!--{% else %}-->
-						<!--{{ jack.duration_second }} second{{ jack.duration_second|pluralize }}-->
-					<!--{% endif %}-->
+					{% comment %}
+					just for now...
+					{% if jack.duration_day > 0 %}
+						{{ jack.duration_day }} day{{ jack.duration_day|pluralize }}
+						{{ jack.duration_hour }} hour{{ jack.duration_hour|pluralize }}
+						{{ jack.duration_minute }} minute{{ jack.duration_minute|pluralize }}
+					{% elif jack.duration_hour > 0 %}
+						{{ jack.duration_hour }} hour{{ jack.duration_hour|pluralize }}
+						{{ jack.duration_minute }} minute{{ jack.duration_minute|pluralize }}
+						{{ jack.duration_second }} second{{ jack.duration_second|pluralize }}
+					{% elif jack.duration_minute > 0 %}
+						{{ jack.duration_minute }} minute{{ jack.duration_minute|pluralize }}
+						{{ jack.duration_second }} second{{ jack.duration_second|pluralize }}
+					{% else %}
+						{{ jack.duration_second }} second{{ jack.duration_second|pluralize }}
+					{% endif %}
+					{% endcomment %}
 
 					{% if jack.duration_day > 0 %}
 						{{ jack.duration_day }} day{{ jack.duration_day|pluralize }} {{ jack.duration_hour|stringformat:"02d" }}:{{ jack.duration_minute|stringformat:"02d" }}:{{ jack.duration_second|stringformat:"02d" }}
