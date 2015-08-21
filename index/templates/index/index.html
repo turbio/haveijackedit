@@ -5,17 +5,19 @@
 {% endblock %}
 {% block content %}
 	<div id="wrapper">
-		{% if not signed_in %}
-			<span id="forkongithub"><a href="https://github.com/turbio/haveijackedit">Fork me on GitHub</a></span>
-		{% endif %}
 		{% include "titlebar.html" %}
 		{% if jack_list %}
 			<div id="title">Have I jacked it?</div>
-			{% if not signed_in %}
+			{% if not user %}
 				<div id="sign_links">
+					{% comment %}
 					<div class="sign_link"><a id="signup_link" href="#" onclick="show_signup()">get your own</a></div>
 					<div id="sign_sep">|</div>
 					<div class="sign_link"><a id="signin_link" href="#" onclick="show_signin()">sign in</a></div>
+					{% endcomment %}
+					<div class="sign_link"><a id="signup_link" href="/signup">get your own</a></div>
+					<div id="sign_sep">|</div>
+					<div class="sign_link"><a id="signin_link" href="/signin">sign in</a></div>
 				</div>
 			{% endif %}
 			{% for jack in jack_list %}
@@ -25,6 +27,7 @@
 			nothing yet...
 		{% endif %}
 	</div>
+	{% comment %}
 	{% if not signed_in %}
 		<div id="signin" class="account_dialog">
 			{% include "signin.html" %}
@@ -35,4 +38,5 @@
 			<a href="#" onclick="hide_dialog()">back</a>
 		</div>
 	{% endif %}
+	{% endcomment %}
 {% endblock %}

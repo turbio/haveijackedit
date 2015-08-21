@@ -32,15 +32,9 @@ def index(request):
 		perspective_ip=False if 'user_id' in request.session else True)
 
 	context = {
-		'version': djangosettings.APP_VERSION,
-		'show_username': True,
-		'jack_list': jacks,
+		'user': User.objects.filter(id=request.session.get('user_id')).first(),
+		'jack_list': jacks
 	}
-
-	if 'user_logged_in' in request.session:
-		print(request.session)
-		context['signed_in'] = True
-		context['user_analytic_id'] = request.session['user_name']
 
 	return render(request, 'index/index.html', context)
 
@@ -137,17 +131,13 @@ def settings(request):
 		'private': userSettings.private,
 		'show_on_home_page': userSettings.on_homepage,
 		'show_date': userSettings.show_date,
-		'show_time': userSettings.show_time
+		'show_time': userSettings.show_time,
 	}
 
 	context = {
-		'version': djangosettings.APP_VERSION,
-		'signed_in': 'user_logged_in' in request.session,
+		'user': userObject,
 		'options': user_options
 	}
-
-	if 'user_logged_in' in request.session:
-		context['user_analytic_id'] = request.session['user_name']
 
 	return render(request, 'index/settings.html', context)
 
@@ -193,9 +183,7 @@ def signout(request):
 	return HttpResponseRedirect('/dash/')
 
 def signin(request):
-	context = {
-		'version': djangosettings.APP_VERSION,
-	}
+	context = { }
 
 	if request.method == 'POST':
 		username = str(request.POST.get('username', ''))
@@ -235,9 +223,7 @@ def verifyCaptcha(captcha_response, userIp):
 		raise Exception('must verify captcha')
 
 def signup(request):
-	context = {
-		'version': djangosettings.APP_VERSION,
-	}
+	context = { }
 
 	if request.method == 'POST':
 		username = str(request.POST.get('username', ''))
@@ -299,18 +285,13 @@ def feed(request):
 			jacked_message = "no"
 
 	context = {
-		'version': djangosettings.APP_VERSION,
-		'show_username': True,
 		'jack_list': userJackList,
 		'username': subdomain,
 		'title_text_a': jacked_message,
 		'is_user': isUser,
 		'is_private': isPrivate,
-		'signed_in': 'user_logged_in' in request.session,
+		'user': User.objects.filter(id=request.session.get('user_id')).first()
 	}
-
-	if 'user_logged_in' in request.session:
-		context['user_analytic_id'] = request.session['user_name']
 
 	return render(request, 'index/feed.html', context)
 
@@ -321,19 +302,13 @@ def dash(request):
 		return HttpResponseRedirect('/')
 
 	context = {
-		'version': djangosettings.APP_VERSION,
-		'show_date': True,
-		'user': User.objects.filter(id=request.session['user_id']).first(),
+		'user': User.objects.filter(id=request.session.get('user_id')).first(),
 		'yes_word': YesWords.objects.random_word('yes'),
 		'filler_user': User.objects.order_by('?')[:3],
 		'jack_list': Jack.objects.with_details(
 			user=request.session['user_id'],
 			perspective=request.session['user_id']),
-		'signed_in': 'user_logged_in' in request.session,
 	}
-
-	if 'user_logged_in' in request.session:
-		context['user_analytic_id'] = request.session['user_name']
 
 	return render(request, 'index/dash.html', context)
 
