@@ -1,4 +1,61 @@
 var addedPunc = false;
+var imageAdded = false;
+var dropzoneAdded = false;
+var picFromWebcam = false;
+
+var secondElement;
+var minuteElement;
+var hourElement;
+var dayElement;
+
+var seconds = 0;
+var minutes = 0;
+var hours = 0;
+var days = 0;
+
+function addtime(){
+	seconds++;
+	if (seconds >= 60) {
+		seconds = 0;
+		minutes++;
+		if (minutes >= 60) {
+			minutes = 0;
+			hours++;
+			if (hours >= 24) {
+				hours = 0;
+				days++;
+			}
+		}
+	}
+
+	secondElement.innerHTML = (seconds > 9 ? seconds : "0" + seconds);
+	minuteElement.innerHTML = (minutes > 9 ? minutes : "0" + minutes);
+	try{
+		hourElement.innerHTML = (hours > 9 ? hours : "0" + hours);
+		dayElement.innerHTML = days;
+	}catch(err){ }
+
+	setTimeout(addtime, 1000);
+}
+
+function inittime(){
+	secondElement = document.getElementById('jack_time_second');
+	seconds = parseInt(secondElement.innerHTML);
+	minuteElement = document.getElementById('jack_time_minute');
+	minutes = parseInt(minuteElement.innerHTML);
+
+	try{
+		hourElement = document.getElementById('jack_time_hour');
+		hours = parseInt(hourElement.innerHTML);
+		dayElement = document.getElementById('jack_time_day');
+		days = parseInt(dayElement.innerHTML);
+	}catch(err){
+		//heh
+	}
+	addtime();
+}
+
+window.onload = inittime;
 
 function add_punc(){
 	if(!addedPunc){
@@ -139,8 +196,6 @@ function showPosition(position) {
 	document.getElementById("geolocation_map").className = "";
 }
 
-picFromWebcam = false;
-
 function useWebcam(){
 	document.getElementById("camera_box").style['display'] = "block";
 	Webcam.set({image_format: 'png'})
@@ -174,7 +229,6 @@ function saveImage(){
 	});
 }
 
-var dropzoneAdded = false;
 
 function addImage(){
 	document.getElementById("jack_add_picture").style.display = "flex";
@@ -243,8 +297,6 @@ function showUploadedImage(input){
 		reader.readAsDataURL(input.files[0]);
 	}
 }
-
-var imageAdded = false;
 
 function hideImage(){
 	document.getElementById("add_pic").style.display = "block";

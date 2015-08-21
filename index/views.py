@@ -320,12 +320,10 @@ def dash(request):
 	if not 'user_logged_in' in request.session:
 		return HttpResponseRedirect('/')
 
-	username = request.session['user_name']
-
 	context = {
 		'version': djangosettings.APP_VERSION,
 		'show_date': True,
-		'username': username,
+		'user': User.objects.filter(id=request.session['user_id']).first(),
 		'yes_word': YesWords.objects.random_word('yes'),
 		'filler_user': User.objects.order_by('?')[:3],
 		'jack_list': Jack.objects.with_details(
@@ -365,21 +363,34 @@ def submit_jack(request):
 	if request.method != 'POST':
 		return HttpResponseRedirect('/dash/')
 
+	finished = True
+	userObject = User.objects.get(id = request.session['user_id'])
+	jackStartTime = userObject.started
+	userObject.started = None
+
 	if 'new_jack' in request.POST and request.POST['new_jack'] != '':
 		message = str(request.POST.get('new_jack', ''))
 	elif 'start_time' in request.POST:
-		print('starting jack time')
+		userObject.started = datetime.datetime.today()
+		userObject.save()
 		return HttpResponseRedirect('/dash/')
+	elif 'no_finish' in request.POST:
+		message = None
+		finished = False
 	else:
 		return HttpResponseRedirect('/dash/')
+
+	userObject.save()
 
 	userIp = getUserIp(request)
 
 	newJack = Jack(
-		user=User.objects.get(id = request.session['user_id']),
+		user=userObject,
 		comment=message,
 		date=datetime.datetime.today(),
-		ip=userIp)
+		ip=userIp,
+		finished=finished,
+		start=jackStartTime)
 
 	if 'jack_geo' in request.POST and not request.POST['jack_geo'] == '':
 		recievedGeolocationJson = request.POST['jack_geo']

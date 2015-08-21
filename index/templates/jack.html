@@ -1,5 +1,6 @@
 <div class="feed_jack">
 	<div class="jack" id="jack_{{ jack.id }}">
+	{% if jack.finished %}
 		<div class="jack_content">
 			<div class="msg">{{ jack.comment }}</div>
 			{% if jack.location_lat  %}
@@ -28,6 +29,37 @@
 			<div class="jack_row with_icon">
 				<div class="jack_icon"><i class="material-icons">people</i></div>
 				<div class="jack_bro"><a href="#">{{ jack.bro }}</a></div>
+			</div>
+			{% endif %}
+			{% if jack.duration %}
+			<div class="jack_row with_icon">
+				<div class="jack_icon"><i class="material-icons">timer</i></div>
+				<div class="jack_bro">
+					<!--{% if jack.duration_day > 0 %}-->
+						<!--{{ jack.duration_day }} day{{ jack.duration_day|pluralize }}-->
+						<!--{{ jack.duration_hour }} hour{{ jack.duration_hour|pluralize }}-->
+						<!--{{ jack.duration_minute }} minute{{ jack.duration_minute|pluralize }}-->
+					<!--{% elif jack.duration_hour > 0 %}-->
+						<!--{{ jack.duration_hour }} hour{{ jack.duration_hour|pluralize }}-->
+						<!--{{ jack.duration_minute }} minute{{ jack.duration_minute|pluralize }}-->
+						<!--{{ jack.duration_second }} second{{ jack.duration_second|pluralize }}-->
+					<!--{% elif jack.duration_minute > 0 %}-->
+						<!--{{ jack.duration_minute }} minute{{ jack.duration_minute|pluralize }}-->
+						<!--{{ jack.duration_second }} second{{ jack.duration_second|pluralize }}-->
+					<!--{% else %}-->
+						<!--{{ jack.duration_second }} second{{ jack.duration_second|pluralize }}-->
+					<!--{% endif %}-->
+
+					{% if jack.duration_day > 0 %}
+						{{ jack.duration_day }} day{{ jack.duration_day|pluralize }} {{ jack.duration_hour|stringformat:"02d" }}:{{ jack.duration_minute|stringformat:"02d" }}:{{ jack.duration_second|stringformat:"02d" }}
+					{% elif jack.duration_hour > 0 %}
+						{{ jack.duration_hour|stringformat:"02d" }}:{{ jack.duration_minute|stringformat:"02d" }}:{{ jack.duration_second|stringformat:"02d" }}
+					{% elif jack.duration_minute > 0 %}
+						{{ jack.duration_minute|stringformat:"02d" }}:{{ jack.duration_second|stringformat:"02d" }}
+					{% else %}
+						{{ jack.duration_second }} second{{ jack.duration_second|pluralize }}
+					{% endif %}
+				</div>
 			</div>
 			{% endif %}
 
@@ -69,5 +101,8 @@
 				</form>
 			{% endif %}
 		</div>
+	{% else %}
+	didn't finish
+	{% endif %}
 	</div>
 </div>

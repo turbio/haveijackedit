@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import Sum, F, When, Case, Value, CharField, Q
+from datetime import datetime, timezone
 
 class UserSubmitted(models.Model):
 	user = models.ForeignKey('User', null=True)
@@ -15,6 +16,26 @@ class User(models.Model):
 	creation_date = models.DateTimeField()
 	settings = models.OneToOneField('UserSettings')
 	started = models.DateTimeField(null=True)
+
+	def isJacking(self):
+		return self.started is not None
+
+	def jackTime(self):
+		if self.started is not None:
+			return datetime.now(timezone.utc) - self.started
+		else:
+			return None
+
+	def jackTimeFormated(self):
+		diff = self.jackTime()
+		if diff is None:
+			return None
+
+		formated = {"days": diff.days}
+		formated["hours"], rem = divmod(diff.seconds, 3600)
+		formated["minutes"], formated["seconds"] = divmod(rem, 60)
+
+		return formated
 
 class UserSettings(models.Model):
 	private = models.BooleanField(default=False)
@@ -44,6 +65,7 @@ class JackManager(models.Manager):
 SELECT
 	index_jack.usersubmitted_ptr_id,
 	index_jack.comment AS comment,
+	index_jack.finished AS finished,
 	IFNULL(SUM(index_vote.points), 0) AS votes,
 	index_user.name AS user_name,
 	index_ip.address AS ip_address,
@@ -53,6 +75,11 @@ SELECT
 	index_image.data AS image_file,
 	index_image.source AS image_source,
 	visibility.private AS private,
+	TIMESTAMPDIFF(DAY,index_jack.start,index_jack.date) AS duration_day,
+	MOD(TIMESTAMPDIFF(HOUR,index_jack.start,index_jack.date), 24) AS duration_hour,
+	MOD(TIMESTAMPDIFF(MINUTE,index_jack.start,index_jack.date), 60) AS duration_minute,
+	MOD(TIMESTAMPDIFF(SECOND,index_jack.start,index_jack.date), 60) AS duration_second,
+	TIMESTAMPDIFF(SECOND,index_jack.start,index_jack.date) AS duration,
 	CASE
 	WHEN TIMESTAMPDIFF(SECOND,index_jack.date,UTC_TIMESTAMP()) < 60
 		THEN CONCAT(TIMESTAMPDIFF(SECOND,index_jack.date,UTC_TIMESTAMP())," seconds ago")
@@ -106,7 +133,8 @@ LEFT OUTER JOIN index_image ON
 	( index_jack.image_id = index_image.usersubmitted_ptr_id )
 WHERE
 	(NOT visibility.private OR index_user.id = "%s")
-	AND (NOT visibility.hidden) %s %s
+	AND (NOT visibility.hidden)
+	AND index_jack.finished %s %s
 GROUP BY
 	index_jack.usersubmitted_ptr_id
 ORDER BY %s LIMIT %s"""
@@ -135,13 +163,14 @@ ORDER BY %s LIMIT %s"""
 
 class Jack(UserSubmitted):
 	date = models.DateTimeField()
-	comment = models.CharField(max_length=160)
+	comment = models.CharField(max_length=160, null=True)
 	location = models.ForeignKey('Geolocation', null=True)
 	link = models.ForeignKey('Link', null=True)
 	image = models.ForeignKey('Image', null=True)
 	bros = models.ManyToManyField('User', related_name='jack_bros')
 	start = models.DateTimeField(null=True)
 	objects = JackManager()
+	finished = models.BooleanField()
 
 	def votes(self):
 		votesum = self.vote_set.all().aggregate(Sum('points'))['points__sum']

@@ -621,6 +621,7 @@ form{
 #jack_link_title{
 	text-align: left;
 	font-size: .5em;
+	overflow: hidden;
 	margin: 0;
 }
 
@@ -631,6 +632,10 @@ form{
 	background-color: #eee;
 	display: none;
 	padding: .25em;
+}
+
+#jack_time_field{
+	display: block;
 }
 
 .add_pic_instruction{
@@ -921,4 +926,9 @@ input[type="checkbox"]:checked + label{
 	border-left: 0;
 	border-right: 0;
 	border-bottom: 0;
+}
+
+.jack_time_counter{
+	display: inline-block;
+	/*float: left;*/
 }

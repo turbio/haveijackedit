@@ -61,6 +61,30 @@
 			<input id="jack_bro" name="jack_bro" type="text" value="" placeholder="{{ filler_user.0.name }}, {{ filler_user.1.name }}, {{ filler_user.2.name }}..."/>
 		</div>
 
+		{% if user.isJacking %}
+			<div id="jack_time_field" class="jack_field">
+				<div id="jack_link_title">
+					<div class="jack_time_counter"><i class="material-icons">timer</i></div>&nbsp;
+					{% if user.jackTimeFormated.hours > 0 or user.jackTimeFormated.days > 0 %}
+						{% if user.jackTimeFormated.days > 0 %}
+							<div class="jack_time_counter" id="jack_time_day">{{ user.jackTimeFormated.days }}</div>
+							{% if user.jackTimeFormated.days > 1 %}
+								<div class="jack_time_counter">&nbsp;days&nbsp;</div>
+							{% else %}
+								<div class="jack_time_counter">&nbsp;day&nbsp;</div>
+							{% endif %}
+						{% endif %}
+
+						<div class="jack_time_counter" id="jack_time_hour">{{ user.jackTimeFormated.hours|stringformat:"02d" }}</div>
+						<div class="jack_time_counter">:</div>
+					{% endif %}
+					<div class="jack_time_counter" id="jack_time_minute">{{ user.jackTimeFormated.minutes|stringformat:"02d" }}</div>
+					<div class="jack_time_counter">:</div>
+					<div class="jack_time_counter" id="jack_time_second">{{ user.jackTimeFormated.seconds|stringformat:"02d" }}</div>
+				</div>
+			</div>
+		{% endif %}
+
 		<input id="submit_jack_submit" type="submit" value="submit"/>
 	</form>
 
@@ -78,9 +102,17 @@
 	</a>
 
 	<div id="remaining_chars"></div>
-	<form action="/submit_jack/" method="POST">{% csrf_token %}
-		<div id="bottom_action_box">
-			<input id="bottom_button" type="submit" name="start_time" value="about to jack?"/>
-		</div>
-	</form>
+	{% if user.isJacking %}
+		<form action="/submit_jack/" method="POST">{% csrf_token %}
+			<div id="bottom_action_box">
+				<input id="bottom_button" type="submit" name="no_finish" value="didn't finish"/>
+			</div>
+		</form>
+	{% else %}
+		<form action="/submit_jack/" method="POST">{% csrf_token %}
+			<div id="bottom_action_box">
+				<input id="bottom_button" type="submit" name="start_time" value="about to jack"/>
+			</div>
+		</form>
+	{% endif %}
 </div>
