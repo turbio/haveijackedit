@@ -259,8 +259,6 @@ def feed(request):
 	#try:
 	userObject = User.objects.get(name__iexact = subdomain)
 
-	print(userObject.name)
-
 	isUser = True
 
 	isPrivate = userObject.settings.private

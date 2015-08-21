@@ -6,7 +6,7 @@
 {% if is_private %}
 		<div class="error_page_message">
 			this page is private
-			<div><a href="{{ request.META.HTTP_HOST }}">
+			<div><a href="{{ HOST_NAME }}">
 				return home
 			</a></div>
 		</div>
@@ -32,10 +32,10 @@
 	{% else %}
 		<div class="error_page_message">
 			doesn't look like this user exists
-			<div><a href="{{ request.META.HTTP_HOST }}?u={{ username }}">
+			<div><a href="{{ HOST_NAME }}?u={{ username }}">
 				take this url
 			</a></div>
-			<div><a href="http://{{ request.META.HTTP_HOST }}">
+			<div><a href="http://{{ HOST_NAME }}">
 				return home
 			</a></div>
 		</div>

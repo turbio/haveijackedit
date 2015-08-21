@@ -77,7 +77,7 @@
 					</a>
 				</div>
 
-				<a href="http://{{ jack.user_name }}.{{ request.META.HTTP_HOST }}">
+				<a href="http://{{ jack.user_name }}.{{ HOST_NAME }}">
 					<div class="name">&ndash;{{ jack.user_name }}, {{ jack.age }}</div>
 				</a>
 				{% if jack.private %}<div class="private_jack">only you can see this</div>{% endif %}
