@@ -152,6 +152,7 @@ def submit_settings(request):
 
 	if 'submit' in request.POST:
 		userSettings = userObject.settings
+
 		userSettings.private = 'private' in request.POST
 		userSettings.on_homepage = 'show_on_home_page' in request.POST
 		userSettings.show_date = 'show_date' in request.POST
@@ -254,7 +255,6 @@ def feed(request):
 	userJackList = False
 	hasJacked = False
 	subdomain = getSubdomain(request.META['HTTP_HOST'])
-
 
 	#try:
 	userObject = User.objects.get(name__iexact = subdomain)
