@@ -85,7 +85,7 @@ def handlevote(request):
 			voteObject = Vote(jack=jackObject, user=userObject)
 
 		voteObject.ip = getUserIp(request)
-		voteObject.date = datetime.datetime.today()
+		voteObject.date = datetime.today()
 		voteObject.points = userChoice
 		voteObject.save()
 
@@ -108,7 +108,7 @@ def handlevote(request):
 				ip=getUserIp(request),
 				jack=jackObject)
 
-		voteObject.date = datetime.datetime.today()
+		voteObject.date = datetime.today()
 		voteObject.points = userChoice
 		voteObject.save()
 
