@@ -1,10 +1,13 @@
 {% if user %}
 <div id="title_bar">
 	<a href="http://{{ HOST_NAME }}"><div class="titlebar_button" id="home_icon"><i class="material-icons">home</i></div></a>
-	<!--<a href="http://{{ HOST_NAME }}/signout"><div class="titlebar_button  btn_right" id="exit_icon"><i class="material-icons">exit_to_app</i></div></a>-->
-	<!--<a href="http://{{ HOST_NAME }}/settings"><div class="titlebar_button btn_right" id="settings_icon"><i class="material-icons">settings</i></div></a>-->
-	<a href="http://{{ HOST_NAME }}/signout"><div class="titlebar_button  btn_right" id="exit_icon">{{ user.name }}<i class="material-icons">person</i></div></a>
+
+	<a href="http://{{ HOST_NAME }}/settings" onClick="show_user_actions(); return false;"><div class="titlebar_button  btn_right" id="actions_icon">{{ user.name }}<i class="material-icons">person</i></div></a>
 	<a href="http://{{ HOST_NAME }}/dash"><div class="titlebar_button btn_right" id="dash_icon"><i class="material-icons">dashboard</i></div></a>
 	<a href="http://test.{{ HOST_NAME }}"><div class="titlebar_button btn_right" id="dash_icon"><i class="material-icons">view_agenda</i></div></a>
+</div>
+<div id="user_actions">
+	<a href="http://{{ HOST_NAME }}/signout"><div class="titlebar_button  btn_right" id="exit_icon"><i class="material-icons">exit_to_app</i></div></a>
+	<a href="http://{{ HOST_NAME }}/settings"><div class="titlebar_button btn_right" id="settings_icon"><i class="material-icons">settings</i></div></a>
 </div>
 {% endif %}
