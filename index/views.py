@@ -339,7 +339,7 @@ def submit_jack(request):
 	if 'new_jack' in request.POST and request.POST['new_jack'] != '':
 		message = str(request.POST.get('new_jack', ''))
 	elif 'start_time' in request.POST:
-		userObject.started = datetime.datetime.today()
+		userObject.started = datetime.today()
 		userObject.save()
 		return HttpResponseRedirect('/dash/')
 	elif 'no_finish' in request.POST:
@@ -355,7 +355,7 @@ def submit_jack(request):
 	newJack = Jack(
 		user=userObject,
 		comment=message,
-		date=datetime.datetime.today(),
+		date=datetime.today(),
 		ip=userIp,
 		finished=finished,
 		start=jackStartTime)
@@ -442,8 +442,8 @@ def createUser(username, password):
 	newUser = User(
 		name=username,
 		password_hash=hashed_password,
-		last_online=datetime.datetime.today(),
-		creation_date=datetime.datetime.today(),
+		last_online=datetime.today(),
+		creation_date=datetime.today(),
 		password_salt=hash_salt,
 		settings=newUserSettings)
 	newUser.save()
