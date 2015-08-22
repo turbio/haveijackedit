@@ -77,9 +77,7 @@
 					</a>
 				</div>
 
-				<a href="http://{{ jack.user_name }}.{{ HOST_NAME }}">
-					<div class="name">&ndash;{{ jack.user_name }}, {{ jack.age }}</div>
-				</a>
+				<div class="name">&ndash;<a href="http://{{ jack.user_name }}.{{ HOST_NAME }}">{{ jack.user_name }}</a>, {{ jack.age }}</div>
 				{% if jack.private %}<div class="private_jack">only you can see this</div>{% endif %}
 			</div>
 			{% if jack.isowner %}

@@ -39,10 +39,6 @@ body{
 	text-align: center;
 }
 
-.name:hover{
-	text-decoration: underline;
-}
-
 .name{
 	text-align: right;
 	color: #bbb;
@@ -50,6 +46,11 @@ body{
 	position: absolute;
 	bottom: 0;
 	right: 0;
+}
+
+.name a:hover{
+	text-decoration: underline;
+	color: #bbb;
 }
 
 a{
@@ -704,7 +705,6 @@ form{
 .jack_row a:hover{
 	text-decoration: underline;
 	overflow: hidden;
-	color: #eee;
 }
 
 .jack_bro{
@@ -939,18 +939,29 @@ input[type="checkbox"]:checked + label{
 	font-size: .5em;
 	padding: .5em;
 	background: white;
-	width: 6em;
+	min-width: 6em;
 	height: 10em;
 	z-index: 10;
 	border-style: solid;
 	border-top: 0;
 	margin-right: -3px; /*to accomodate the border*/
 	display: none;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	flex-direction: column;
+
 }
 
 @media (max-width: 600px){
 	#user_actions{
 		position: relative;
 		width: 100%;
+		border-left: 0;
+		border-right: 0;
 	}
+}
+
+.titlebar_button_selected{
+	color: black;
+	background: white;
 }
