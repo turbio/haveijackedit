@@ -987,6 +987,10 @@ input[type="checkbox"]:checked + label{
 	justify-content: flex-start;
 }
 
+.btn_action a{
+	color: inherit;
+}
+
 .btn_action:hover{
 	color: white;
 	background: black;
