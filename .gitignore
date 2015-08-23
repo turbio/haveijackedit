@@ -4,3 +4,4 @@ migrations
 settings.py
 Session.vim
 media/
+index/static/MaterialIcons-Regular.*
