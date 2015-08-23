@@ -2,15 +2,19 @@
 <div id="title_bar">
 	<a href="http://{{ HOST_NAME }}"><div class="titlebar_button" id="home_icon"><i class="material-icons">home</i></div></a>
 
-	<a href="http://{{ HOST_NAME }}/dash"><div class="titlebar_button" id="currently_jacking"><i class="material-icons">thumb_up</i><div id="currently_jacking_text">currently jacking!</div></div></a>
+	{% if user.isJacking %}
+		<a href="http://{{ HOST_NAME }}/dash"><div class="titlebar_button" id="currently_jacking"><i class="material-icons">thumb_up</i><div id="currently_jacking_text">currently jacking!</div></div></a>
+	{% endif %}
 
 	<a href="http://{{ HOST_NAME }}/settings" onClick="show_user_actions(); return false;"><div class="titlebar_button  btn_right" id="actions_icon">{{ user.name }}<i class="material-icons">person</i></div></a>
 	<a href="http://{{ HOST_NAME }}/dash"><div class="titlebar_button btn_right" id="dash_icon"><i class="material-icons">dashboard</i></div></a>
 	<a href="http://test.{{ HOST_NAME }}"><div class="titlebar_button btn_right" id="dash_icon"><i class="material-icons">view_agenda</i></div></a>
 </div>
-<div id="user_actions"><div class="titlebar_button btn_action">settings</div>
+<div id="user_actions">
+	<div class="titlebar_button">score: NaN</div>
+	<a href="http://{{ HOST_NAME }}/stats"><div class="titlebar_button btn_action"><i class="btn_action_icon material-icons">equalizer</i>stats</div></a>
 	<a href="http://{{ HOST_NAME }}/settings"><div class="titlebar_button btn_action"><i class="btn_action_icon material-icons">settings</i>settings</div></a>
-	<div class="titlebar_button  btn_action"><i class="btn_action_icon material-icons">exit_to_app</i>signout</div>
+	<a href="http://{{ HOST_NAME }}/signout"><div class="titlebar_button  btn_action"><i class="btn_action_icon material-icons">exit_to_app</i>signout</div></a>
 	<div class="titlebar_button  btn_action"><i class="btn_action_icon material-icons">close</i>close</div>
 </div>
 {% endif %}
