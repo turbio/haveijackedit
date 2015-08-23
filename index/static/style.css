@@ -940,14 +940,14 @@ input[type="checkbox"]:checked + label{
 	padding: .5em;
 	background: white;
 	min-width: 6em;
-	height: 10em;
+	min-height: 10em;
 	z-index: 10;
 	border-style: solid;
 	border-top: 0;
 	margin-right: -3px; /*to accomodate the border*/
 	display: none;
 	flex-wrap: wrap;
-	align-items: flex-start;
+	align-items: stretch;
 	flex-direction: column;
 
 }
@@ -959,9 +959,39 @@ input[type="checkbox"]:checked + label{
 		border-left: 0;
 		border-right: 0;
 	}
+	#currently_jacking{
+		/*display: none;*/
+		/*width: 100%;*/
+		width: 1em;
+	}
+	#currently_jacking_text{
+		display: none;
+	}
+}
+
+#currently_jacking_text{
+	margin-left: .25em;
+}
+
+#currently_jacking{
+	color: #ff8888;
 }
 
 .titlebar_button_selected{
 	color: black;
 	background: white;
+}
+
+.btn_action{
+	color: black;
+	justify-content: flex-start;
+}
+
+.btn_action:hover{
+	color: white;
+	background: black;
+}
+
+.btn_action_icon{
+	margin-right: .5em;
 }
