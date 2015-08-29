@@ -84,8 +84,9 @@ def modifyjack(request):
 		jackObject.save()
 
 	elif request.POST['operation'] == 'edit':
-		#TODO
-		pass
+		context = {
+		}
+		return render(request, 'modify_jack.html', context)
 
 	elif request.POST['operation'] == 'delete':
 		jackObject.delete()
