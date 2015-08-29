@@ -32,5 +32,6 @@ urlpatterns = [
 	url(r'^modify/$', views.modifyjack),
 	url(r'^stats/$', views.stats),
 	url(r'^community/$', views.community),
+	url(r'^jack/', views.standalone_jack),
 	url(r'^$', views.index),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

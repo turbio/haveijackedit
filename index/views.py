@@ -48,6 +48,12 @@ def community(request):
 	}
 	return render(request, 'index/community.html', context)
 
+def standalone_jack(request):
+	context = {
+
+	}
+	return render(request, 'index/standalone_jack.html', context)
+
 def modifyjack(request):
 	jackObject = Jack.objects.filter(id = request.POST['jack_id']) \
 		.select_related('user').first()
