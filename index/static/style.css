@@ -1043,3 +1043,7 @@ input[type="checkbox"]:checked + label{
 .vote_list_item{
 	text-align: left;
 }
+
+.background_link{
+	color: black;
+}

@@ -95,6 +95,7 @@ SELECT
 	WHEN TIMESTAMPDIFF(HOUR,index_jack.date,UTC_TIMESTAMP()) < 60
 		THEN CONCAT(TIMESTAMPDIFF(HOUR,index_jack.date,UTC_TIMESTAMP())," hours ago") ELSE CONCAT(TIMESTAMPDIFF(DAY,index_jack.date,UTC_TIMESTAMP())," days ago")
 	END AS age,
+	REPLACE(index_jack.comment, ' ', '_') AS friendly_url,
 	(
 		SELECT
 			GROUP_CONCAT(index_user.name SEPARATOR ', ')
