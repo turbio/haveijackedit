@@ -30,33 +30,32 @@ function addtime(){
 
 	secondElement.innerHTML = (seconds > 9 ? seconds : "0" + seconds);
 	minuteElement.innerHTML = (minutes > 9 ? minutes : "0" + minutes);
-	try{
+	if(hourElement != null){
 		hourElement.innerHTML = (hours > 9 ? hours : "0" + hours);
 		dayElement.innerHTML = days;
-	}catch(err){ }
+	}
 
 	setTimeout(addtime, 1000);
 }
 
 function inittime(){
-	try{
-		secondElement = document.getElementById('jack_time_second');
+	secondElement = document.getElementById('jack_time_second');
+	minuteElement = document.getElementById('jack_time_minute');
+	hourElement = document.getElementById('jack_time_hour');
+	dayElement = document.getElementById('jack_time_day');
+
+	if(secondElement != null){
 		seconds = parseInt(secondElement.innerHTML);
-		minuteElement = document.getElementById('jack_time_minute');
 		minutes = parseInt(minuteElement.innerHTML);
-		try{
-			hourElement = document.getElementById('jack_time_hour');
+		if(hourElement != null){
 			hours = parseInt(hourElement.innerHTML);
-			dayElement = document.getElementById('jack_time_day');
 			days = parseInt(dayElement.innerHTML);
-		}catch(e){}
+		}
 		addtime();
-	}catch(err){
-		//heh
 	}
 }
 
-window.onload = inittime;
+window.addEventListener("load", inittime);
 
 function add_punc(){
 	if(!addedPunc){
@@ -129,7 +128,7 @@ function createMap(mapCanvas, position_object){
 	longlat = new google.maps.LatLng(position_object["lat"], position_object["long"])
 	var mapOptions = {
 		center: longlat,
-		zoom: 16,
+		zoom: 8,
 		mapTypeControlOptions: {
 			mapTypeIds: [google.maps.MapTypeId.ROADMAP, MY_MAPTYPE_ID]
 		},
@@ -161,7 +160,7 @@ function createMap(mapCanvas, position_object){
 	{
 		elementType: 'labels',
 		stylers: [
-		{ visibility: 'off' }
+		{ visibility: 'on' }
 		]
 	},
 	{
