@@ -31,7 +31,6 @@ def index(request):
 		perspective_ip=False if 'user_id' in request.session else True)
 
 	context = {
-		'user': User.objects.filter(id=request.session.get('user_id')).first(),
 		'jack_list': jacks
 	}
 
@@ -146,7 +145,6 @@ def settings(request):
 	}
 
 	context = {
-		'user': userObject,
 		'options': user_options
 	}
 
@@ -295,7 +293,6 @@ def feed(request):
 		'title_text_a': jacked_message,
 		'is_user': isUser,
 		'is_private': isPrivate,
-		'user': User.objects.filter(id=request.session.get('user_id')).first()
 	}
 
 	return render(request, 'index/feed.html', context)
@@ -307,7 +304,6 @@ def dash(request):
 		return HttpResponseRedirect('/')
 
 	context = {
-		'user': User.objects.filter(id=request.session.get('user_id')).first(),
 		'yes_word': YesWords.objects.random_word('yes'),
 		'filler_user': User.objects.order_by('?')[:3],
 		'jack_list': Jack.objects.with_details(
