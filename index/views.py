@@ -51,14 +51,15 @@ def community(request):
 def standalone_jack(request):
 	#the id should be whatever is directly after /jack/
 	jackUrlId = request.META['PATH_INFO'].split('/')[2:][0]
-	postId = int(jackUrlId)
+	jackId = int(jackUrlId)
 
 	jackObject = Jack.objects.with_details(
 		perspective=request.session['user_id'] if 'user_id' in request.session else getIp(request),
-		perspective_ip=False if 'user_id' in request.session else True)
+		perspective_ip=False if 'user_id' in request.session else True,
+		jack_id=jackId)
 
 	context = {
-		'jack_num': postId
+		'jack_num': jackId
 	}
 
 	return render(request, 'index/standalone_jack.html', context)
