@@ -57,6 +57,7 @@ class JackManager(models.Manager):
 	#limit: number of posts to show
 	#homepage: only show jacks that would normally appear on homepage
 	#perspective_ip: if the perspective is an ip or user id
+	#jack_id: only show this specific jack
 	def with_details(
 			self,
 			user=None,
@@ -64,7 +65,8 @@ class JackManager(models.Manager):
 			score=False,
 			limit=25,
 			homepage=False,
-			perspective_ip=False):
+			perspective_ip=False,
+			jack_id=None):
 
 		baseQuery = """
 SELECT
@@ -139,7 +141,7 @@ LEFT OUTER JOIN index_image ON
 WHERE
 	(NOT visibility.private OR index_user.id = "%s")
 	AND (NOT visibility.hidden)
-	AND index_jack.finished %s %s
+	AND index_jack.finished %s %s %s
 GROUP BY
 	index_jack.usersubmitted_ptr_id
 ORDER BY %s LIMIT %s"""
@@ -152,6 +154,7 @@ ORDER BY %s LIMIT %s"""
 		orderScoreQuery = """score DESC"""
 		homepageQuery = """AND visibility.on_homepage"""
 		singleUserQuery = """AND index_user.id = "%s" """ % user
+		singleJackQuery = """AND index_jack.usersubmitted_ptr_id = "%s" """ % jack_id
 
 		query = baseQuery % (
 				ownerQuery if perspective is not None else "",
@@ -160,6 +163,7 @@ ORDER BY %s LIMIT %s"""
 				perspective if perspective is not None else "",
 				homepageQuery if homepage else "",
 				singleUserQuery if user is not None else "",
+				singleJackQuery if jack_id is not None else "",
 				orderScoreQuery if score else orderDateQuery,
 				limit
 			)
