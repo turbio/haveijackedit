@@ -1,3 +1,6 @@
+{% block head %}
+	<script src="/static/new_jack.js?v{{ VERSION }}"></script>
+{% endblock %}
 <div id="new_jack_box">
 	<form method="POST" action="/submit_jack/">{% csrf_token %}
 		<input id="new_jack_post_box" type="hidden" name="new_jack" value="{{ yes_word }}"/>
@@ -88,16 +91,16 @@
 		<input id="submit_jack_submit" type="submit" value="submit"/>
 	</form>
 
-	<a href="/nojs" onClick="addLocation(); return false;">
+	<a href="/nojs" onClick="toggleAddLocation(); return false;">
 		<div class="jack_box_button" id="location_button"><i class="material-icons">location_on</i></div>
 	</a>
-	<a href="#" onClick="addImage(); return false;">
+	<a href="#" onClick="toggleAddImage(); return false;">
 		<div class="jack_box_button" id="image_button"><i class="material-icons">insert_photo</i></div>
 	</a>
-	<a href="/nojs" onClick="addLink(); return false;">
+	<a href="/nojs" onClick="toggleAddLink(); return false;">
 		<div class="jack_box_button" id="link_button"><i class="material-icons">link</i></div>
 	</a>
-	<a href="/nojs" onClick="addBro(); return false;">
+	<a href="/nojs" onClick="toggleAddBro(); return false;">
 		<div class="jack_box_button" id="link_button"><i class="material-icons">person_add</i></div>
 	</a>
 

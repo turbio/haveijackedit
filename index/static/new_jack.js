@@ -99,10 +99,10 @@ var geoEnabled = false;
 
 function removeGeo(){
 	geoEnabled = true;
-	addLocation();
+	toggleAddLocation();
 }
 
-function addLocation(){
+function toggleAddLocation(){
 	geoEnabled = !geoEnabled
 	if(geoEnabled){
 		if (navigator.geolocation){
@@ -231,7 +231,7 @@ function saveImage(){
 }
 
 
-function addImage(){
+function toggleAddImage(){
 	document.getElementById("jack_add_picture").style.display = "flex";
 
 	if(!dropzoneAdded){
@@ -263,14 +263,14 @@ function removePicture(){
 	}
 }
 
-function addLink(){
+function toggleAddLink(){
 	document.getElementById("jack_add_link").style.display = "block";
 }
 function removeLink(){
 	document.getElementById("jack_add_link").style.display = "none";
 }
 
-function addBro(){
+function toggleAddBro(){
 	document.getElementById("jack_add_bro").style.display = "block";
 }
 function removeBro(){
