@@ -3,6 +3,10 @@ var imageAdded = false;
 var dropzoneAdded = false;
 var picFromWebcam = false;
 
+var addBro = false;
+var addLink = false;
+var addPic = false;
+
 var secondElement;
 var minuteElement;
 var hourElement;
@@ -231,21 +235,26 @@ function saveImage(){
 
 
 function toggleAddImage(){
-	document.getElementById("jack_add_picture").style.display = "flex";
+	if(!addPic){
+		document.getElementById("jack_add_picture").style.display = "flex";
 
-	if(!dropzoneAdded){
-		dropzoneAdded = true;
+		if(!dropzoneAdded){
+			dropzoneAdded = true;
 
-		var myDropzone = new Dropzone("div#jack_add_picture",
-			{
-				url: "/file/post",
-				maxFilesize: 8,
-				maxFiles: 1,
-				acceptedFiles: "image/*",
-				autoProcessQueue: false,
-				//previewTemplate: ""
-			});
+			var myDropzone = new Dropzone("div#jack_add_picture",
+				{
+					url: "/file/post",
+					maxFilesize: 8,
+					maxFiles: 1,
+					acceptedFiles: "image/*",
+					autoProcessQueue: false,
+					//previewTemplate: ""
+				});
+		}
+	}else{
+		removePicture();
 	}
+	addPic = !addPic;
 }
 
 function removePicture(){
@@ -263,15 +272,26 @@ function removePicture(){
 }
 
 function toggleAddLink(){
-	document.getElementById("jack_add_link").style.display = "block";
+	if(!addLink){
+		document.getElementById("jack_add_link").style.display = "block";
+	}else{
+		removeLink();
+	}
+	addLink = !addLink;
 }
 function removeLink(){
 	document.getElementById("jack_add_link").style.display = "none";
 }
 
 function toggleAddBro(){
-	document.getElementById("jack_add_bro").style.display = "block";
+	if(!addBro){
+		document.getElementById("jack_add_bro").style.display = "block";
+	}else{
+		removeBro();
+	}
+	addBro = !addBro;
 }
+
 function removeBro(){
 	document.getElementById("jack_add_bro").style.display = "none";
 }
