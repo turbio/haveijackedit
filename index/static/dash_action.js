@@ -39,20 +39,21 @@ function addtime(){
 }
 
 function inittime(){
-	secondElement = document.getElementById('jack_time_second');
-	seconds = parseInt(secondElement.innerHTML);
-	minuteElement = document.getElementById('jack_time_minute');
-	minutes = parseInt(minuteElement.innerHTML);
-
 	try{
-		hourElement = document.getElementById('jack_time_hour');
-		hours = parseInt(hourElement.innerHTML);
-		dayElement = document.getElementById('jack_time_day');
-		days = parseInt(dayElement.innerHTML);
+		secondElement = document.getElementById('jack_time_second');
+		seconds = parseInt(secondElement.innerHTML);
+		minuteElement = document.getElementById('jack_time_minute');
+		minutes = parseInt(minuteElement.innerHTML);
+		try{
+			hourElement = document.getElementById('jack_time_hour');
+			hours = parseInt(hourElement.innerHTML);
+			dayElement = document.getElementById('jack_time_day');
+			days = parseInt(dayElement.innerHTML);
+		}catch(e){}
+		addtime();
 	}catch(err){
 		//heh
 	}
-	addtime();
 }
 
 window.onload = inittime;

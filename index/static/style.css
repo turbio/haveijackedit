@@ -24,10 +24,10 @@ body{
 }
 
 .jack{
-	overflow: hidden;
 	margin-left: auto;
 	margin-right: auto;
 	padding: .25em;
+	word-wrap: break-word;
 }
 
 .shaded_jack{

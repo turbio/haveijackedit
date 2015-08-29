@@ -1,4 +1,5 @@
 SELECT
+	index_user.id,
 	(votes.total_recieved * 5) + jacks.unique_dates + FLOOR(jacks.total_submitted_length / jacks.total_submitted) AS score
 FROM
 	index_user

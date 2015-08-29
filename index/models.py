@@ -1,5 +1,6 @@
 from django.db import models
-from django.db.models import Sum, F, When, Case, Value, CharField, Q
+from django.db.models import Sum, Count, F, When, Case, Value, CharField, Q
+from django.db.models.functions import Concat
 from datetime import datetime, timezone
 
 class UserSubmitted(models.Model):
@@ -16,10 +17,10 @@ class User(models.Model):
 	creation_date = models.DateTimeField()
 	settings = models.OneToOneField('UserSettings')
 	started = models.DateTimeField(null=True)
-	objects = UserManager()
 
 	def score(self):
-		return 0
+		return User.objects.raw(
+			open("index/user_score.sql").read() % self.id)[0].score
 
 	def isJacking(self):
 		return self.started is not None
