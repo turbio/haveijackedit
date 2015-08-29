@@ -11,6 +11,7 @@ function asignClick(){
 		}
 		document.getElementById("user_actions").style.display = "flex";
 		document.getElementById("actions_icon").className = "titlebar_button  btn_right titlebar_button_selected";
+		return false;
 	}
 }
 
