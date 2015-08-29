@@ -85,11 +85,20 @@ def modifyjack(request):
 
 	elif request.POST['operation'] == 'edit':
 		context = {
+			'modify': True,
+			'jack_id': jackObject.id,
+			'comment_filler': jackObject.comment,
+			'return_location': request.POST['return_location']
 		}
 		return render(request, 'modify_jack.html', context)
 
 	elif request.POST['operation'] == 'delete':
 		jackObject.delete()
+
+	elif request.POST['operation'] == 'submit_edit':
+		print(request.POST['new_jack'])
+		jackObject.comment = request.POST['new_jack']
+		jackObject.save()
 
 	return HttpResponseRedirect(request.POST['return_location'])
 
@@ -328,7 +337,7 @@ def dash(request):
 		return HttpResponseRedirect('/')
 
 	context = {
-		'yes_word': YesWords.objects.random_word('yes'),
+		'comment_filler': YesWords.objects.random_word('yes'),
 		'filler_user': User.objects.order_by('?')[:3],
 		'jack_list': Jack.objects.with_details(
 			user=request.session['user_id'],
