@@ -37,6 +37,18 @@ def index(request):
 
 	return render(request, 'index/index.html', context)
 
+def stats(request):
+	context = {
+
+	}
+	return render(request, 'index/stats.html', context)
+
+def community(request):
+	context = {
+
+	}
+	return render(request, 'index/community.html', context)
+
 def modifyjack(request):
 	jackObject = Jack.objects.filter(id = request.POST['jack_id']) \
 		.select_related('user').first()
