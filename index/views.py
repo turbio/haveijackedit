@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import Http404
 from django.conf import settings as djangosettings
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext, loader
@@ -58,8 +59,13 @@ def standalone_jack(request):
 		perspective_ip=False if 'user_id' in request.session else True,
 		jack_id=jackId)
 
+	if len(list(jackObject)) == 0:
+		raise Http404("This jack doesn't exist")
+
+	jackObject = jackObject[0]
+
 	context = {
-		'jack_num': jackId
+		'jack': jackObject
 	}
 
 	return render(request, 'index/standalone_jack.html', context)
