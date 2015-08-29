@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models import Sum, Count, F, When, Case, Value, CharField, Q
 from django.db.models.functions import Concat
 from datetime import datetime, timezone
+import re
 
 class UserSubmitted(models.Model):
 	user = models.ForeignKey('User', null=True)
@@ -95,7 +96,6 @@ SELECT
 	WHEN TIMESTAMPDIFF(HOUR,index_jack.date,UTC_TIMESTAMP()) < 60
 		THEN CONCAT(TIMESTAMPDIFF(HOUR,index_jack.date,UTC_TIMESTAMP())," hours ago") ELSE CONCAT(TIMESTAMPDIFF(DAY,index_jack.date,UTC_TIMESTAMP())," days ago")
 	END AS age,
-	REPLACE(index_jack.comment, ' ', '_') AS friendly_url,
 	(
 		SELECT
 			GROUP_CONCAT(index_user.name SEPARATOR ', ')
@@ -185,6 +185,10 @@ class Jack(UserSubmitted):
 	def votes(self):
 		votesum = self.vote_set.all().aggregate(Sum('points'))['points__sum']
 		return 0 if votesum is None else votesum
+
+	def friendly_url(self):
+		pattern = re.compile('[\W]+')
+		return pattern.sub('_', self.comment)
 
 class Vote(UserSubmitted):
 	jack = models.ForeignKey('Jack')
