@@ -102,6 +102,17 @@
 				</form>
 			{% endif %}
 		</div>
+		{% comment %}
+		{% if votelist %}
+			<div class="vote_list jack">
+				{% for vote in votelist %}
+					<div class="vote_list_item name">
+						<a href="http://{{ vote.user.name }}.{{ HOST_NAME }}">{{ vote.user.name }}</a>
+					</div>
+				{% endfor %}
+			</div>
+		{% endif %}
+		{% endcomment %}
 	{% else %}
 	didn't finish
 	{% endif %}

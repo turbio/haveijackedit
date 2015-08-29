@@ -43,9 +43,12 @@ body{
 	text-align: right;
 	color: #bbb;
 	font-size: 0.5em;
-	position: absolute;
 	bottom: 0;
 	right: 0;
+}
+
+.name a{
+	color: #bbb;
 }
 
 .name a:hover{
@@ -55,10 +58,6 @@ body{
 
 a{
 	text-decoration: none;
-	color: blue;
-}
-
-a:visited{
 	color: blue;
 }
 
@@ -1036,4 +1035,11 @@ input[type="checkbox"]:checked + label{
 
 	/* Support for IE. */
 	font-feature-settings: 'liga';
+}
+
+.vote_list{
+}
+
+.vote_list_item{
+	text-align: left;
 }

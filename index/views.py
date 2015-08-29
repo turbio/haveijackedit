@@ -65,7 +65,8 @@ def standalone_jack(request):
 	jackObject = jackObject[0]
 
 	context = {
-		'jack': jackObject
+		'jack': jackObject,
+		#'votelist': Vote.objects.filter(jack__id=jackId).select_related('user')
 	}
 
 	return render(request, 'index/standalone_jack.html', context)
