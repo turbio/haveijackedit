@@ -66,6 +66,12 @@
 			<input id="jack_bro" name="jack_bro" type="text" value="" placeholder="{{ filler_user.0.name }}, {{ filler_user.1.name }}, {{ filler_user.2.name }}..."/>
 		</div>
 
+		<div id="jack_add_tag" class="jack_field">
+			<a href="/nojs" onClick="removeTag(); return false;"> <div class="button close_button"><i class="material-icons">close</i></div></a>
+			<div id="jack_link_title">tag your jack</div>
+			<input id="jack_tag" name="jack_tag" type="text" value="" placeholder="cockvore"/>
+		</div>
+
 		{% if user.isJacking %}
 			<div id="jack_time_field" class="jack_field">
 				<div id="jack_link_title">
@@ -104,6 +110,9 @@
 	</a>
 	<a href="/nojs" onClick="toggleAddBro(); return false;">
 		<div class="jack_box_button" id="link_button"><i class="material-icons">person_add</i></div>
+	</a>
+	<a href="/nojs" onClick="toggleAddTag(); return false;">
+		<div class="jack_box_button" id="tag_button"><i class="material-icons">label</i></div>
 	</a>
 
 	<div id="remaining_chars"></div>

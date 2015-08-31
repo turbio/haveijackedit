@@ -618,6 +618,11 @@ form{
 	margin: 0;
 }
 
+#jack_tag{
+	width: 100%;
+	margin: 0;
+}
+
 #jack_link_title{
 	text-align: left;
 	font-size: .5em;

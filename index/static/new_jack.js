@@ -6,6 +6,7 @@ var picFromWebcam = false;
 var addBro = false;
 var addLink = false;
 var addPic = false;
+var addTag = false;
 
 var secondElement;
 var minuteElement;
@@ -21,6 +22,7 @@ window.addEventListener("load", function() {
 	document.getElementById("jack_add_picture").style.display = "none";
 	document.getElementById("jack_add_link").style.display = "none";
 	document.getElementById("jack_add_bro").style.display = "none";
+	document.getElementById("jack_add_tag").style.display = "none";
 });
 
 function addtime(){
@@ -109,6 +111,20 @@ var geoEnabled = false;
 function removeGeo(){
 	geoEnabled = true;
 	toggleAddLocation();
+}
+
+function toggleAddTag(){
+	if(!addTag){
+		document.getElementById("jack_add_tag").style.display = "block";
+	}else{
+		removeTag();
+	}
+	addTag = !addTag;
+}
+
+function removeTag(){
+	addTag = true;
+	document.getElementById("jack_add_tag").style.display = "none";
 }
 
 function toggleAddLocation(){
