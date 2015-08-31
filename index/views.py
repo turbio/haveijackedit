@@ -448,6 +448,14 @@ def submit_jack(request):
 		for broString in broStrings:
 			newJack.bros.add(User.objects.get(name__iexact=broString))
 
+	if 'jack_tag' in request.POST and not request.POST['jack_tag'] == '':
+		tagStrings = request.POST['jack_tag'].split(",")
+		tagStrings = [s.strip(' ') for s in tagStrings]
+
+		for tagText in tagStrings:
+			userTagObject, created = Tag.objects.get_or_create(text=tagText)
+			newJack.tags.add(userTagObject)
+
 	return HttpResponseRedirect('/dash/')
 
 def getSubdomain(url):

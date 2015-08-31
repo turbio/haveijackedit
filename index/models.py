@@ -98,6 +98,15 @@ SELECT
 	END AS age,
 	(
 		SELECT
+			GROUP_CONCAT(index_tag.text SEPARATOR ', ')
+		FROM
+			index_jack_tags
+		INNER JOIN index_tag ON
+			index_jack_tags.tag_id = index_tag.id
+		WHERE index_jack_tags.jack_id = index_jack.usersubmitted_ptr_id
+	) AS tag,
+	(
+		SELECT
 			GROUP_CONCAT(index_user.name SEPARATOR ', ')
 		FROM
 			index_jack_bros
