@@ -19,37 +19,9 @@
 				<input id="new_jack_post_box" type="hidden" name="new_jack" value="{{ comment_filler }}"/>
 				<div contentEditable="true" id="new_jack_text" name="new_jack_editable" onKeyDown="textChange()" onKeyUp="textChange()" onchange="textChange()">{{ comment_filler }}</div>
 
-				{% if jack.location_lng %}
-					<div class="jack_field">
-						<div class="jack_icon jack_row"><i class="material-icons">my_location</i></div>
-						<img class="jack_image" src="https://maps.googleapis.com/maps/api/staticmap?center={{ jack.location_lat }},{{ jack.location_lng }}&zoom=8&size=600x600&maptype=roadmap&style=element:labels|visibility:on&style=saturation:-100&markers={{ jack.location_lat }},{{ jack.location_lng }}"/>
-					</div>
-				{% endif %}
-
-				{% if jack.image_file %}
-					<div class="jack_field">
-						{% if jack.image_source == "f" %}
-							<div class="jack_icon jack_row"><i class="material-icons">photo</i></div>
-						{% elif jack.image_source == "c" %}
-							<div class="jack_icon jack_row"><i class="material-icons">photo_camera</i></div>
-						{% endif %}
-						<img class="jack_image" src="/media/{{ jack.image_file }}"/>
-					</div>
-				{% endif %}
-
-				{% if jack.url %}
-					<div class="jack_field">
-						<div id="jack_link_title">sweet jacking material:</div>
-						<input id="jack_link_url" name="jack_link_url" type="text" value="{{ jack.url }}"  disabled/>
-					</div>
-				{% endif %}
-
-				{% if jack.bro %}
-					<div class="jack_field">
-						<div id="jack_link_title">jacked it with:</div>
-						<input id="jack_bro" name="jack_bro" type="text" value="{{ jack.bro }}"  disabled/>
-					</div>
-				{% endif %}
+				<div class="jack_field">
+					<div id="modify_jack_subtext">(only the text can be edited)</div>
+				</div>
 
 				<input id="submit_jack_submit" type="submit" value="submit"/>
 			</form>

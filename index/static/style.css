@@ -93,6 +93,7 @@ textarea{
 }
 
 input[type=submit]{
+	color: #000;
 	transition: all .2s;
 }
 
@@ -1048,4 +1049,8 @@ input[type="checkbox"]:checked + label{
 
 #geobox{
 	display: none;
+}
+
+#modify_jack_subtext{
+	font-size: .25em;
 }
