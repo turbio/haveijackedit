@@ -85,8 +85,7 @@ def modifyjack(request):
 
 	elif request.POST['operation'] == 'edit':
 		context = {
-			'modify': True,
-			'jack_id': jackObject.id,
+			'jack': Jack.objects.with_details(jack_id=jackObject.id)[0],
 			'comment_filler': jackObject.comment,
 			'return_location': request.POST['return_location']
 		}

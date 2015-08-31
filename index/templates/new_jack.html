@@ -4,12 +4,7 @@
 	<script src="/static/dropzone.js"></script>
 {% endblock %}
 <div id="new_jack_box">
-	<form method="POST" {% if modify %}action="/modify/"{% else %}action="/submit_jack/"{% endif %}>{% csrf_token %}
-		{% if modify %}
-			<input type="hidden" name="jack_id" value="{{ jack_id }}"/>
-			<input type="hidden" name="operation" value="submit_edit"/>
-			<input type="hidden" name="return_location" value="{{ return_location }}"/>
-		{% endif %}
+	<form method="POST" action="/submit_jack/">{% csrf_token %}
 		<input id="new_jack_post_box" type="hidden" name="new_jack" value="{{ comment_filler }}"/>
 		<input id="jack_geo" type="hidden" name="jack_geo" value=""/>
 		<div contentEditable="true" id="new_jack_text" name="new_jack_editable" onKeyDown="textChange()" onKeyUp="textChange()" onchange="textChange()" onClick="add_punc(); textChange()">{{ comment_filler }}</div>

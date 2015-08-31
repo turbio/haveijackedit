@@ -17,6 +17,12 @@ var minutes = 0;
 var hours = 0;
 var days = 0;
 
+window.addEventListener("load", function() {
+	document.getElementById("jack_add_picture").style.display = "none";
+	document.getElementById("jack_add_link").style.display = "none";
+	document.getElementById("jack_add_bro").style.display = "none";
+});
+
 function addtime(){
 	seconds++;
 	if (seconds >= 60) {

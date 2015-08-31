@@ -425,7 +425,6 @@ form{
 }
 
 #jack_add_picture{
-	display: none;
 	position: relative;
 	height: 6em;
 	/*display: flex;*/
@@ -630,7 +629,6 @@ form{
 	margin-bottom: 0.25em;
 	position: relative;
 	background-color: #eee;
-	display: none;
 	padding: .25em;
 }
 
@@ -1046,4 +1044,8 @@ input[type="checkbox"]:checked + label{
 
 .background_link{
 	color: black;
+}
+
+#geobox{
+	display: none;
 }
