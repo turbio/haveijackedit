@@ -178,6 +178,7 @@ class Jack(UserSubmitted):
 	link = models.ForeignKey('Link', null=True)
 	image = models.ForeignKey('Image', null=True)
 	bros = models.ManyToManyField('User', related_name='jack_bros')
+	tags = models.ManyToManyField('Tag', related_name='jack_tags')
 	start = models.DateTimeField(null=True)
 	objects = JackManager()
 	finished = models.BooleanField()
@@ -210,6 +211,9 @@ class Image(UserSubmitted):
 
 	SOURCES = (('f', 'file'), ('c', 'camera'))
 	source = models.CharField(max_length='1', choices=SOURCES, default='f')
+
+class Tag(models.Model):
+	text = models.CharField(max_length=32)
 
 #this is just the different' words to show, these models shouldn't be edited
 class RandomWordManager(models.Manager):
