@@ -425,6 +425,7 @@ def submit_jack(request):
 		imageFile = NamedTemporaryFile(delete=True)
 		imageFile.write(uri.data)
 		imageFile.flush()
+		filename += '.' + str(uri.mimetype.split('/')[-1])
 
 		newImage.data.save(filename, File(imageFile))
 		newImage.save()

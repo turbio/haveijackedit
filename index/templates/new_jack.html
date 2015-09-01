@@ -1,7 +1,16 @@
 {% block head %}
+	<!--ugh, yeah i know..-->
+	<!--<script src="//code.jquery.com/jquery-1.10.2.js"></script>-->
+	<!--<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>-->
+	<!--<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">-->
+	<script src="/static/jquery-1.10.2.js"></script>
+	<script src="/static/jquery-ui.js"></script>
+
 	<script src="/static/new_jack.js?v{{ VERSION }}"></script>
 	<script src="/static/webcam.js"></script>
 	<script src="/static/dropzone.js"></script>
+
+	<link rel="stylesheet" href="/static/jquery-ui.css">
 {% endblock %}
 <div id="new_jack_box">
 	<form method="POST" action="/submit_jack/">{% csrf_token %}

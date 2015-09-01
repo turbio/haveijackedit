@@ -1059,3 +1059,21 @@ input[type="checkbox"]:checked + label{
 #modify_jack_subtext{
 	font-size: .25em;
 }
+
+.ui-autocomplete{
+	/*sorry... don't want to deal with jquery*/
+	font-size: .5em !important;
+	border-style: solid !important;
+	border-width: 3px !important;
+	border-color: #888 !important;
+}
+
+.ui-state-focus{
+	background-color: #888 !important;
+	color: #fff !important;
+	border: none !important;
+}
+
+.ui-menu-item{
+	transition: all .2s;
+}

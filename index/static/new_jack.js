@@ -18,6 +18,22 @@ var minutes = 0;
 var hours = 0;
 var days = 0;
 
+$(function() {
+	var availableTags = [
+		"test1",
+		"test2",
+		"test3",
+		];
+	$("#jack_tag").autocomplete({
+		source: availableTags,
+		search: searchForTag
+	});
+});
+
+function searchForTag(event, ui){
+	colsole.log("lmao");
+}
+
 window.addEventListener("load", function() {
 	document.getElementById("jack_add_picture").style.display = "none";
 	document.getElementById("jack_add_link").style.display = "none";
