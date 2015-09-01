@@ -49,6 +49,25 @@ def community(request):
 	}
 	return render(request, 'index/community.html', context)
 
+def tag_suggestion(request):
+
+	#could use more personal data, this will work for now
+	suggestedTags = Tag.objects \
+		.filter(text__icontains=request.GET['term']) \
+		.values_list('text', flat=True)
+
+	suggestedTagsJson = json.dumps(list(suggestedTags))
+
+	return HttpResponse(suggestedTagsJson)
+
+def bro_suggestion(request):
+
+	broSuggestions = [
+		'filler'
+	]
+
+	return HttpResponse(json.dumps(broSuggestions))
+
 def standalone_jack(request):
 	#the id should be whatever is directly after /jack/
 	jackUrlId = request.META['PATH_INFO'].split('/')[2:][0]

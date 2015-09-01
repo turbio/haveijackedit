@@ -25,13 +25,12 @@ $(function() {
 		"test3",
 		];
 	$("#jack_tag").autocomplete({
-		source: availableTags,
+		source: "/tag_suggestion/",
 		search: searchForTag
 	});
 });
 
 function searchForTag(event, ui){
-	colsole.log("lmao");
 }
 
 window.addEventListener("load", function() {
