@@ -19,11 +19,6 @@ var hours = 0;
 var days = 0;
 
 $(function() {
-	var availableTags = [
-		"test1",
-		"test2",
-		"test3",
-		];
 	$("#jack_tag").autocomplete({
 		source: "/tag_suggestion/",
 		search: searchForTag
