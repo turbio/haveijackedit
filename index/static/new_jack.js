@@ -18,21 +18,33 @@ var minutes = 0;
 var hours = 0;
 var days = 0;
 
-$(function() {
-	$("#jack_tag").autocomplete({
-		source: "/tag_suggestion/",
-		search: searchForTag
-	});
-});
-
-function searchForTag(event, ui){
+function addNewTag(object, text){
+	text = text.replace(/^\s+|\s+$/g, '');
+	$("<div class=\"inserted_tag\">" + text + "</div>").insertBefore(object);
 }
 
-window.addEventListener("load", function() {
-	document.getElementById("jack_add_picture").style.display = "none";
-	document.getElementById("jack_add_link").style.display = "none";
-	document.getElementById("jack_add_bro").style.display = "none";
-	document.getElementById("jack_add_tag").style.display = "none";
+function checkForTagChange(){
+	split_tags = this.value.split(",");
+
+	if(split_tags.length > 1){
+		this.value = split_tags[split_tags.length - 1]
+		for(i = 0; i < split_tags.length - 1; i++){
+			addNewTag(this, split_tags[i])
+		}
+	}
+}
+
+$(document).ready(function(){
+	//$("#jack_tag").replaceWith('<input id="jack_tag" name="jack_tag" type="text" value=""/>');
+	$("#jack_add_picture").hide()
+	$("#jack_add_link").hide()
+	$("#jack_add_bro").hide()
+	$("#jack_add_tag").hide()
+
+	$("#jack_tag").autocomplete({
+		source: "/tag_suggestion/",
+		delay: 100
+	}).bind("change paste keyup", checkForTagChange);
 });
 
 function addtime(){

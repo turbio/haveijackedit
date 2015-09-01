@@ -53,8 +53,8 @@ def tag_suggestion(request):
 
 	#could use more personal data, this will work for now
 	suggestedTags = Tag.objects \
-		.filter(text__icontains=request.GET['term']) \
-		.values_list('text', flat=True)
+		.filter(text__icontains=request.GET.get('term')) \
+        .values_list('text', flat=True)[0:3]
 
 	suggestedTagsJson = json.dumps(list(suggestedTags))
 

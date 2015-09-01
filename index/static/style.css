@@ -1066,6 +1066,7 @@ input[type="checkbox"]:checked + label{
 	border-style: solid !important;
 	border-width: 3px !important;
 	border-color: #888 !important;
+	background-color: #fff;
 }
 
 .ui-state-focus{
@@ -1076,4 +1077,18 @@ input[type="checkbox"]:checked + label{
 
 .ui-menu-item{
 	transition: all .2s;
+}
+
+.div_text_input{
+	font-size: 0.5em;
+	background: white;
+	border: solid;
+	border-color: #888;
+	outline: 0;
+	text-align: left;
+	/*height: 2em;*/
+}
+
+.inserted_tag{
+	float: left;
 }
