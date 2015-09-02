@@ -1116,7 +1116,7 @@ input[type="checkbox"]:checked + label{
 }
 
 .hidden_input_field{
-	background: red;
+	background: none;
 	border: none;
 	float: left;
 	/*width: 100%;*/

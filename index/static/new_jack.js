@@ -33,6 +33,10 @@ function checkForTagChange(){
 			addNewTag(this, split_tags[i])
 		}
 	}
+
+	if(this.value.length > 32){
+		this.value = this.value.substring(0, 32);
+	}
 }
 
 $(document).ready(function(){
