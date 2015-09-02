@@ -55,10 +55,16 @@ function checkForTagChange(event){
 $(document).ready(function(){
 	$("#jack_tag").replaceWith(
 		'<input class="hidden_input_field" id="jack_tag" name="jack_tag" type="hidden" value=""/><div class="fake_input_field"><input class="hidden_input_field" id="jack_tag_input" type="text" value="" placeholder="vore, vore, vore"/></div>');
+	$("#jack_bro").replaceWith(
+		'<input class="hidden_input_field" id="jack_bro" name="jack_bro" type="hidden" value=""/><div class="fake_input_field"><input class="hidden_input_field" id="jack_bro_input" type="text" value="" placeholder="user, user, user"/></div>');
 	$("#jack_add_picture").hide()
 	$("#jack_add_link").hide()
 	$("#jack_add_bro").hide()
 	$("#jack_add_tag").hide()
+
+	$(".fake_input_field").bind("click", function(){
+		$(this).find(".hidden_input_field").select();
+	});
 
 	$("#jack_tag_input").autocomplete({
 		source: "/tag_suggestion/",
@@ -76,8 +82,20 @@ $(document).ready(function(){
 		inputElement: $("#jack_tag")
 	});
 
-	$(".fake_input_field").bind("click", function(){
-		$(".fake_input_field > .hidden_input_field").select();
+	$("#jack_bro_input").autocomplete({
+		source: "/bro_suggestion/",
+		select: function(event, ui){
+			addNewTag(this, ui.item.value);
+			this.value = "";
+			return false;
+		},
+		delay: 100
+	})
+	.bind("change paste keyup", checkForTagChange)
+	.autoGrowInput({minWidth:30,comfortZone:30})
+	.data({
+		currentTags: [],
+		inputElement: $("#jack_bro")
 	});
 });
 

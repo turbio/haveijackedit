@@ -54,7 +54,7 @@ def tag_suggestion(request):
 	#could use more personal data, this will work for now
 	suggestedTags = Tag.objects \
 		.filter(text__icontains=request.GET.get('term')) \
-        .values_list('text', flat=True)[0:3]
+		.values_list('text', flat=True)[0:5]
 
 	suggestedTagsJson = json.dumps(list(suggestedTags))
 
@@ -62,11 +62,13 @@ def tag_suggestion(request):
 
 def bro_suggestion(request):
 
-	broSuggestions = [
-		'filler'
-	]
+	suggestedBros = User.objects \
+		.filter(name__icontains=request.GET.get('term')) \
+		.values_list('name', flat=True)[0:5]
 
-	return HttpResponse(json.dumps(broSuggestions))
+	suggestedTagsJson = json.dumps(list(suggestedBros))
+
+	return HttpResponse(suggestedTagsJson)
 
 def standalone_jack(request):
 	#the id should be whatever is directly after /jack/
@@ -466,7 +468,11 @@ def submit_jack(request):
 		broStrings = [s.strip(' ') for s in broStrings]
 
 		for broString in broStrings:
-			newJack.bros.add(User.objects.get(name__iexact=broString))
+			try:
+				newJack.bros.add(User.objects.get(name__iexact=broString))
+			except:
+				#hopefully you only end up here if the user doesn't exist
+				pass
 
 	if 'jack_tag' in request.POST and not request.POST['jack_tag'] == '':
 		tagStrings = request.POST['jack_tag'].split(",")
