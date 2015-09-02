@@ -24,6 +24,7 @@ function addNewTag(object, text){
 }
 
 function checkForTagChange(){
+	$(this).attr('size', $(this).val().length);
 	split_tags = this.value.split(",");
 
 	if(split_tags.length > 1){
@@ -35,16 +36,28 @@ function checkForTagChange(){
 }
 
 $(document).ready(function(){
-	//$("#jack_tag").replaceWith('<input id="jack_tag" name="jack_tag" type="text" value=""/>');
+	$("#jack_tag").replaceWith(
+		'<input id="jack_tag" name="jack_tag" type="hidden" value=""/><div class="fake_input_field"><input class="hidden_input_field" id="jack_tag_input" type="text" value=""/></div>');
 	$("#jack_add_picture").hide()
 	$("#jack_add_link").hide()
 	$("#jack_add_bro").hide()
 	$("#jack_add_tag").hide()
 
-	$("#jack_tag").autocomplete({
+	$("#jack_tag_input").autocomplete({
 		source: "/tag_suggestion/",
+		select: function(event, ui){
+			addNewTag(this, ui.item.value);
+			this.value = "";
+			return false;
+		},
 		delay: 100
-	}).bind("change paste keyup", checkForTagChange);
+	}).
+	bind("change paste keyup", checkForTagChange)
+	.autoGrowInput({minWidth:30,comfortZone:30});
+
+	$(".fake_input_field").bind("click", function(){
+		$(".fake_input_field > .hidden_input_field").select();
+	});
 });
 
 function addtime(){

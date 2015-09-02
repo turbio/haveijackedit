@@ -1091,4 +1091,33 @@ input[type="checkbox"]:checked + label{
 
 .inserted_tag{
 	float: left;
+	font-size: .5em;
+
+	margin-right: .125em;
+	margin-left: .125em;
+	margin-bottom: .125em;
+	margin-top: .125em;
+
+	padding-left: .25em;
+	padding-right: .25em;
+
+	/*border-radius: 0.25em;*/
+	background: #ccc;
+}
+
+/*it looks like a form, but it's not*/
+.fake_input_field{
+	border-style: solid;
+	border-color: #888;
+	border-width: 3px;
+	overflow: hidden;
+	background: white;
+	cursor: text;
+}
+
+.hidden_input_field{
+	background: red;
+	border: none;
+	float: left;
+	/*width: 100%;*/
 }
