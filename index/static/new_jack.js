@@ -26,25 +26,28 @@ function addNewTag(object, text){
 	}
 }
 
-function checkForTagChange(event){
-	this.placeholder = "";
+function checkForTagRemoval(event){
 	if(event.key == "Backspace" && this.value.length == 0 && $(this).data("currentTags").length > 0){
 		$(this).prev('.inserted_tag').remove();
 		$(this).data("currentTags").pop();
-	}else{
-		$(this).attr('size', $(this).val().length);
-		split_tags = this.value.split(",");
+	}
+}
 
-		if(split_tags.length > 1){
-			this.value = split_tags[split_tags.length - 1]
-			for(i = 0; i < split_tags.length - 1; i++){
-				addNewTag(this, split_tags[i])
-			}
-		}
+function checkForTagChange(event){
+	this.placeholder = "";
 
-		if(this.value.length > 32){
-			this.value = this.value.substring(0, 32);
+	$(this).attr('size', $(this).val().length);
+	split_tags = this.value.split(",");
+
+	if(split_tags.length > 1){
+		this.value = split_tags[split_tags.length - 1]
+		for(i = 0; i < split_tags.length - 1; i++){
+			addNewTag(this, split_tags[i])
 		}
+	}
+
+	if(this.value.length > 32){
+		this.value = this.value.substring(0, 32);
 	}
 
 	$(this).data("inputElement")[0].value =
@@ -76,6 +79,7 @@ $(document).ready(function(){
 		delay: 100
 	})
 	.bind("change paste keyup", checkForTagChange)
+	.bind("keydown", checkForTagRemoval)
 	.autoGrowInput({minWidth:30,comfortZone:30})
 	.data({
 		currentTags: [],
@@ -92,6 +96,7 @@ $(document).ready(function(){
 		delay: 100
 	})
 	.bind("change paste keyup", checkForTagChange)
+	.bind("keydown", checkForTagRemoval)
 	.autoGrowInput({minWidth:30,comfortZone:30})
 	.data({
 		currentTags: [],
