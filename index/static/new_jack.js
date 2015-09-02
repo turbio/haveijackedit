@@ -19,29 +19,42 @@ var hours = 0;
 var days = 0;
 
 function addNewTag(object, text){
-	text = text.replace(/^\s+|\s+$/g, '');
-	$("<div class=\"inserted_tag\">" + text + "</div>").insertBefore(object);
+	if(text != ""){
+		text = text.replace(/^\s+|\s+$/g, '');
+		$(object).data("currentTags").push(text);
+		$("<div class=\"inserted_tag\">" + text + "</div>").insertBefore(object);
+	}
 }
 
-function checkForTagChange(){
-	$(this).attr('size', $(this).val().length);
-	split_tags = this.value.split(",");
+function checkForTagChange(event){
+	this.placeholder = "";
+	if(event.key == "Backspace" && this.value.length == 0 && $(this).data("currentTags").length > 0){
+		$(this).prev('.inserted_tag').remove();
+		$(this).data("currentTags").pop();
+	}else{
+		$(this).attr('size', $(this).val().length);
+		split_tags = this.value.split(",");
 
-	if(split_tags.length > 1){
-		this.value = split_tags[split_tags.length - 1]
-		for(i = 0; i < split_tags.length - 1; i++){
-			addNewTag(this, split_tags[i])
+		if(split_tags.length > 1){
+			this.value = split_tags[split_tags.length - 1]
+			for(i = 0; i < split_tags.length - 1; i++){
+				addNewTag(this, split_tags[i])
+			}
+		}
+
+		if(this.value.length > 32){
+			this.value = this.value.substring(0, 32);
 		}
 	}
 
-	if(this.value.length > 32){
-		this.value = this.value.substring(0, 32);
-	}
+	$(this).data("inputElement")[0].value =
+		$(this).data("currentTags").join(",")
+		+ (this.value.length > 0 ? "," + this.value : "");
 }
 
 $(document).ready(function(){
 	$("#jack_tag").replaceWith(
-		'<input id="jack_tag" name="jack_tag" type="hidden" value=""/><div class="fake_input_field"><input class="hidden_input_field" id="jack_tag_input" type="text" value=""/></div>');
+		'<input class="hidden_input_field" id="jack_tag" name="jack_tag" type="hidden" value=""/><div class="fake_input_field"><input class="hidden_input_field" id="jack_tag_input" type="text" value="" placeholder="vore, vore, vore"/></div>');
 	$("#jack_add_picture").hide()
 	$("#jack_add_link").hide()
 	$("#jack_add_bro").hide()
@@ -55,9 +68,13 @@ $(document).ready(function(){
 			return false;
 		},
 		delay: 100
-	}).
-	bind("change paste keyup", checkForTagChange)
-	.autoGrowInput({minWidth:30,comfortZone:30});
+	})
+	.bind("change paste keyup", checkForTagChange)
+	.autoGrowInput({minWidth:30,comfortZone:30})
+	.data({
+		currentTags: [],
+		inputElement: $("#jack_tag")
+	});
 
 	$(".fake_input_field").bind("click", function(){
 		$(".fake_input_field > .hidden_input_field").select();
