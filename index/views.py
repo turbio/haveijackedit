@@ -35,19 +35,25 @@ def index(request):
 		'jack_list': jacks
 	}
 
-	return render(request, 'index/index.html', context)
+	return render(request, 'index.html', context)
+
+def about(request):
+	context = {
+
+	}
+	return render(request, 'about.html', context)
 
 def stats(request):
 	context = {
 
 	}
-	return render(request, 'index/stats.html', context)
+	return render(request, 'stats.html', context)
 
 def community(request):
 	context = {
 
 	}
-	return render(request, 'index/community.html', context)
+	return render(request, 'community.html', context)
 
 def tag_suggestion(request):
 
@@ -94,7 +100,7 @@ def standalone_jack(request):
 		'standalone': True
 	}
 
-	return render(request, 'index/standalone_jack.html', context)
+	return render(request, 'standalone_jack.html', context)
 
 def modifyjack(request):
 	jackObject = Jack.objects.filter(id = request.POST['jack_id']) \
@@ -205,7 +211,7 @@ def settings(request):
 		'options': user_options
 	}
 
-	return render(request, 'index/settings.html', context)
+	return render(request, 'settings.html', context)
 
 def submit_settings(request):
 	if request.method != 'POST':
@@ -295,6 +301,7 @@ def signup(request):
 	if request.method == 'POST':
 		username = str(request.POST.get('username', ''))
 		password = str(request.POST.get('password', ''))
+		private = str(request.POST.get('private', ''))
 
 		try:
 			captchaClientResponse = str(request.POST.get('g-recaptcha-response', ''))
@@ -308,7 +315,7 @@ def signup(request):
 
 			verifyCaptcha(captchaClientResponse, ip)
 
-			createUser(username, password)
+			createUser(username, password, private == 'on')
 			signin(request)
 			return HttpResponseRedirect('/dash')
 		except Exception as e:
@@ -352,7 +359,7 @@ def feed(request):
 		'is_private': isPrivate,
 	}
 
-	return render(request, 'index/feed.html', context)
+	return render(request, 'feed.html', context)
 
 def dash(request):
 	#dash is basically useless if you're not logged in, so instead of throwing
@@ -368,7 +375,7 @@ def dash(request):
 			perspective=request.session['user_id']),
 	}
 
-	return render(request, 'index/dash.html', context)
+	return render(request, 'dash.html', context)
 
 #if multiple parts of the application need the user's ip object, this prevents
 #multiple database querys
@@ -499,7 +506,7 @@ def userExists(username):
 	return False if User.objects.filter(name__iexact = username).count() == 0 else True
 
 #creates user or raises exception detailing what went wrong
-def createUser(username, password):
+def createUser(username, password, isPrivate=False):
 	if username == '':
 		raise Exception('must supply a username')
 	if not username.isalnum():
@@ -511,6 +518,7 @@ def createUser(username, password):
 	hashed_password = hashPassword(password, hash_salt)
 
 	newUserSettings = UserSettings()
+	newUserSettings.private = isPrivate
 	newUserSettings.save()
 
 	newUser = User(

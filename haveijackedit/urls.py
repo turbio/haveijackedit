@@ -35,5 +35,6 @@ urlpatterns = [
 	url(r'^jack/', views.standalone_jack),
 	url(r'^tag_suggestion/$', views.tag_suggestion),
 	url(r'^bro_suggestion/$', views.bro_suggestion),
+	url(r'^about/$', views.about),
 	url(r'^$', views.index),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
