@@ -70,6 +70,10 @@ def bro_suggestion(request):
 
 	return HttpResponse(suggestedTagsJson)
 
+def api(request):
+	json.dumps()
+	return HttpResponse(jsonResponse)
+
 def standalone_jack(request):
 	#the id should be whatever is directly after /jack/
 	jackUrlId = request.META['PATH_INFO'].split('/')[2:][0]
@@ -468,11 +472,7 @@ def submit_jack(request):
 		broStrings = [s.strip(' ') for s in broStrings]
 
 		for broString in broStrings:
-			try:
-				newJack.bros.add(User.objects.get(name__iexact=broString))
-			except:
-				#hopefully you only end up here if the user doesn't exist
-				pass
+			newJack.bros.add(User.objects.get(name__iexact=broString))
 
 	if 'jack_tag' in request.POST and not request.POST['jack_tag'] == '':
 		tagStrings = request.POST['jack_tag'].split(",")
