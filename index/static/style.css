@@ -1121,3 +1121,12 @@ input[type="checkbox"]:checked + label{
 	float: left;
 	/*width: 100%;*/
 }
+
+#index_about_blurb{
+	display: none;
+	font-size: .5em;
+	text-align: center;
+	max-width: 20em;
+	margin-left: auto;
+	margin-right: auto;
+}

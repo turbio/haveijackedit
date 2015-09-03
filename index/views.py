@@ -37,6 +37,12 @@ def index(request):
 
 	return render(request, 'index/index.html', context)
 
+def about(request):
+	context = {
+
+	}
+	return render(request, 'index/about.html', context)
+
 def stats(request):
 	context = {
 
@@ -291,6 +297,7 @@ def signup(request):
 	if request.method == 'POST':
 		username = str(request.POST.get('username', ''))
 		password = str(request.POST.get('password', ''))
+		private = str(request.POST.get('private', ''))
 
 		try:
 			captchaClientResponse = str(request.POST.get('g-recaptcha-response', ''))
@@ -304,7 +311,7 @@ def signup(request):
 
 			verifyCaptcha(captchaClientResponse, ip)
 
-			createUser(username, password)
+			createUser(username, password, private == 'on')
 			signin(request)
 			return HttpResponseRedirect('/dash')
 		except Exception as e:
@@ -499,7 +506,7 @@ def userExists(username):
 	return False if User.objects.filter(name__iexact = username).count() == 0 else True
 
 #creates user or raises exception detailing what went wrong
-def createUser(username, password):
+def createUser(username, password, isPrivate=False):
 	if username == '':
 		raise Exception('must supply a username')
 	if not username.isalnum():
@@ -511,6 +518,7 @@ def createUser(username, password):
 	hashed_password = hashPassword(password, hash_salt)
 
 	newUserSettings = UserSettings()
+	newUserSettings.private = isPrivate
 	newUserSettings.save()
 
 	newUser = User(
