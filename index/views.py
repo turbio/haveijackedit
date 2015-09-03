@@ -35,25 +35,25 @@ def index(request):
 		'jack_list': jacks
 	}
 
-	return render(request, 'index/index.html', context)
+	return render(request, 'index.html', context)
 
 def about(request):
 	context = {
 
 	}
-	return render(request, 'index/about.html', context)
+	return render(request, 'about.html', context)
 
 def stats(request):
 	context = {
 
 	}
-	return render(request, 'index/stats.html', context)
+	return render(request, 'stats.html', context)
 
 def community(request):
 	context = {
 
 	}
-	return render(request, 'index/community.html', context)
+	return render(request, 'community.html', context)
 
 def tag_suggestion(request):
 
@@ -96,7 +96,7 @@ def standalone_jack(request):
 		'standalone': True
 	}
 
-	return render(request, 'index/standalone_jack.html', context)
+	return render(request, 'standalone_jack.html', context)
 
 def modifyjack(request):
 	jackObject = Jack.objects.filter(id = request.POST['jack_id']) \
@@ -207,7 +207,7 @@ def settings(request):
 		'options': user_options
 	}
 
-	return render(request, 'index/settings.html', context)
+	return render(request, 'settings.html', context)
 
 def submit_settings(request):
 	if request.method != 'POST':
@@ -355,7 +355,7 @@ def feed(request):
 		'is_private': isPrivate,
 	}
 
-	return render(request, 'index/feed.html', context)
+	return render(request, 'feed.html', context)
 
 def dash(request):
 	#dash is basically useless if you're not logged in, so instead of throwing
@@ -371,7 +371,7 @@ def dash(request):
 			perspective=request.session['user_id']),
 	}
 
-	return render(request, 'index/dash.html', context)
+	return render(request, 'dash.html', context)
 
 #if multiple parts of the application need the user's ip object, this prevents
 #multiple database querys
