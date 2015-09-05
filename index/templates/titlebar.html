@@ -1,5 +1,5 @@
 {% if user %}
-<div id="title_bar">
+<div class="title_bar" id="top_bar">
 	<a href="http://{{ HOST_NAME }}"><div class="titlebar_button" id="home_icon"><i class="material-icons">home</i></div></a>
 
 	{% if user.isJacking %}
@@ -9,7 +9,7 @@
 	<a id="drop_down_link" href="http://{{ HOST_NAME }}/settings"><div class="titlebar_button  btn_right" id="actions_icon">{{ user.name }}<i class="material-icons">person</i></div></a>
 	<a href="http://{{ HOST_NAME }}/dash"><div class="titlebar_button btn_right" id="dash_icon"><i class="material-icons">dashboard</i></div></a>
 	<a href="http://test.{{ HOST_NAME }}"><div class="titlebar_button btn_right" id="dash_icon"><i class="material-icons">view_agenda</i></div></a>
-	<a href="http://{{ HOST_NAME }}/community"><div class="titlebar_button btn_right" id="community_icon"><i class="material-icons">group_work</i></div></a>
+	<a id="community_button"><div class="titlebar_button btn_right" id="community_icon"><i class="material-icons">group_work</i></div></a>
 </div>
 <div id="user_actions">
 	<div class="titlebar_button">score: {{ user.score }}</div>
@@ -17,5 +17,10 @@
 	<div class="titlebar_button btn_action"><a href="http://{{ HOST_NAME }}/settings"><i class="btn_action_icon material-icons">settings</i>settings</a></div>
 	<div class="titlebar_button  btn_action"><a href="http://{{ HOST_NAME }}/signout"><i class="btn_action_icon material-icons">exit_to_app</i>signout</a></div>
 	<div class="titlebar_button  btn_action"><i class="btn_action_icon material-icons">close</i>close</div>
+</div>
+<div class="title_bar" id="community_bar">
+	<div class="titlebar_button"><i class="material-icons">label</i></div>
+	<div class="titlebar_button">more</div>
+	<div class="titlebar_button btn_right">search...</div>
 </div>
 {% endif %}

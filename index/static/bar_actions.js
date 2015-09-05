@@ -1,9 +1,7 @@
-window.addEventListener("load", function() {
-	asignClick()
-});
+var showCommunityBar = false;
 
-function asignClick(){
-	document.getElementById('drop_down_link').onclick = function(e){
+$(document).ready(function(){
+	$("#drop_down_link").bind("click", function(e){
 		if(e){
 			e.stopPropagation();
 		}else{
@@ -11,9 +9,21 @@ function asignClick(){
 		}
 		document.getElementById("user_actions").style.display = "flex";
 		document.getElementById("actions_icon").className = "titlebar_button  btn_right titlebar_button_selected";
-		return false;
-	}
-}
+		e.preventDefault();
+	});
+
+	$("#community_button").bind("click", function(e){
+		if(showCommunityBar){
+			document.getElementById("community_bar").style.position = "absolute";
+			document.getElementById("community_bar").style.top = "-1.5em";
+		}else{
+			document.getElementById("community_bar").style.position = "fixed";
+			document.getElementById("community_bar").style.top = "1.5em";
+		}
+		showCommunityBar = !showCommunityBar;
+		e.preventDefault();
+	});
+});
 
 document.onclick = function(){
 	document.getElementById("user_actions").style.display = "none";

@@ -13,7 +13,7 @@ body{
 	left: 0;
 	right: 0;
 	bottom: 0;
-	top: 0;
+	top: 1.5em;
 	vertical-align: middle;
 }
 
@@ -290,17 +290,31 @@ form{
 	margin: 0.25em;
 }
 
-#title_bar{
+.title_bar{
 	font-size: .5em;
-	position: relative;
+	position: fixed;
 	top: 0;
 	left: 0;
 	right: 0;
 
-	background: #000;
-	color: #fff;
 	height: 1.5em;
 	padding-right: .5em;
+}
+
+#community_bar{
+	position: absolute;
+	z-index: 1;
+	background: #eee;
+	color: #000;
+	top: -1.5em;
+
+	transition: all .2s;
+}
+
+#top_bar{
+	z-index: 2;
+	background: #000;
+	color: #fff;
 }
 
 .titlebar_button:hover{
@@ -327,7 +341,7 @@ form{
 	float: right;
 }
 
-#title_bar a{
+.title_bar a{
 	color: white;
 	/*background: red;*/
 }
@@ -937,7 +951,7 @@ input[type="checkbox"]:checked + label{
 }
 
 #user_actions{
-	position: absolute;
+	position: fixed;
 	right: .5em;
 	font-size: .5em;
 	padding: .5em;
@@ -948,6 +962,7 @@ input[type="checkbox"]:checked + label{
 	border-style: solid;
 	border-top: 0;
 	margin-right: -3px; /*to accomodate the border*/
+	top: 1.5em;
 	display: none;
 	flex-wrap: wrap;
 	align-items: stretch;
@@ -957,10 +972,13 @@ input[type="checkbox"]:checked + label{
 
 @media (max-width: 600px){
 	#user_actions{
-		position: relative;
-		width: 100%;
+		position: fixed;
 		border-left: 0;
 		border-right: 0;
+
+		margin-right: 0;
+		right: 0;
+		left: 0;
 	}
 	#currently_jacking{
 		/*display: none;*/
