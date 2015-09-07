@@ -1,7 +1,7 @@
 {% if user %}
 <div class="title_bar" id="top_bar">
 	<a href="http://{{ HOST_NAME }}"><div class="titlebar_button" id="home_icon"><i class="material-icons">home</i></div></a>
-	<div class="titlebar_button"><input id="community_bar_search" type="text" placeholder="search..."/></div>
+	<div class="titlebar_button"><input id="bar_search" type="text" placeholder="search..."/></div>
 	<div id="sort_button" class="titlebar_button"><i class="material-icons">sort</i></div>
 
 	{% if user.isJacking %}
@@ -11,7 +11,7 @@
 	<a id="drop_down_link" href="http://{{ HOST_NAME }}/settings"><div class="titlebar_button  btn_right" id="actions_icon">{{ user.name }}<i class="material-icons">person</i></div></a>
 	<a href="http://{{ HOST_NAME }}/dash"><div class="titlebar_button btn_right" id="dash_icon"><i class="material-icons">dashboard</i></div></a>
 	<a href="http://test.{{ HOST_NAME }}"><div class="titlebar_button btn_right" id="dash_icon"><i class="material-icons">view_agenda</i></div></a>
-	<a href="http://{{ HOST_NAME }}/community"><div class="titlebar_button btn_right" id="dash_icon"><i class="material-icons">view_agenda</i></div></a>
+	<a id="community_button_link" href="http://{{ HOST_NAME }}/community"><div class="titlebar_button btn_right" id="dash_icon"><i class="material-icons">group_work</i></div></a>
 </div>
 <div id="user_actions">
 	<div class="titlebar_button">flair</div>
@@ -23,7 +23,7 @@
 	<div class="titlebar_button  btn_action"><a href="http://{{ HOST_NAME }}/signout"><i class="btn_action_icon material-icons">exit_to_app</i>signout</a></div>
 	<div class="titlebar_button  btn_action"><i class="btn_action_icon material-icons">close</i>close</div>
 </div>
-<div class="title_bar" id="community_bar">
+<div class="title_bar sub_bar" id="sort_bar">
 	<div class="titlebar_button">popular</div>
 	<div class="titlebar_button">new</div>
 	<div class="titlebar_button">top</div>
@@ -33,5 +33,12 @@
 	<!--<div class="titlebar_button"><i class="material-icons">file_download</i></div>-->
 	<!--<div class="titlebar_button"><i class="material-icons">info</i></div>-->
 	<!--<div class="titlebar_button"><i class="material-icons">code</i></div>-->
+</div>
+<div class="title_bar sub_bar" id="community_bar">
+	<div class="titlebar_button"><i class="material-icons">label</i></div>
+	<div class="titlebar_button"><i class="material-icons">view_list</i></div>
+	<div class="titlebar_button"><i class="material-icons">file_download</i></div>
+	<div class="titlebar_button"><i class="material-icons">info</i></div>
+	<div class="titlebar_button"><i class="material-icons">code</i></div>
 </div>
 {% endif %}

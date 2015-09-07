@@ -299,16 +299,24 @@ form{
 
 	height: 1.5em;
 	padding-right: .5em;
+	transition: all .2s;
+}
+
+.sub_bar{
+	background: #eee;
+	color: #000;
+	z-index: 1;
+	top: -1.5em;
+	padding: 0;
 }
 
 #community_bar{
-	position: fixed;
-	z-index: 1;
-	background: #eee;
-	color: #000;
-	top: -1.5em;
 
-	transition: all .2s;
+}
+
+#sort_bar{
+	display: flex;
+	justify-content: center;
 }
 
 #top_bar{
@@ -1149,7 +1157,7 @@ input[type="checkbox"]:checked + label{
 	margin-right: auto;
 }
 
-#community_bar_search{
+#bar_search{
 	border: none;
 	font-size: .75em;
 }

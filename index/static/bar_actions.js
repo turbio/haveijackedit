@@ -1,3 +1,4 @@
+var showSortBar = false;
 var showCommunityBar = false;
 
 $(document).ready(function(){
@@ -13,10 +14,24 @@ $(document).ready(function(){
 	});
 
 	$("#sort_button").bind("click", function(e){
+		if(showSortBar){
+			document.getElementById("sort_bar").style.top = "-1.5em";
+		}else{
+			document.getElementById("sort_bar").style.top = "1.5em";
+			document.getElementById("community_bar").style.top = "-1.5em";
+			showCommunityBar = false;
+		}
+		showSortBar = !showSortBar;
+		e.preventDefault();
+	});
+
+	$("#community_button_link").bind("click", function(e){
 		if(showCommunityBar){
 			document.getElementById("community_bar").style.top = "-1.5em";
 		}else{
 			document.getElementById("community_bar").style.top = "1.5em";
+			document.getElementById("sort_bar").style.top = "-1.5em";
+			showSortBar = false;
 		}
 		showCommunityBar = !showCommunityBar;
 		e.preventDefault();
