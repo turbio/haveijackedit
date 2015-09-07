@@ -302,7 +302,7 @@ form{
 }
 
 #community_bar{
-	position: absolute;
+	position: fixed;
 	z-index: 1;
 	background: #eee;
 	color: #000;
@@ -1147,4 +1147,9 @@ input[type="checkbox"]:checked + label{
 	max-width: 20em;
 	margin-left: auto;
 	margin-right: auto;
+}
+
+#community_bar_search{
+	border: none;
+	font-size: .75em;
 }

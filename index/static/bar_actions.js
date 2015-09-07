@@ -12,12 +12,10 @@ $(document).ready(function(){
 		e.preventDefault();
 	});
 
-	$("#community_button").bind("click", function(e){
+	$("#sort_button").bind("click", function(e){
 		if(showCommunityBar){
-			document.getElementById("community_bar").style.position = "absolute";
 			document.getElementById("community_bar").style.top = "-1.5em";
 		}else{
-			document.getElementById("community_bar").style.position = "fixed";
 			document.getElementById("community_bar").style.top = "1.5em";
 		}
 		showCommunityBar = !showCommunityBar;
