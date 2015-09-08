@@ -310,6 +310,10 @@ form{
 	padding: 0;
 }
 
+.sub_bar_visible{
+	top: 1.5em !important;
+}
+
 .sub_bar a{
 	color: #000;
 }
