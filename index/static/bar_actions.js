@@ -16,9 +16,14 @@ $(document).ready(function(){
 	$("#sort_button").bind("click", function(e){
 		if(showSortBar){
 			document.getElementById("sort_bar").style.top = "-1.5em";
+
+			$("#sort_button").removeClass("titlebar_button_selected_secondary");
 		}else{
 			document.getElementById("sort_bar").style.top = "1.5em";
 			document.getElementById("community_bar").style.top = "-1.5em";
+
+			$("#sort_button").addClass("titlebar_button_selected_secondary");
+			$("#community_button_icon").removeClass("titlebar_button_selected_secondary");
 			showCommunityBar = false;
 		}
 		showSortBar = !showSortBar;
@@ -28,9 +33,14 @@ $(document).ready(function(){
 	$("#community_button_link").bind("click", function(e){
 		if(showCommunityBar){
 			document.getElementById("community_bar").style.top = "-1.5em";
+
+			$("#community_button_icon").removeClass("titlebar_button_selected_secondary");
 		}else{
 			document.getElementById("community_bar").style.top = "1.5em";
 			document.getElementById("sort_bar").style.top = "-1.5em";
+
+			$("#community_button_icon").addClass("titlebar_button_selected_secondary");
+			$("#sort_button").removeClass("titlebar_button_selected_secondary");
 			showSortBar = false;
 		}
 		showCommunityBar = !showCommunityBar;

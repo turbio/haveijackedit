@@ -13,7 +13,7 @@
 	{% with user.name|add:"."|add:HOST_NAME as user_feed %}
 		<a href="http://{{ user.name}}.{{ HOST_NAME }}"><div class="titlebar_button btn_right{% if request.get_host == user_feed and request.path == "/"%} titlebar_button_selected{% endif %}" id="dash_icon"><i class="material-icons">view_agenda</i></div></a>
 	{% endwith %}
-	<a id="community_button_link" href="http://{{ HOST_NAME }}/community"><div class="titlebar_button btn_right" id="dash_icon"><i class="material-icons">group_work</i></div></a>
+	<a id="community_button_link" href="http://{{ HOST_NAME }}/community"><div id="community_button_icon" class="titlebar_button btn_right" id="dash_icon"><i class="material-icons">group_work</i></div></a>
 </div>
 <div id="user_actions">
 	<div class="titlebar_button">flair</div>
@@ -26,16 +26,25 @@
 	<div class="titlebar_button  btn_action"><i class="btn_action_icon material-icons">close</i>close</div>
 </div>
 <div class="title_bar sub_bar" id="sort_bar">
-	<div class="titlebar_button">popular</div>
-	<div class="titlebar_button">new</div>
-	<div class="titlebar_button">top</div>
+	{% if request.GET.sort %}
+		<a href="http://{{ request.get_host }}{{ request.path }}?sort=popular"><div class="titlebar_button{% if request.GET.sort == "popular" %} titlebar_button_selected{% endif %}">popular</div></a>
+		<a href="http://{{ request.get_host }}{{ request.path }}?sort=new"><div class="titlebar_button{% if request.GET.sort == "new" %} titlebar_button_selected{% endif %}">new</div></a>
+		<a href="http://{{ request.get_host }}{{ request.path }}?sort=top"><div class="titlebar_button{% if request.GET.sort == "top" %} titlebar_button_selected{% endif %}">top</div></a>
+	{% else %}
+		{% comment %}
+			ugh
+		{% endcomment %}
+		<a href="http://{{ request.get_host }}{{ request.path }}?sort=popular"><div class="titlebar_button{% if request.session.sort_jacks_by == "popular" or not request.session.sort_jacks_by or not request.GET.sort %} titlebar_button_selected{% endif %}">popular</div></a>
+		<a href="http://{{ request.get_host }}{{ request.path }}?sort=new"><div class="titlebar_button{% if request.session.sort_jacks_by == "new" %} titlebar_button_selected{% endif %}">new</div></a>
+		<a href="http://{{ request.get_host }}{{ request.path }}?sort=top"><div class="titlebar_button{% if request.session.sort_jacks_by == "top" %} titlebar_button_selected{% endif %}">top</div></a>
+	{% endif %}
 </div>
 <div class="title_bar sub_bar" id="community_bar">
 	<a href=""><div class="titlebar_button"><i class="material-icons">label</i></div></a>
 	<a href=""><div class="titlebar_button"><i class="material-icons">view_list</i></div></a>
 
 	<a href=""><div class="titlebar_button btn_right"><i class="material-icons">info</i></div></a>
-	<a href=""><div class="titlebar_button btn_right"><i class="material-icons">file_download</i></div></a>
 	<a href=""><div class="titlebar_button btn_right"><i class="material-icons">code</i></div></a>
+	<a href=""><div class="titlebar_button btn_right"><i class="material-icons">file_download</i></div></a>
 </div>
 {% endif %}

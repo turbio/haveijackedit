@@ -1015,6 +1015,11 @@ input[type="checkbox"]:checked + label{
 	background: white;
 }
 
+.titlebar_button_selected_secondary{
+	color: black;
+	background: #eee;
+}
+
 .btn_action{
 	color: black;
 	justify-content: flex-start;
@@ -1164,5 +1169,8 @@ input[type="checkbox"]:checked + label{
 #bar_search{
 	border: none;
 	font-size: .75em;
-	padding: .25em;
+	height: 1.5em;
+
+	padding-left: .25em;
+	padding-right: .25em;
 }
