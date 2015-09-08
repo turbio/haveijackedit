@@ -310,6 +310,10 @@ form{
 	padding: 0;
 }
 
+.sub_bar a{
+	color: #000;
+}
+
 #community_bar{
 
 }
@@ -349,7 +353,7 @@ form{
 	float: right;
 }
 
-.title_bar a{
+#top_bar a{
 	color: white;
 	/*background: red;*/
 }
@@ -1160,4 +1164,5 @@ input[type="checkbox"]:checked + label{
 #bar_search{
 	border: none;
 	font-size: .75em;
+	padding: .25em;
 }
