@@ -39,21 +39,45 @@ def index(request):
 
 def about(request):
 	context = {
-
+		'is_community_page': True
 	}
 	return render(request, 'about.html', context)
 
 def stats(request):
 	context = {
-
+		'is_community_page': True
 	}
 	return render(request, 'stats.html', context)
 
 def community(request):
 	context = {
-
+		'is_community_page': True
 	}
 	return render(request, 'community.html', context)
+
+def tags(request):
+	context = {
+		'is_community_page': True
+	}
+	return render(request, 'popular_tags.html', context)
+
+def leader_board(request):
+	context = {
+		'is_community_page': True
+	}
+	return render(request, 'leader_board.html', context)
+
+def developer(request):
+	context = {
+		'is_community_page': True
+	}
+	return render(request, 'developer.html', context)
+
+def app_download(request):
+	context = {
+		'is_community_page': True
+	}
+	return render(request, 'app_download.html', context)
 
 def tag_suggestion(request):
 

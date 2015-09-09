@@ -36,5 +36,10 @@ urlpatterns = [
 	url(r'^tag_suggestion/$', views.tag_suggestion),
 	url(r'^bro_suggestion/$', views.bro_suggestion),
 	url(r'^about/$', views.about),
+	url(r'^tags/', views.tags),
+	url(r'^tag/', views.tags),
+	url(r'^leader_board/', views.leader_board),
+	url(r'^dev/$', views.developer),
+	url(r'^app/$', views.app_download),
 	url(r'^$', views.index),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
