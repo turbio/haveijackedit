@@ -5,7 +5,6 @@ def const_settings(request):
 	return {
 		'HOST_NAME': settings.HOST_NAME,
 		'MEDIA_URL': settings.MEDIA_URL,
-		'COMMUNITY_BAR_SHOWN_PAGES': settings.COMMUNITY_BAR_SHOWN_PAGES
 	}
 
 def user_object(request):

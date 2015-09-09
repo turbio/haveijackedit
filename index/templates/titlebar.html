@@ -45,7 +45,7 @@
 {% comment %}
 this is bad and ugly... but it works for now
 {% endcomment %}
-<div class="title_bar sub_bar{% if request.path in COMMUNITY_BAR_SHOWN_PAGES %} sub_bar_visible{% endif %}" id="community_bar">
+<div class="title_bar sub_bar{% if is_community_page %} sub_bar_visible{% endif %}" id="community_bar">
 	<a href="http://{{ HOST_NAME }}/tags"><div class="titlebar_button{% if request.path == "/tags/" %} titlebar_button_selected{% endif %}"><i class="material-icons">label</i></div></a>
 	<a href="http://{{ HOST_NAME }}/leader_board"><div class="titlebar_button{% if request.path == "/leader_board/" %} titlebar_button_selected{% endif %}"><i class="material-icons">view_list</i></div></a>
 
