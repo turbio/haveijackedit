@@ -2,7 +2,10 @@
 <div class="title_bar" id="top_bar">
 	<a href="http://{{ HOST_NAME }}"><div class="titlebar_button{% if request.get_host == HOST_NAME and request.path == "/" %} titlebar_button_selected{% endif %}" id="home_icon"><i class="material-icons">home</i></div></a>
 	<div class="titlebar_button"><input id="bar_search" type="text" placeholder="search..."/></div>
-	<div id="sort_button" class="titlebar_button"><i class="material-icons">sort</i></div>
+
+	{% if request.path == "/dash/" or request.path == "/" %}
+		<div id="sort_button" class="titlebar_button"><i class="material-icons">sort</i></div>
+	{% endif %}
 
 	{% if user.isJacking %}
 		<a href="http://{{ HOST_NAME }}/dash"><div class="titlebar_button" id="currently_jacking"><i class="material-icons">thumb_up</i><div id="currently_jacking_text">currently jacking!</div></div></a>
@@ -39,12 +42,15 @@
 		<a href="http://{{ request.get_host }}{{ request.path }}?sort=top"><div class="titlebar_button{% if request.session.sort_jacks_by == "top" %} titlebar_button_selected{% endif %}">top</div></a>
 	{% endif %}
 </div>
-<div class="title_bar sub_bar" id="community_bar">
-	<a href="http://{{ HOST_NAME }}/tags"><div class="titlebar_button"><i class="material-icons">label</i></div></a>
-	<a href="http://{{ HOST_NAME }}/leader_board"><div class="titlebar_button"><i class="material-icons">view_list</i></div></a>
+{% comment %}
+this is bad and ugly... but it works for now
+{% endcomment %}
+<div class="title_bar sub_bar{% if request.path in COMMUNITY_BAR_SHOWN_PAGES %} sub_bar_visible{% endif %}" id="community_bar">
+	<a href="http://{{ HOST_NAME }}/tags"><div class="titlebar_button{% if request.path == "/tags/" %} titlebar_button_selected{% endif %}"><i class="material-icons">label</i></div></a>
+	<a href="http://{{ HOST_NAME }}/leader_board"><div class="titlebar_button{% if request.path == "/leader_board/" %} titlebar_button_selected{% endif %}"><i class="material-icons">view_list</i></div></a>
 
-	<a href="http://{{ HOST_NAME }}/about"><div class="titlebar_button btn_right"><i class="material-icons">info</i></div></a>
-	<a href="http://{{ HOST_NAME }}/dev"><div class="titlebar_button btn_right"><i class="material-icons">code</i></div></a>
-	<a href="http://{{ HOST_NAME }}/app"><div class="titlebar_button btn_right"><i class="material-icons">file_download</i></div></a>
+	<a href="http://{{ HOST_NAME }}/about"><div class="titlebar_button btn_right{% if request.path == "/about/" %} titlebar_button_selected{% endif %}"><i class="material-icons">info</i></div></a>
+	<a href="http://{{ HOST_NAME }}/dev"><div class="titlebar_button btn_right"{% if request.path == "/dev/" %} titlebar_button_selected{% endif %}><i class="material-icons">code</i></div></a>
+	<a href="http://{{ HOST_NAME }}/app"><div class="titlebar_button btn_right{% if request.path == "/app/" %} titlebar_button_selected{% endif %}"><i class="material-icons">file_download</i></div></a>
 </div>
 {% endif %}

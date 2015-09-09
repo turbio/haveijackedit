@@ -19,6 +19,7 @@ $(document).ready(function(){
 
 		$("#community_bar").removeClass("sub_bar_visible");
 		$("#community_button_icon").removeClass("titlebar_button_selected_secondary");
+
 		e.preventDefault();
 	});
 
