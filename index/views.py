@@ -89,6 +89,11 @@ def app_download(request):
 	}
 	return render(request, 'app_download.html', context)
 
+def promo(request):
+	context = {
+	}
+	return render(request, 'promo.html', context)
+
 def tag_suggestion(request):
 
 	#could use more personal data, this will work for now

@@ -42,5 +42,6 @@ urlpatterns = [
 	url(r'^app/$', views.app_download),
 	url(r'^bros/$', views.bros),
 	url(r'^customize/$', views.customize),
+	url(r'^promo/', views.promo),
 	url(r'^$', views.index),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
