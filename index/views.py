@@ -73,6 +73,16 @@ def developer(request):
 	}
 	return render(request, 'developer.html', context)
 
+def bros(request):
+	context = {
+	}
+	return render(request, 'bros.html', context)
+
+def customize(request):
+	context = {
+	}
+	return render(request, 'customize.html', context)
+
 def app_download(request):
 	context = {
 		'is_community_page': True

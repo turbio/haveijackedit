@@ -41,5 +41,7 @@ urlpatterns = [
 	url(r'^leader_board/', views.leader_board),
 	url(r'^dev/$', views.developer),
 	url(r'^app/$', views.app_download),
+	url(r'^bros/$', views.bros),
+	url(r'^customize/$', views.customize),
 	url(r'^$', views.index),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
