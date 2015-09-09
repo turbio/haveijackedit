@@ -20,7 +20,6 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-	url(r'^admin/', include(admin.site.urls)),
 	url(r'^dash/$', views.dash),
 	url(r'^settings/$', views.settings),
 	url(r'^submit_settings/$', views.submit_settings),
