@@ -93,6 +93,11 @@ def promo(request):
 	}
 	return render(request, 'promo.html', context)
 
+def search(request):
+	context = {
+	}
+	return render(request, 'search.html', context)
+
 def tag_suggestion(request):
 
 	#could use more personal data, this will work for now
