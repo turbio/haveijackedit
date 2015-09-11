@@ -98,6 +98,9 @@ def search(request):
 	}
 	return render(request, 'search.html', context)
 
+def search_suggestion(request):
+	return HttpResponse("temp")
+
 def tag_suggestion(request):
 
 	#could use more personal data, this will work for now
