@@ -15,7 +15,26 @@ $(document).ready(function(){
 
 	$("#bar_search").autocomplete({
 		source: "/search_suggestion/",
-		delay: 200
+		response: function(event, ui){
+			console.log(ui);
+			results = ui['content'];
+			for(i in results){
+				if(ui['content'][i]['type'] == 'tag'){
+					ui['content'][i]['label'] = '<i class="material-icons">label</i> ';
+				}else if(ui['content'][i]['type'] == 'user'){
+					ui['content'][i]['label'] = '<i class="material-icons">person</i> ';
+				}else{
+					ui['content'][i]['label'] = '';
+				}
+
+				ui['content'][i]['label'] += ui['content'][i]['text'];
+
+				ui['content'][i]['value'] =
+					ui['content'][i]['type'] + ":" + ui['content'][i]['text'].replace(' ', '+');
+			}
+		},
+		delay: 300,
+		html: true
 	});
 
 	$("#sort_button").bind("click", function(e){

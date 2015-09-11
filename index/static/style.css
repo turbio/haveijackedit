@@ -1107,6 +1107,10 @@ input[type="checkbox"]:checked + label{
 	border-width: 3px !important;
 	border-color: #888 !important;
 	background-color: #fff;
+
+	top: 1.5em !important;
+	left: 1.5em !important;
+	position: fixed !important;
 }
 
 .ui-state-focus{
