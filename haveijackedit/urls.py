@@ -34,6 +34,7 @@ urlpatterns = [
 	url(r'^jack/', views.standalone_jack),
 	url(r'^tag_suggestion/$', views.tag_suggestion),
 	url(r'^bro_suggestion/$', views.bro_suggestion),
+	url(r'^search_suggestion/$', views.search_suggestion),
 	url(r'^about/$', views.about),
 	url(r'^tags/', views.tags),
 	url(r'^tag/', views.tags),

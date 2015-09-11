@@ -1101,6 +1101,7 @@ input[type="checkbox"]:checked + label{
 
 .ui-autocomplete{
 	/*sorry... don't want to deal with jquery*/
+	border-top-style: none !important;
 	font-size: .5em !important;
 	border-style: solid !important;
 	border-width: 3px !important;

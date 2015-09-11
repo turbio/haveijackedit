@@ -99,7 +99,15 @@ def search(request):
 	return render(request, 'search.html', context)
 
 def search_suggestion(request):
-	return HttpResponse("temp")
+
+	#could use more personal data, this will work for now
+	suggestedTags = Tag.objects \
+		.filter(text__icontains=request.GET.get('term')) \
+		.values_list('text', flat=True)[0:5]
+
+	suggestedTagsJson = json.dumps(list(suggestedTags))
+
+	return HttpResponse(suggestedTagsJson)
 
 def tag_suggestion(request):
 

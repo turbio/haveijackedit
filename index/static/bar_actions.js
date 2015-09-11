@@ -13,6 +13,11 @@ $(document).ready(function(){
 		e.preventDefault();
 	});
 
+	$("#bar_search").autocomplete({
+		source: "/search_suggestion/",
+		delay: 200
+	});
+
 	$("#sort_button").bind("click", function(e){
 		$("#sort_bar").toggleClass("sub_bar_visible");
 		$("#sort_button").toggleClass("titlebar_button_selected_secondary");
