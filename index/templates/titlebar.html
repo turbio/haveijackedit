@@ -1,7 +1,9 @@
 {% if user %}
 <div class="title_bar" id="top_bar">
 	<a href="http://{{ HOST_NAME }}"><div class="titlebar_button{% if request.get_host == HOST_NAME and request.path == "/" %} titlebar_button_selected{% endif %}" id="home_icon"><i class="material-icons">home</i></div></a>
-	<div class="titlebar_button"><input id="bar_search" type="text" placeholder="search..."/></div>
+	<form method="GET" action="/search">
+		<div class="titlebar_button"><input name="term" id="bar_search" type="text" placeholder="search..."/></div>
+	</form>
 
 	{% if request.path == "/dash/" or request.path == "/" %}
 		<div id="sort_button" class="titlebar_button"><i class="material-icons">sort</i></div>
