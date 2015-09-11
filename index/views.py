@@ -114,14 +114,11 @@ def search_suggestion(request):
 	suggestedUsers = [{'type': 'user', 'text': user} for user in suggestedUsers]
 
 	fullList = suggestedTags + suggestedUsers
-	#fullList = sorted(fullList, key=lambda item: item['text'])
+	fullList = sorted(fullList, key=lambda item: item['text'].lower())
 
 	suggestedTagsJson = json.dumps(fullList)
 
 	return HttpResponse(suggestedTagsJson)
-
-def test(a):
-	return list(a.values())[0]
 
 def tag_suggestion(request):
 
