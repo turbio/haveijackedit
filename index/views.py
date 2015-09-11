@@ -100,14 +100,28 @@ def search(request):
 
 def search_suggestion(request):
 
-	#could use more personal data, this will work for now
+	#i'm fully aware of how inefficient this is but... i don't like orm nor do i
+	#want to break out into full on sql
 	suggestedTags = Tag.objects \
 		.filter(text__icontains=request.GET.get('term')) \
 		.values_list('text', flat=True)[0:5]
 
-	suggestedTagsJson = json.dumps(list(suggestedTags))
+	suggestedUsers = User.objects \
+		.filter(name__icontains=request.GET.get('term')) \
+		.values_list('name', flat=True)[0:5]
+
+	suggestedTags = [{'tag': tag} for tag in suggestedTags]
+	suggestedUsers = [{'user': user} for user in suggestedUsers]
+
+	fullList = suggestedTags + suggestedUsers
+	#fullList = sorted(fullList, key=test)
+
+	suggestedTagsJson = json.dumps(fullList)
 
 	return HttpResponse(suggestedTagsJson)
+
+def test(a):
+	return list(a.values())[0]
 
 def tag_suggestion(request):
 
