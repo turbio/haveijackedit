@@ -110,11 +110,11 @@ def search_suggestion(request):
 		.filter(name__icontains=request.GET.get('term')) \
 		.values_list('name', flat=True)[0:5]
 
-	suggestedTags = [{'tag': tag} for tag in suggestedTags]
-	suggestedUsers = [{'user': user} for user in suggestedUsers]
+	suggestedTags = [{'type': 'tag', 'text': tag} for tag in suggestedTags]
+	suggestedUsers = [{'type': 'user', 'text': user} for user in suggestedUsers]
 
 	fullList = suggestedTags + suggestedUsers
-	#fullList = sorted(fullList, key=test)
+	#fullList = sorted(fullList, key=lambda item: item['text'])
 
 	suggestedTagsJson = json.dumps(fullList)
 
