@@ -45,7 +45,6 @@ def about(request):
 
 def stats(request):
 	context = {
-		'is_community_page': True
 	}
 	return render(request, 'stats.html', context)
 
