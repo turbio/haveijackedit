@@ -1179,3 +1179,11 @@ input[type="checkbox"]:checked + label{
 	padding-left: .25em;
 	padding-right: .25em;
 }
+
+#bar_search:active{
+	background: #fff;
+}
+
+#bar_search:focus{
+	background: #fff;
+}
