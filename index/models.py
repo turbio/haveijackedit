@@ -164,7 +164,13 @@ ORDER BY %s LIMIT %s"""
 		orderScoreQuery = """score DESC"""
 		homepageQuery = """AND visibility.on_homepage"""
 		singleUserQuery = """AND index_user.id = "%s" """ % user
-		singleJackQuery = """AND index_jack.usersubmitted_ptr_id = "%s" """ % jack_id
+
+		if jack_id is not None:
+			if type(jack_id) is int:
+				specificJackQuery = """AND index_jack.usersubmitted_ptr_id = "%s" """ % jack_id
+			elif type(jack_id) is list:
+				sqlUserArray = str(tuple([int(uid) for uid in jack_id]))
+				specificJackQuery = """AND index_jack.usersubmitted_ptr_id IN "%s" """ % sqlUserArray
 
 		query = baseQuery % (
 				ownerQuery if perspective is not None else "",
@@ -173,7 +179,7 @@ ORDER BY %s LIMIT %s"""
 				perspective if perspective is not None else "",
 				homepageQuery if homepage else "",
 				singleUserQuery if user is not None else "",
-				singleJackQuery if jack_id is not None else "",
+				specificJackQuery if jack_id is not None else "",
 				orderScoreQuery if score else orderDateQuery,
 				limit
 			)
