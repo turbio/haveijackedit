@@ -170,7 +170,7 @@ ORDER BY %s LIMIT %s"""
 				specificJackQuery = """AND index_jack.usersubmitted_ptr_id = "%s" """ % jack_id
 			elif type(jack_id) is list:
 				sqlUserArray = str(tuple([int(uid) for uid in jack_id]))
-				specificJackQuery = """AND index_jack.usersubmitted_ptr_id IN "%s" """ % sqlUserArray
+				specificJackQuery = """AND index_jack.usersubmitted_ptr_id IN %s """ % sqlUserArray
 
 		query = baseQuery % (
 				ownerQuery if perspective is not None else "",
