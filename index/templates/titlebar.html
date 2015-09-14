@@ -2,7 +2,7 @@
 <div class="title_bar" id="top_bar">
 	<a href="http://{{ HOST_NAME }}"><div class="titlebar_button{% if request.get_host == HOST_NAME and request.path == "/" %} titlebar_button_selected{% endif %}" id="home_icon"><i class="material-icons">home</i></div></a>
 	<form method="GET" action="/search">
-		<div class="titlebar_button"><input name="term" id="bar_search" type="text" placeholder="search..."/></div>
+		<div class="titlebar_button"><input name="term" id="bar_search" type="text" placeholder="search..." {% if search_query %}value="{{ search_query }}"{% endif %}/></div>
 	</form>
 
 	{% if request.path == "/dash/" or request.path == "/" %}
