@@ -94,13 +94,18 @@ def promo(request):
 	return render(request, 'promo.html', context)
 
 def search(request):
-	searchTerm = request.GET.get('term').split(' ')
+	searchTerm = request.GET.get('term', None)
+
+	if searchTerm is None:
+		searchTerm = ' '.join(request.META['PATH_INFO'].split('/')[2:])
+
+	searchTerms = searchTerm.split(' ')
 
 	searchTags = []
 	searchUsers = []
 	searchWords = []
 
-	for term in searchTerm:
+	for term in searchTerms:
 		term = term.replace('+', ' ')
 		if term.startswith('tag:'):
 			searchTags.append(term.replace('tag:',''))
@@ -139,7 +144,7 @@ def search(request):
 		foundJacks = foundJacks.filter(jackFilterUser)
 
 	context = {
-		'search_query': request.GET.get('term'),
+		'search_query': searchTerm,
 		'search_tags': searchTags,
 		'search_users': searchUsers,
 		'search_words': ' '.join(searchWords)
