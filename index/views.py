@@ -98,6 +98,7 @@ def search(request):
 
 	context = {
 		'is_searchable': True,
+		'is_search_page': True,
 		'is_sortable': True
 	}
 
