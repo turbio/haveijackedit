@@ -96,11 +96,16 @@ def promo(request):
 def search(request):
 	searchTerm = request.GET.get('term', None)
 
+	context = {
+		'is_searchable': True,
+		'is_sortable': True
+	}
+
 	if searchTerm is None:
 		searchTerm = ' '.join(request.META['PATH_INFO'].split('/')[2:])
 
 	if searchTerm == '':
-		context = { 'empty_search_query': True }
+		context['empty_search_query'] = True
 		return render(request, 'search.html', context)
 
 	searchTerms = searchTerm.split(' ')
@@ -147,12 +152,10 @@ def search(request):
 	if jackFilterUser is not None:
 		foundJacks = foundJacks.filter(jackFilterUser)
 
-	context = {
-		'search_query': searchTerm,
-		'search_tags': searchTags,
-		'search_users': searchUsers,
-		'search_words': ' '.join(searchWords)
-	}
+	context['search_query'] = searchTerm,
+	context['search_tags'] = searchTags,
+	context['search_users'] = searchUsers,
+	context['search_words'] = ' '.join(searchWords)
 
 	if foundJacks.count() <= 0:
 		return render(request, 'search.html', context)
