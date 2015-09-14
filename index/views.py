@@ -32,7 +32,10 @@ def index(request):
 		perspective_ip=False if 'user_id' in request.session else True)
 
 	context = {
-		'jack_list': jacks
+		'jack_list': jacks,
+		'is_searchable': True,
+		'is_sortable': True
+
 	}
 
 	return render(request, 'index.html', context)
@@ -494,6 +497,8 @@ def feed(request):
 		'title_text_a': jacked_message,
 		'is_user': isUser,
 		'is_private': isPrivate,
+		'is_searchable': True,
+		'is_sortable': True
 	}
 
 	return render(request, 'feed.html', context)
@@ -510,6 +515,8 @@ def dash(request):
 		'jack_list': Jack.objects.with_details(
 			user=request.session['user_id'],
 			perspective=request.session['user_id']),
+		'is_searchable': True,
+		'is_sortable': True
 	}
 
 	return render(request, 'dash.html', context)
