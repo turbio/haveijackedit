@@ -126,6 +126,9 @@ def search(request):
 	if jackFilterWords is not None:
 		foundJacks = foundJacks.filter(jackFilterWords)
 
+	if jackFilterTags is not None:
+		foundJacks = foundJacks.filter(jackFilterTags)
+
 	foundJacks = Jack.objects.with_details(
 		perspective=request.session['user_id'] if 'user_id' in request.session else getIp(request),
 		perspective_ip=False if 'user_id' in request.session else True,
