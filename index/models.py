@@ -169,7 +169,8 @@ ORDER BY %s LIMIT %s"""
 			if type(jack_id) is int:
 				specificJackQuery = """AND index_jack.usersubmitted_ptr_id = "%s" """ % jack_id
 			elif type(jack_id) is list:
-				sqlUserArray = str(tuple([int(uid) for uid in jack_id]))
+				#sqlUserArray = str(tuple([int(uid) for uid in jack_id]))
+				sqlUserArray = '(' + ','.join(str(uid) for uid in jack_id) + ')'
 				specificJackQuery = """AND index_jack.usersubmitted_ptr_id IN %s """ % sqlUserArray
 
 		query = baseQuery % (
