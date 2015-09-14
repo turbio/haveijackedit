@@ -94,8 +94,56 @@ def promo(request):
 	return render(request, 'promo.html', context)
 
 def search(request):
+	searchTerm = request.GET.get('term').split(' ')
+
+	searchTags = []
+	searchUsers = []
+	searchWords = []
+
+	for term in searchTerm:
+		term = term.replace('+', ' ')
+		if term.startswith('tag:'):
+			searchTags.append(term.replace('tag:',''))
+		elif term.startswith('user:'):
+			searchUsers.append(term.replace('user:',''))
+		else:
+			searchWords.append(term)
+
+	foundJacks = Jack.objects
+
+	jackFilterWords = None
+	for word in searchWords:
+		newFilter = Q(comment__icontains=word)
+		jackFilterWords = newFilter if jackFilterWords is None \
+			else jackFilterWords | newFilter
+
+	jackFilterTags = None
+	for tag in searchTags:
+		newFilter = Q(tags__text__icontains=tag)
+		jackFilterTags = newFilter if jackFilterTags is None \
+			else jackFilterTags | newFilter
+
+	if jackFilterWords is not None:
+		foundJacks = foundJacks.filter(jackFilterWords)
+
+	foundJacks = Jack.objects.with_details(
+		perspective=request.session['user_id'] if 'user_id' in request.session else getIp(request),
+		perspective_ip=False if 'user_id' in request.session else True,
+		jack_id=list(foundJacks.values_list('id', flat=True)))
+
+	#if jackFilterTags is not None:
+		#foundJacks = foundJacks.filter(jackFilterTags)
+
+	#for tag in searchTags:
+		#foundJacks.filter(tags__text__icontains=tag)
+
+	#for user in searchUsers:
+		#foundJacks.filter(user__name=user)
+
 	context = {
+		'results': foundJacks
 	}
+
 	return render(request, 'search.html', context)
 
 def search_suggestion(request):
