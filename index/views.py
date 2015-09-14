@@ -115,7 +115,7 @@ def search(request):
 	for word in searchWords:
 		newFilter = Q(comment__icontains=word)
 		jackFilterWords = newFilter if jackFilterWords is None \
-			else jackFilterWords | newFilter
+			else jackFilterWords & newFilter
 
 	jackFilterTags = None
 	for tag in searchTags:
@@ -123,11 +123,20 @@ def search(request):
 		jackFilterTags = newFilter if jackFilterTags is None \
 			else jackFilterTags | newFilter
 
+	jackFilterUser = None
+	for user in searchUsers:
+		newFilter = Q(user__name=user)
+		jackFilterUser = newFilter if jackFilterUser is None \
+			else jackFilterUser | newFilter
+
 	if jackFilterWords is not None:
 		foundJacks = foundJacks.filter(jackFilterWords)
 
 	if jackFilterTags is not None:
 		foundJacks = foundJacks.filter(jackFilterTags)
+
+	if jackFilterUser is not None:
+		foundJacks = foundJacks.filter(jackFilterUser)
 
 	foundJacks = Jack.objects.with_details(
 		perspective=request.session['user_id'] if 'user_id' in request.session else getIp(request),
