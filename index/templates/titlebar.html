@@ -4,7 +4,7 @@
 
 	{% if is_searchable %}
 		<form method="GET" action="/search">
-			<div class="titlebar_button{% if is_search_page%} titlebar_button_selected{% endif %}"><input name="term" id="bar_search" type="text" placeholder="search..." {% if search_query %}value="{{ search_query }}"{% endif %}/></div>
+			<div class="titlebar_button{% if is_search_page %} titlebar_button_selected{% endif %}"><input name="term" id="bar_search" type="text" placeholder="search..." {% if search_query %}value="{{ search_query }}"{% endif %}/></div>
 		</form>
 	{% endif %}
 	{% if is_sortable %}
