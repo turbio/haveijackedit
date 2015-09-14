@@ -152,9 +152,9 @@ def search(request):
 	if jackFilterUser is not None:
 		foundJacks = foundJacks.filter(jackFilterUser)
 
-	context['search_query'] = searchTerm,
-	context['search_tags'] = searchTags,
-	context['search_users'] = searchUsers,
+	context['search_query'] = searchTerm
+	context['search_tags'] = searchTags
+	context['search_users'] = searchUsers
 	context['search_words'] = ' '.join(searchWords)
 
 	if foundJacks.count() <= 0:
