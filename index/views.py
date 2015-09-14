@@ -119,13 +119,13 @@ def search(request):
 
 	jackFilterTags = None
 	for tag in searchTags:
-		newFilter = Q(tags__text__icontains=tag)
+		newFilter = Q(tags__text__iexact=tag)
 		jackFilterTags = newFilter if jackFilterTags is None \
 			else jackFilterTags | newFilter
 
 	jackFilterUser = None
 	for user in searchUsers:
-		newFilter = Q(user__name=user)
+		newFilter = Q(user__name__iexact=user)
 		jackFilterUser = newFilter if jackFilterUser is None \
 			else jackFilterUser | newFilter
 
