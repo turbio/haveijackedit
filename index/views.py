@@ -99,6 +99,10 @@ def search(request):
 	if searchTerm is None:
 		searchTerm = ' '.join(request.META['PATH_INFO'].split('/')[2:])
 
+	if searchTerm == '':
+		context = { 'empty_search_query': True }
+		return render(request, 'search.html', context)
+
 	searchTerms = searchTerm.split(' ')
 
 	searchTags = []

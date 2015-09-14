@@ -10,8 +10,13 @@
 			{% endfor %}
 		{% else %}
 			<div id="no_search_results">
-				<div>no jacks matched your search</div>
-				<i class="material-icons">mood_bad</i></div>
+				{% if empty_search_query %}
+					<div>you should probably search for something...</div>
+				{% else %}
+					<div>no jacks matched your search</div>
+					<i class="material-icons">mood_bad</i>
+				{% endif %}
+			</div>
 		{% endif %}
 	</div>
 {% endblock %}
