@@ -143,15 +143,6 @@ def search(request):
 		perspective_ip=False if 'user_id' in request.session else True,
 		jack_id=list(foundJacks.values_list('id', flat=True)))
 
-	#if jackFilterTags is not None:
-		#foundJacks = foundJacks.filter(jackFilterTags)
-
-	#for tag in searchTags:
-		#foundJacks.filter(tags__text__icontains=tag)
-
-	#for user in searchUsers:
-		#foundJacks.filter(user__name=user)
-
 	context = {
 		'results': foundJacks
 	}
