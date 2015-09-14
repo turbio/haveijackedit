@@ -4,8 +4,14 @@
 {% block content %}
 	<div id="wrapper">
 		{% include "titlebar.html" %}
-		{% for jack in results %}
-			{% include "jack.html" %}
-		{% endfor %}
+		{% if results %}
+			{% for jack in results %}
+				{% include "jack.html" %}
+			{% endfor %}
+		{% else %}
+			<div id="no_search_results">
+				<div>no jacks matched your search</div>
+				<i class="material-icons">mood_bad</i></div>
+		{% endif %}
 	</div>
 {% endblock %}

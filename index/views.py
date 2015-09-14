@@ -138,14 +138,22 @@ def search(request):
 	if jackFilterUser is not None:
 		foundJacks = foundJacks.filter(jackFilterUser)
 
+	context = {
+		'search_query': request.GET.get('term'),
+		'search_tags': searchTags,
+		'search_users': searchUsers,
+		'search_words': ' '.join(searchWords)
+	}
+
+	if foundJacks.count() <= 0:
+		return render(request, 'search.html', context)
+
 	foundJacks = Jack.objects.with_details(
 		perspective=request.session['user_id'] if 'user_id' in request.session else getIp(request),
 		perspective_ip=False if 'user_id' in request.session else True,
 		jack_id=list(foundJacks.values_list('id', flat=True)))
 
-	context = {
-		'results': foundJacks
-	}
+	context['results'] = foundJacks
 
 	return render(request, 'search.html', context)
 

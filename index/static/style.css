@@ -1183,3 +1183,10 @@ input[type="checkbox"]:checked + label{
 	padding-left: .25em;
 	padding-right: .25em;
 }
+
+#no_search_results{
+	font-size: .5em;
+	color: #bbb;
+	text-align: center;
+	padding: 1em;
+}
