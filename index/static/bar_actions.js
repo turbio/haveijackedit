@@ -16,7 +16,6 @@ $(document).ready(function(){
 	$("#bar_search").autocomplete({
 		source: "/search_suggestion/",
 		response: function(event, ui){
-			console.log(ui);
 			results = ui['content'];
 			for(i in results){
 				if(ui['content'][i]['type'] == 'tag'){
