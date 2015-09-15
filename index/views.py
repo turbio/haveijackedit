@@ -525,12 +525,16 @@ def dash(request):
 	context = {
 		'comment_filler': YesWords.objects.random_word('yes'),
 		'filler_user': User.objects.order_by('?')[:3],
-		'jack_list': Jack.objects.with_details(
-			user=request.session['user_id'],
-			perspective=request.session['user_id']),
 		'is_searchable': True,
 		'is_sortable': True
 	}
+
+	jackList = Jack.objects.with_details(
+		sort=jackSortMethod(request, 'new'),
+		user=request.session['user_id'],
+		perspective=request.session['user_id'])
+
+	context['jack_list'] = jackList
 
 	return render(request, 'dash.html', context)
 
