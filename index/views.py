@@ -177,7 +177,8 @@ def search(request):
 
 	foundJacks = Jack.objects.with_details(
 		sort=context['sort_method'],
-		perspective=request.session['user_id'] if 'user_id' in request.session else getIp(request),
+		perspective=request.session['user_id'] if 'user_id' in request.session \
+				else getIp(request),
 		perspective_ip=False if 'user_id' in request.session else True,
 		jack_id=list(foundJacks.values_list('id', flat=True)))
 
@@ -238,7 +239,8 @@ def standalone_jack(request):
 	jackId = int(jackUrlId)
 
 	jackObject = Jack.objects.with_details(
-		perspective=request.session['user_id'] if 'user_id' in request.session else getIp(request),
+		perspective=request.session['user_id'] if 'user_id' in request.session \
+				else getIp(request),
 		perspective_ip=False if 'user_id' in request.session else True,
 		jack_id=jackId)
 
@@ -437,7 +439,8 @@ def verifyCaptcha(captcha_response, userIp):
 	encodedPostData = urllib.parse.urlencode(captchaData).encode('utf-8')
 
 	captchaRequest = urllib.request.Request(djangosettings.CAPTCHA_URL)
-	captchaRequest.add_header("Content-Type","application/x-www-form-urlencoded;charset=utf-8")
+	captchaRequest.add_header(
+			"Content-Type","application/x-www-form-urlencoded;charset=utf-8")
 
 	captchaResponse = ''
 	with urllib.request.urlopen(captchaRequest, encodedPostData) as f:
@@ -456,7 +459,8 @@ def signup(request):
 		private = str(request.POST.get('private', ''))
 
 		try:
-			captchaClientResponse = str(request.POST.get('g-recaptcha-response', ''))
+			captchaClientResponse = str(request.POST.get(
+				'g-recaptcha-response', ''))
 
 			#get the users ip
 			x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -627,7 +631,8 @@ def submit_jack(request):
 		newImage.save()
 		newJack.image = newImage
 
-	if 'jack_link_url' in request.POST and not request.POST['jack_link_url'] == '':
+	if 'jack_link_url' in request.POST \
+			and not request.POST['jack_link_url'] == '':
 		validUrl = validateUrl(request.POST['jack_link_url'])
 		if(validUrl):
 			newLink = Link(
@@ -667,7 +672,8 @@ def getSubdomain(url):
 
 #returns True if a use with username exists, otherwise returns false
 def userExists(username):
-	return False if User.objects.filter(name__iexact = username).count() == 0 else True
+	return False if User.objects.filter(name__iexact = username).count() == 0 \
+			else True
 
 #creates user or raises exception detailing what went wrong
 def createUser(username, password, isPrivate=False):
