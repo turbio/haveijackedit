@@ -4,6 +4,13 @@
 
 	{% if is_searchable %}
 		<form method="GET" action="/search">
+			{% comment %}
+			baiscally, when you go to the search page from something like the dash
+			it should only show what would be on the dash and sort by how the dash
+			was being sorted
+			{% endcomment %}
+			<input type="hidden" name="source_page" value="{{ search_source_tags }}"/>
+			<input type="hidden" name="source_sort" value="{{ sort_method }}"/>
 			<div class="titlebar_button{% if is_search_page %} titlebar_button_selected{% endif %}"><input name="term" id="bar_search" type="text" placeholder="search..." {% if search_query %}value="{{ search_query }}"{% endif %}/></div>
 		</form>
 	{% endif %}
