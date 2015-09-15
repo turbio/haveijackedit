@@ -112,7 +112,8 @@ def search(request):
 	context = {
 		'is_searchable': True,
 		'is_search_page': True,
-		'is_sortable': True
+		'is_sortable': True,
+		'default_sort': 'popular'
 	}
 
 	if searchTerm is None:
@@ -175,6 +176,7 @@ def search(request):
 		return render(request, 'search.html', context)
 
 	foundJacks = Jack.objects.with_details(
+		sort=jackSortMethod(request, context['default_sort']),
 		perspective=request.session['user_id'] if 'user_id' in request.session else getIp(request),
 		perspective_ip=False if 'user_id' in request.session else True,
 		jack_id=list(foundJacks.values_list('id', flat=True)))
