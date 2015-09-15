@@ -55,9 +55,9 @@ class JackManager(models.Manager):
 	#user: to only show jacks by a single user id or ip address
 	#perspective: show from a particular user id or ip address' perspective
 	#sort: a string determining how to sort jacks, values:
-	#"top": sort by the number of votes recieved
+	#"votes": sort by the number of votes recieved
 	#"score": sort by the score
-	#"new": sort by date
+	#"date": sort by date
 	#limit: number of posts to show
 	#homepage: only show jacks that would normally appear on homepage
 	#perspective_ip: if the perspective is an ip or user id
@@ -169,7 +169,7 @@ ORDER BY %s LIMIT %s"""
 
 		orderQuery = orderDateQuery
 
-		if sort is "top":
+		if sort is "votes":
 			orderQuery = orderTopQuery
 		elif sort is "score":
 			orderQuery = orderScoreQuery

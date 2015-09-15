@@ -20,23 +20,33 @@ from random_words import RandomWords
 from django.core.files.temp import NamedTemporaryFile
 from datetime import datetime, timezone, timedelta
 
+def jackSortMethod(request, default):
+	sortMethods = {
+		'popular': 'score',
+		'top': 'votes',
+		'new': 'date'
+	}
+
+	return sortMethods.get(request.GET.get('sort', default), 'date')
+
 def index(request):
 	subdomain = getSubdomain(request.META['HTTP_HOST'])
 	if subdomain:
 		return feed(request)
 
+	context = {
+		'is_searchable': True,
+		'is_sortable': True,
+		'default_sort': 'popular'
+	}
+
 	jacks = Jack.objects.with_details(
-		score=True,
+		sort=jackSortMethod(request, context['default_sort']),
 		homepage=True,
 		perspective=request.session['user_id'] if 'user_id' in request.session else getIp(request),
 		perspective_ip=False if 'user_id' in request.session else True)
 
-	context = {
-		'jack_list': jacks,
-		'is_searchable': True,
-		'is_sortable': True
-
-	}
+	context['jack_list'] = jacks
 
 	return render(request, 'index.html', context)
 
