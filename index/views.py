@@ -37,11 +37,11 @@ def index(request):
 	context = {
 		'is_searchable': True,
 		'is_sortable': True,
-		'default_sort': 'popular'
+		'sort_method': jackSortMethod(request, 'popular')
 	}
 
 	jacks = Jack.objects.with_details(
-		sort=jackSortMethod(request, context['default_sort']),
+		sort=context['sort_method'],
 		homepage=True,
 		perspective=request.session['user_id'] if 'user_id' in request.session else getIp(request),
 		perspective_ip=False if 'user_id' in request.session else True)
@@ -113,7 +113,7 @@ def search(request):
 		'is_searchable': True,
 		'is_search_page': True,
 		'is_sortable': True,
-		'default_sort': 'popular'
+		'sort_method': jackSortMethod(request, 'popular')
 	}
 
 	if searchTerm is None:
@@ -176,7 +176,7 @@ def search(request):
 		return render(request, 'search.html', context)
 
 	foundJacks = Jack.objects.with_details(
-		sort=jackSortMethod(request, context['default_sort']),
+		sort=context['sort_method'],
 		perspective=request.session['user_id'] if 'user_id' in request.session else getIp(request),
 		perspective_ip=False if 'user_id' in request.session else True,
 		jack_id=list(foundJacks.values_list('id', flat=True)))
@@ -490,12 +490,12 @@ def feed(request):
 	isPrivate = userObject.settings.private
 
 	context = {
-		'default_sort': 'new'
+		'sort_method': jackSortMethod(request, 'new')
 	}
 
 	if not isPrivate:
 		userJackList = Jack.objects.with_details(
-			sort=jackSortMethod(request, context['default_sort']),
+			sort=context['sort_method'],
 			user=userObject.id,
 			perspective=request.session.get('user_id'))
 
@@ -528,11 +528,12 @@ def dash(request):
 		'comment_filler': YesWords.objects.random_word('yes'),
 		'filler_user': User.objects.order_by('?')[:3],
 		'is_searchable': True,
-		'is_sortable': True
+		'is_sortable': True,
+		'sort_method': jackSortMethod(request, 'new')
 	}
 
 	jackList = Jack.objects.with_details(
-		sort=jackSortMethod(request, 'new'),
+		sort=context['sort_method'],
 		user=request.session['user_id'],
 		perspective=request.session['user_id'])
 
