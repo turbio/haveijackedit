@@ -487,8 +487,13 @@ def feed(request):
 
 	isPrivate = userObject.settings.private
 
+	context = {
+		'default_sort': 'new'
+	}
+
 	if not isPrivate:
 		userJackList = Jack.objects.with_details(
+			sort=jackSortMethod(request, context['default_sort']),
 			user=userObject.id,
 			perspective=request.session.get('user_id'))
 
@@ -501,15 +506,13 @@ def feed(request):
 	else:
 		jacked_message = YesWords.objects.random_word('no')
 
-	context = {
-		'jack_list': userJackList,
-		'username': subdomain,
-		'title_text_a': jacked_message,
-		'is_user': isUser,
-		'is_private': isPrivate,
-		'is_searchable': True,
-		'is_sortable': True
-	}
+	context['jack_list'] = userJackList
+	context['username'] = subdomain
+	context['title_text_a'] = jacked_message
+	context['is_user'] = isUser
+	context['is_private'] = isPrivate
+	context['is_searchable'] = not isPrivate
+	context['is_sortable'] = not isPrivate
 
 	return render(request, 'feed.html', context)
 
