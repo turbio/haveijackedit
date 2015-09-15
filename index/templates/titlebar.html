@@ -33,17 +33,19 @@
 	<div class="titlebar_button  btn_action"><i class="btn_action_icon material-icons">close</i>close</div>
 </div>
 <div class="title_bar sub_bar" id="sort_bar">
+	{% comment %}
+		ugh
+	{% endcomment %}
+	{% load add_get_parameter %}
+
 	{% if request.GET.sort %}
-		<a href="http://{{ request.get_host }}{{ request.path }}?sort=popular"><div class="titlebar_button{% if request.GET.sort == "popular" %} titlebar_button_selected{% endif %}">popular</div></a>
-		<a href="http://{{ request.get_host }}{{ request.path }}?sort=new"><div class="titlebar_button{% if request.GET.sort == "new" %} titlebar_button_selected{% endif %}">new</div></a>
-		<a href="http://{{ request.get_host }}{{ request.path }}?sort=top"><div class="titlebar_button{% if request.GET.sort == "top" %} titlebar_button_selected{% endif %}">top</div></a>
+		<a href="http://{{ request.get_host }}{{ request.path }}{% add_get sort='popular' %}"><div class="titlebar_button{% if request.GET.sort == "popular" %} titlebar_button_selected{% endif %}">popular</div></a>
+		<a href="http://{{ request.get_host }}{{ request.path }}{% add_get sort='new' %}"><div class="titlebar_button{% if request.GET.sort == "new" %} titlebar_button_selected{% endif %}">new</div></a>
+		<a href="http://{{ request.get_host }}{{ request.path }}{% add_get sort='top' %}"><div class="titlebar_button{% if request.GET.sort == "top" %} titlebar_button_selected{% endif %}">top</div></a>
 	{% else %}
-		{% comment %}
-			ugh
-		{% endcomment %}
-		<a href="http://{{ request.get_host }}{{ request.path }}?sort=popular"><div class="titlebar_button{% if request.session.sort_jacks_by == "popular" or not request.session.sort_jacks_by or not request.GET.sort %} titlebar_button_selected{% endif %}">popular</div></a>
-		<a href="http://{{ request.get_host }}{{ request.path }}?sort=new"><div class="titlebar_button{% if request.session.sort_jacks_by == "new" %} titlebar_button_selected{% endif %}">new</div></a>
-		<a href="http://{{ request.get_host }}{{ request.path }}?sort=top"><div class="titlebar_button{% if request.session.sort_jacks_by == "top" %} titlebar_button_selected{% endif %}">top</div></a>
+		<a href="http://{{ request.get_host }}{{ request.path }}{% add_get sort='popular' %}"><div class="titlebar_button{% if request.session.sort_jacks_by == "popular" or not request.session.sort_jacks_by or not request.GET.sort %} titlebar_button_selected{% endif %}">popular</div></a>
+		<a href="http://{{ request.get_host }}{{ request.path }}{% add_get sort='new' %}"><div class="titlebar_button{% if request.session.sort_jacks_by == "new" %} titlebar_button_selected{% endif %}">new</div></a>
+		<a href="http://{{ request.get_host }}{{ request.path }}{% add_get sort='top' %}"><div class="titlebar_button{% if request.session.sort_jacks_by == "top" %} titlebar_button_selected{% endif %}">top</div></a>
 	{% endif %}
 </div>
 {% comment %}
