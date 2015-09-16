@@ -24,7 +24,11 @@ def jackSortMethod(request, default):
 	sortMethods = {
 		'popular': 'score',
 		'top': 'votes',
-		'new': 'date'
+		'new': 'date',
+
+		'score': 'score',
+		'votes': 'votes',
+		'date': 'date'
 	}
 
 	return sortMethods.get(request.GET.get('sort', default), 'date')
@@ -486,7 +490,6 @@ def feed(request):
 	hasJacked = False
 	subdomain = getSubdomain(request.META['HTTP_HOST'])
 
-	#try:
 	userObject = User.objects.get(name__iexact = subdomain)
 
 	isUser = True
@@ -513,6 +516,7 @@ def feed(request):
 		jacked_message = YesWords.objects.random_word('no')
 
 	context['jack_list'] = userJackList
+	context['search_source_labels'] = 'user:' + userObject.name
 	context['username'] = subdomain
 	context['title_text_a'] = jacked_message
 	context['is_user'] = isUser
