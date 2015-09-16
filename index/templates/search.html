@@ -19,6 +19,7 @@
 			{% for jack in results %}
 				{% include "jack.html" %}
 			{% endfor %}
+			{% include "pagination_nav.html" %}
 		{% else %}
 			<div id="no_search_results">
 				{% if empty_search_query %}

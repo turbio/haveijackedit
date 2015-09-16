@@ -3,12 +3,12 @@
 	{% if page_prev %}
 		<div class="pagination_link"><a href="http://{{ HOST_NAME }}{{ request.path }}{% add_get page=page_prev %}">previous</a></div>
 	{% else %}
-		<div class="pagination_link">previous</div>
+		<div class="pagination_link pagination_invalid">previous</div>
 	{% endif %}
 	<div class="pagination_link">|</div>
 	{% if page_next %}
 		<div class="pagination_link"><a href="http://{{ HOST_NAME }}{{ request.path }}{% add_get page=page_next %}">next</a></div>
 	{% else %}
-		<div class="pagination_link">next</div>
+		<div class="pagination_link pagination_invalid">next</div>
 	{% endif %}
 </div>
