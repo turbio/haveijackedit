@@ -23,9 +23,10 @@
 				</div>
 			</div>
 		{% if jack_list %}
-		{% for jack in jack_list %}
-			{% include "jack.html" %}
-		{% endfor %}
+			{% for jack in jack_list %}
+				{% include "jack.html" %}
+			{% endfor %}
+			{% include "pagination_nav.html" %}
 		{% else %}
 		{% endif %}
 		</div>

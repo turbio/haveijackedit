@@ -44,11 +44,21 @@ def index(request):
 		'sort_method': jackSortMethod(request, 'popular')
 	}
 
+	pageNumber = request.GET.get('page', 1)
+	try:
+		pageNumber = int(pageNumber)
+	except:
+		pageNumber = 1
+
 	jacks = Jack.objects.with_details(
+		page=pageNumber,
 		sort=context['sort_method'],
 		homepage=True,
 		perspective=request.session['user_id'] if 'user_id' in request.session else getIp(request),
 		perspective_ip=False if 'user_id' in request.session else True)
+
+	context['page_next'] = pageNumber + 1 if  len(list(jacks)) >= djangosettings.JACKS_PER_PAGE else False
+	context['page_prev'] = pageNumber - 1 if pageNumber > 1 else False
 
 	context['jack_list'] = jacks
 
@@ -519,10 +529,20 @@ def feed(request):
 	}
 
 	if not isPrivate:
+		pageNumber = request.GET.get('page', 1)
+		try:
+			pageNumber = int(pageNumber)
+		except:
+			pageNumber = 1
+
 		userJackList = Jack.objects.with_details(
+			page=pageNumber,
 			sort=context['sort_method'],
 			user=userObject.id,
 			perspective=request.session.get('user_id'))
+
+		context['page_next'] = pageNumber + 1 if  len(list(userJackList)) >= djangosettings.JACKS_PER_PAGE else False
+		context['page_prev'] = pageNumber - 1 if pageNumber > 1 else False
 
 		if len(list(userJackList)) > 0:
 			day = timedelta(days=1)
