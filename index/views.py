@@ -127,11 +127,7 @@ def search(request):
 		context['empty_search_query'] = True
 		return render(request, 'search.html', context)
 
-	print(searchTerm)
-	print(searchUrl)
-
 	searchTokens = searchTerm + searchUrl
-	print(searchTokens)
 
 	searchTags = []
 	searchUsers = []
