@@ -54,7 +54,10 @@ class JackManager(models.Manager):
 	#adds a lot of details to jacks
 	#user: to only show jacks by a single user id or ip address
 	#perspective: show from a particular user id or ip address' perspective
-	#score: wether or not to sort the jacks by their score, if False: sorty by date
+	#sort: a string determining how to sort jacks, values:
+	#"votes": sort by the number of votes recieved
+	#"score": sort by the score
+	#"date": sort by date
 	#limit: number of posts to show
 	#homepage: only show jacks that would normally appear on homepage
 	#perspective_ip: if the perspective is an ip or user id
@@ -63,7 +66,7 @@ class JackManager(models.Manager):
 			self,
 			user=None,
 			perspective=None,
-			score=False,
+			sort=False,
 			limit=25,
 			homepage=False,
 			perspective_ip=False,
@@ -162,6 +165,15 @@ ORDER BY %s LIMIT %s"""
 
 		orderDateQuery = """index_jack.date DESC"""
 		orderScoreQuery = """score DESC"""
+		orderTopQuery = """votes DESC"""
+
+		orderQuery = orderDateQuery
+
+		if sort is "votes":
+			orderQuery = orderTopQuery
+		elif sort is "score":
+			orderQuery = orderScoreQuery
+
 		homepageQuery = """AND visibility.on_homepage"""
 		singleUserQuery = """AND index_user.id = "%s" """ % user
 
@@ -176,12 +188,12 @@ ORDER BY %s LIMIT %s"""
 		query = baseQuery % (
 				ownerQuery if perspective is not None else "",
 				voteDirectionQuery if perspective is not None else "",
-				scoreQuery if score else "",
+				scoreQuery,
 				perspective if perspective is not None else "",
 				homepageQuery if homepage else "",
 				singleUserQuery if user is not None else "",
 				specificJackQuery if jack_id is not None else "",
-				orderScoreQuery if score else orderDateQuery,
+				orderQuery,
 				limit
 			)
 
