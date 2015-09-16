@@ -543,17 +543,25 @@ def dash(request):
 	context = {
 		'comment_filler': YesWords.objects.random_word('yes'),
 		'filler_user': User.objects.order_by('?')[:3],
-		'page_next': True,
-		'page_prev': True,
 		'is_searchable': True,
 		'is_sortable': True,
 		'sort_method': jackSortMethod(request, 'new')
 	}
 
+	pageNumber = request.GET.get('page', 1)
+	try:
+		pageNumber = int(pageNumber)
+	except:
+		pageNumber = 0
+
 	jackList = Jack.objects.with_details(
+		page=pageNumber,
 		sort=context['sort_method'],
 		user=request.session['user_id'],
 		perspective=request.session['user_id'])
+
+	context['page_next'] = pageNumber + 1 if  len(list(jackList)) >= djangosettings.JACKS_PER_PAGE else False
+	context['page_prev'] = pageNumber - 1 if pageNumber > 1 else False
 
 	context['jack_list'] = jackList
 

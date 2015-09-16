@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings as djangosettings
 from django.db.models import Sum, Count, F, When, Case, Value, CharField, Q
 from django.db.models.functions import Concat
 from datetime import datetime, timezone
@@ -59,6 +60,7 @@ class JackManager(models.Manager):
 	#"score": sort by the score
 	#"date": sort by date
 	#limit: number of posts to show
+	#page: which page to return, assuming that limit determines the page length
 	#homepage: only show jacks that would normally appear on homepage
 	#perspective_ip: if the perspective is an ip or user id
 	#jack_id: only show this specific jack
@@ -67,7 +69,8 @@ class JackManager(models.Manager):
 			user=None,
 			perspective=None,
 			sort=False,
-			limit=25,
+			limit=djangosettings.JACKS_PER_PAGE,
+			page=1,
 			homepage=False,
 			perspective_ip=False,
 			jack_id=None):
@@ -157,7 +160,7 @@ WHERE
 	AND index_jack.finished %s %s %s
 GROUP BY
 	index_jack.usersubmitted_ptr_id
-ORDER BY %s LIMIT %s"""
+ORDER BY %s LIMIT %s OFFSET %s"""
 
 		ownerQuery = """,CASE WHEN index_user.id = "%s" THEN 1 ELSE 0 END AS isowner""" % perspective
 		voteDirectionQuery = """,(SELECT index_vote.points FROM index_vote INNER JOIN index_usersubmitted ON index_vote.usersubmitted_ptr_id = index_usersubmitted.id LEFT JOIN index_user ON index_usersubmitted.user_id = index_user.id INNER JOIN index_ip ON index_usersubmitted.ip_id = index_ip.id WHERE (index_vote.jack_id = index_jack.usersubmitted_ptr_id) AND %s) AS vote_direction""" % ( ("""(index_ip.address = "%s") AND (index_usersubmitted.user_id IS NULL)""" % perspective) if perspective_ip else ("""(index_usersubmitted.user_id = "%s")""" % perspective))
@@ -194,7 +197,8 @@ ORDER BY %s LIMIT %s"""
 				singleUserQuery if user is not None else "",
 				specificJackQuery if jack_id is not None else "",
 				orderQuery,
-				limit
+				limit,
+				int((page - 1) * limit)
 			)
 
 		return self.raw(query)
