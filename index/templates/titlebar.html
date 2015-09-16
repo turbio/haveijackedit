@@ -3,7 +3,7 @@
 	<a href="http://{{ HOST_NAME }}"><div class="titlebar_button{% if request.get_host == HOST_NAME and request.path == "/" %} titlebar_button_selected{% endif %}" id="home_icon"><i class="material-icons">home</i></div></a>
 
 	{% if is_searchable %}
-		<form method="GET" action="/search/{{ search_source_labels }}">
+	<form method="GET" action="/search{% if search_source_labels %}/{{ search_source_labels }}{% endif %}">
 			{% comment %}
 			baiscally, when you go to the search page from something like the dash
 			it should only show what would be on the dash and sort by how the dash

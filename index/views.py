@@ -111,36 +111,40 @@ def promo(request):
 	return render(request, 'promo.html', context)
 
 def search(request):
-	searchTerm = request.GET.get('term', None)
+	searchTerm = request.GET.get('term', '').split(' ')
+	searchUrl = request.META['PATH_INFO'].split('/')[2:]
 
 	context = {
 		'is_searchable': True,
 		'is_search_page': True,
 		'is_sortable': True,
-		'sort_method': jackSortMethod(request, 'popular')
+		'sort_method': jackSortMethod(request, 'popular'),
+		'search_query': ' '.join(searchTerm),
+		'search_source_labels': '/'.join(searchUrl)
 	}
 
-	if searchTerm is None:
-		searchTerm = ' '.join(request.META['PATH_INFO'].split('/')[2:])
-
-	if searchTerm == '':
+	if searchTerm == [''] and searchUrl == ['']:
 		context['empty_search_query'] = True
 		return render(request, 'search.html', context)
 
-	searchTerms = searchTerm.split(' ')
+	print(searchTerm)
+	print(searchUrl)
+
+	searchTokens = searchTerm + searchUrl
+	print(searchTokens)
 
 	searchTags = []
 	searchUsers = []
 	searchWords = []
 
-	for term in searchTerms:
-		term = term.replace('+', ' ')
-		if term.startswith('tag:'):
-			searchTags.append(term.replace('tag:',''))
-		elif term.startswith('user:'):
-			searchUsers.append(term.replace('user:',''))
+	for token in searchTokens:
+		token = token.replace('+', ' ')
+		if token.startswith('tag:'):
+			searchTags.append(token.replace('tag:',''))
+		elif token.startswith('user:'):
+			searchUsers.append(token.replace('user:',''))
 		else:
-			searchWords.append(term)
+			searchWords.append(token)
 
 	foundJacks = Jack.objects
 
@@ -171,10 +175,9 @@ def search(request):
 	if jackFilterUser is not None:
 		foundJacks = foundJacks.filter(jackFilterUser)
 
-	context['search_query'] = searchTerm
+	
 	context['search_tags'] = searchTags
 	context['search_users'] = searchUsers
-	context['search_words'] = ' '.join(searchWords)
 
 	if foundJacks.count() <= 0:
 		return render(request, 'search.html', context)
