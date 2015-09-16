@@ -1204,7 +1204,8 @@ input[type="checkbox"]:checked + label{
 
 .pagination_link{
 	display: inline-block;
-	margin: .125em;
+	margin-left: 1em;
+	margin-right: 1em;
 }
 
 .pagination_invalid{
