@@ -562,7 +562,7 @@ def dash(request):
 	try:
 		pageNumber = int(pageNumber)
 	except:
-		pageNumber = 0
+		pageNumber = 1
 
 	jackList = Jack.objects.with_details(
 		page=pageNumber,
