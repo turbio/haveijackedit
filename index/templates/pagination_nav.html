@@ -1,12 +1,12 @@
 <div id="pagination_nav">
 	{% load add_get_parameter %}
 	{% if page_prev %}
-		<div class="pagination_link"><a href="http://{{ HOST_NAME }}{{ request.path }}{% add_get page=page_prev %}">previous</a></div>
+		<div class="pagination_link"><a href="http://{{ request.get_host }}{{ request.path }}{% add_get page=page_prev %}">previous</a></div>
 	{% else %}
 		<div class="pagination_link pagination_invalid">previous</div>
 	{% endif %}
 	{% if page_next %}
-		<div class="pagination_link"><a href="http://{{ HOST_NAME }}{{ request.path }}{% add_get page=page_next %}">next</a></div>
+		<div class="pagination_link"><a href="http://{{ request.get_host }}{{ request.path }}{% add_get page=page_next %}">next</a></div>
 	{% else %}
 		<div class="pagination_link pagination_invalid">next</div>
 	{% endif %}
