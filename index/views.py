@@ -171,7 +171,6 @@ def search(request):
 	if jackFilterUser is not None:
 		foundJacks = foundJacks.filter(jackFilterUser)
 
-	
 	context['search_tags'] = searchTags
 	context['search_users'] = searchUsers
 
