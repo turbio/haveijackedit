@@ -510,6 +510,8 @@ def dash(request):
 		'jack_list': Jack.objects.with_details(
 			user=request.session['user_id'],
 			perspective=request.session['user_id']),
+		'page_next': True,
+		'page_prev': True
 	}
 
 	return render(request, 'dash.html', context)

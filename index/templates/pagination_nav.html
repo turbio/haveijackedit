@@ -1,0 +1,13 @@
+<div id="pagination_nav">
+	{% if page_prev %}
+		<div class="pagination_link"><a href="">previous</a></div>
+	{% else %}
+		<div class="pagination_link">previous</div>
+	{% endif %}
+	<div class="pagination_link">|</div>
+	{% if page_next %}
+		<div class="pagination_link"><a href="">next</a></div>
+	{% else %}
+		<div class="pagination_link">next</div>
+	{% endif %}
+</div>

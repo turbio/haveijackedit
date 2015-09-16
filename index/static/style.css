@@ -1195,3 +1195,14 @@ input[type="checkbox"]:checked + label{
 	height: 1.25em;
 	margin-top: .25em;
 }
+
+#pagination_nav{
+	text-align: center;
+	font-size: .5em;
+	margin: 1em;
+}
+
+.pagination_link{
+	display: inline-block;
+	margin: .125em;
+}
