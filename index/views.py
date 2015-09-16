@@ -112,7 +112,7 @@ def promo(request):
 
 def search(request):
 	searchTerm = request.GET.get('term', '').split(' ')
-	searchUrl = request.META['PATH_INFO'].split('/')[2:]
+	urlTerm = request.META['PATH_INFO'].split('/')[2:]
 
 	context = {
 		'is_searchable': True,
@@ -120,27 +120,40 @@ def search(request):
 		'is_sortable': True,
 		'sort_method': jackSortMethod(request, 'popular'),
 		'search_query': ' '.join(searchTerm),
-		'search_source_labels': '/'.join(searchUrl)
+		'search_source_labels': '/'.join(urlTerm),
+		'search_tag_list': [],
+		'search_user_list': []
 	}
 
-	if searchTerm == [''] and searchUrl == ['']:
+	if searchTerm == [''] and urlTerm == ['']:
 		context['empty_search_query'] = True
 		return render(request, 'search.html', context)
-
-	searchTokens = searchTerm + searchUrl
 
 	searchTags = []
 	searchUsers = []
 	searchWords = []
 
-	for token in searchTokens:
-		token = token.replace('+', ' ')
-		if token.startswith('tag:'):
-			searchTags.append(token.replace('tag:',''))
-		elif token.startswith('user:'):
-			searchUsers.append(token.replace('user:',''))
+	for term in urlTerm:
+		term = term.replace('+', ' ')
+		if term.startswith('tag:'):
+			tag = term.replace('tag:','')
+			searchTags.append(tag)
+			context['search_tag_list'].append(tag)
+		elif term.startswith('user:'):
+			user = term.replace('user:','')
+			searchUsers.append(user)
+			context['search_user_list'].append(user)
 		else:
-			searchWords.append(token)
+			searchWords.append(term)
+
+	for term in searchTerm:
+		term = term.replace('+', ' ')
+		if term.startswith('tag:'):
+			searchTags.append(term.replace('tag:',''))
+		elif term.startswith('user:'):
+			searchUsers.append(term.replace('user:',''))
+		else:
+			searchWords.append(term)
 
 	foundJacks = Jack.objects
 
@@ -170,9 +183,6 @@ def search(request):
 
 	if jackFilterUser is not None:
 		foundJacks = foundJacks.filter(jackFilterUser)
-
-	context['search_tags'] = searchTags
-	context['search_users'] = searchUsers
 
 	if foundJacks.count() <= 0:
 		return render(request, 'search.html', context)

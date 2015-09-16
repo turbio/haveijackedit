@@ -4,6 +4,17 @@
 {% block content %}
 	<div id="wrapper">
 		{% include "titlebar.html" %}
+
+		tags:
+		{% for tag in search_tag_list %}
+			{{ tag }}
+		{% endfor %}
+
+		users:
+		{% for user in search_user_list %}
+			{{ user }}
+		{% endfor %}
+
 		{% if results %}
 			{% for jack in results %}
 				{% include "jack.html" %}
