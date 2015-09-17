@@ -575,7 +575,8 @@ def dash(request):
 		'filler_user': User.objects.order_by('?')[:3],
 		'is_searchable': True,
 		'is_sortable': True,
-		'sort_method': jackSortMethod(request, 'new')
+		'sort_method': jackSortMethod(request, 'new'),
+		'search_source_labels': 'user:' + request.session['user_name']
 	}
 
 	pageNumber = request.GET.get('page', 1)

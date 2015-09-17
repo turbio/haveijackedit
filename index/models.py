@@ -104,7 +104,7 @@ SELECT
 	END AS age,
 	(
 		SELECT
-			GROUP_CONCAT(index_tag.text SEPARATOR ', ')
+			GROUP_CONCAT(index_tag.text SEPARATOR ',')
 		FROM
 			index_jack_tags
 		INNER JOIN index_tag ON
@@ -113,7 +113,7 @@ SELECT
 	) AS tag,
 	(
 		SELECT
-			GROUP_CONCAT(index_user.name SEPARATOR ', ')
+			GROUP_CONCAT(index_user.name SEPARATOR ',')
 		FROM
 			index_jack_bros
 		INNER JOIN index_user ON
@@ -201,7 +201,16 @@ ORDER BY %s LIMIT %s OFFSET %s"""
 				int((page - 1) * limit)
 			)
 
-		return self.raw(query)
+		queryResults = list(self.raw(query))
+
+		for i in range(len(queryResults)):
+			if queryResults[i].bro is not None:
+				queryResults[i].bro  = queryResults[i].bro.lstrip(',').split(',')
+
+			if queryResults[i].tag is not None:
+				queryResults[i].tag  = queryResults[i].tag.lstrip(',').split(',')
+
+		return queryResults
 
 class Jack(UserSubmitted):
 	date = models.DateTimeField()

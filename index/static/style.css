@@ -2,6 +2,7 @@ body{
 	padding: 0;
 	margin: 0;
 	font-size: 48px;
+	line-height: 1;
 }
 
 *{
@@ -13,7 +14,7 @@ body{
 	left: 0;
 	right: 0;
 	bottom: 0;
-	top: 1.5em;
+	top: .75em;
 	vertical-align: middle;
 }
 
@@ -726,10 +727,10 @@ form{
 .jack_row{
 	position: relative;
 	margin-top: .125em;
-	/*margin-bottom: .125em;*/
+	margin-bottom: .125em;
 	overflow: hidden;
-	/*display: block;*/
-	/*height: 0em;*/
+	display: block;
+	/* height: 0em; */
 }
 
 .jack_row a{
@@ -760,28 +761,18 @@ form{
 }
 
 .jack_icon{
-	background-color: rgba(255, 255, 255, .5);
-	font-size: .5em;
 	padding: .125em;
 	position: absolute;
 	left: 0;
 	margin: 0;
 	width: 24px;
 	height: 24px;
-}
-
-.jack_link{
 	font-size: .5em;
-	float: left;
-	transition: all 0.2s;
 }
 
-.jack_link a:hover{
-	color: #888;
-}
-
-.jack_link:hover{
-	/*background: black;*/
+.jack_icon_overlayed{
+	background-color: rgba(255, 255, 255, .5);
+	font-size: .5em;
 }
 
 .with_icon{
@@ -875,7 +866,7 @@ input[type="checkbox"]:checked + label{
 
 .vote_button{
 	display: inline-block;
-	/*margin-right: 0.25em;*/
+	/* margin-right: 0.25em; */
 	width: 1em;
 	text-align: center;
 	vertical-align: middle;
@@ -1059,24 +1050,18 @@ input[type="checkbox"]:checked + label{
 	font-family: 'Material Icons';
 	font-weight: normal;
 	font-style: normal;
-	font-size: 24px;  /* Preferred icon size */
+	font-size: 24px;/* Preferred icon size */
 	display: inline-block;
 	width: 1em;
 	height: 1em;
 	line-height: 1;
 	text-transform: none;
 	letter-spacing: normal;
-	word-wrap: normal;
-
-	/* Support for all WebKit browsers. */
-	-webkit-font-smoothing: antialiased;
-	/* Support for Safari and Chrome. */
-	text-rendering: optimizeLegibility;
-
-	/* Support for Firefox. */
-	-moz-osx-font-smoothing: grayscale;
-
-	/* Support for IE. */
+	vertical-align: middle;
+	word-wrap: normal;/* Support for all WebKit browsers. */
+	-webkit-font-smoothing: antialiased;/* Support for Safari and Chrome. */
+	text-rendering: optimizeLegibility;/* Support for Firefox. */
+	-moz-osx-font-smoothing: grayscale;/* Support for IE. */
 	font-feature-settings: 'liga';
 }
 
@@ -1210,4 +1195,32 @@ input[type="checkbox"]:checked + label{
 
 .pagination_invalid{
 	color: #bbb;
+}
+
+.label{
+	background: #bbb;
+	color: #fff;
+	padding: .125em;
+	padding-right: .25em;
+	padding-left: .25em;
+	/* display: inline-block; */
+	float: left;
+}
+
+.label a{
+	color: #fff;
+}
+
+.label a:hover{
+	text-decoration: underline;
+}
+
+.search_label{
+	font-size: .5em;
+	margin-left: .5em;
+}
+
+.jack_label{
+	font-size: .5em;
+	margin: .125em;
 }

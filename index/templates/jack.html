@@ -11,16 +11,16 @@
 				{% endif %}
 				{% if jack.location_lat  %}
 				<div class="{% if not standalone %}jack_image_container {% endif %}jack_row">
-					<div class="jack_icon jack_row"><i class="material-icons">my_location</i></div>
+					<div class="jack_icon jack_icon_overlayed jack_row"><i class="material-icons">my_location</i></div>
 					<img class="jack_image" src="https://maps.googleapis.com/maps/api/staticmap?center={{ jack.location_lat }},{{ jack.location_lng }}&zoom=8&size=600x600&maptype=roadmap&style=element:labels|visibility:on&style=saturation:-100&markers={{ jack.location_lat }},{{ jack.location_lng }}"/>
 				</div>
 				{% endif %}
 				{% if jack.image_file  %}
 					<div class="{% if not standalone %}jack_image_container {% endif %}jack_row">
 						{% if jack.image_source == "f" %}
-							<div class="jack_icon jack_row"><i class="material-icons">photo</i></div>
+							<div class="jack_icon jack_icon_overlayed jack_row"><i class="material-icons">photo</i></div>
 						{% elif jack.image_source == "c" %}
-							<div class="jack_icon jack_row"><i class="material-icons">photo_camera</i></div>
+							<div class="jack_icon jack_icon_overlayed jack_row"><i class="material-icons">photo_camera</i></div>
 						{% endif %}
 						<img class="jack_image" src="/media/{{ jack.image_file }}"/>
 					</div>
@@ -28,25 +28,29 @@
 				{% if jack.url  %}
 					<div class="jack_row with_icon">
 						<div class="jack_icon jack_row"><i class="material-icons">link</i></div>
-						<div class="jack_link jack_row"><a href="{{ jack.url }}">{{ jack.url }}</a></div>
+						<div class="label jack_label "><a href="{{ jack.url }}">{{ jack.url }}</a></div>
 					</div>
 				{% endif %}
 				{% if jack.bro %}
 					<div class="jack_row with_icon">
 						<div class="jack_icon"><i class="material-icons">people</i></div>
-						<div class="jack_bro"><a href="#">{{ jack.bro }}</a></div>
+						{% for b in jack.bro %}
+							<div class="label jack_label"><a href="http://{{ b }}.{{ HOST_NAME }}">{{ b }}</a></div>
+						{% endfor %}
 					</div>
 				{% endif %}
 				{% if jack.tag %}
 					<div class="jack_row with_icon">
 						<div class="jack_icon"><i class="material-icons">label</i></div>
-						<div class="jack_bro"><a href="#">{{ jack.tag }}</a></div>
+						{% for t in jack.tag %}
+							<div class="label jack_label"><a href="http://{{ HOST_NAME }}/tag/{{ t }}">{{ t }}</a></div>
+						{% endfor %}
 					</div>
 				{% endif %}
 				{% if jack.duration %}
 				<div class="jack_row with_icon">
 					<div class="jack_icon"><i class="material-icons">timer</i></div>
-					<div class="jack_bro">
+					<div class="label jack_label">
 						{% comment %}
 						just for now...
 						{% if jack.duration_day > 0 %}
@@ -64,7 +68,6 @@
 							{{ jack.duration_second }} second{{ jack.duration_second|pluralize }}
 						{% endif %}
 						{% endcomment %}
-
 						{% if jack.duration_day > 0 %}
 							{{ jack.duration_day }} day{{ jack.duration_day|pluralize }} {{ jack.duration_hour|stringformat:"02d" }}:{{ jack.duration_minute|stringformat:"02d" }}:{{ jack.duration_second|stringformat:"02d" }}
 						{% elif jack.duration_hour > 0 %}
