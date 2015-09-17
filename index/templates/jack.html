@@ -34,7 +34,9 @@
 				{% if jack.bro %}
 					<div class="jack_row with_icon">
 						<div class="jack_icon"><i class="material-icons">people</i></div>
-						<div class="jack_bro"><a href="#">{{ jack.bro }}</a></div>
+						{% for b in jack.bro %}
+							<div class="jack_bro"><a href="http://{{ b }}.{{ HOST_NAME }}">{{ b }}</a></div>
+						{% endfor %}
 					</div>
 				{% endif %}
 				{% if jack.tag %}
