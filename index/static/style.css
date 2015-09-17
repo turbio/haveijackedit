@@ -1195,3 +1195,6 @@ input[type="checkbox"]:checked + label{
 	height: 1.25em;
 	margin-top: .25em;
 }
+
+.jack_label{
+}
