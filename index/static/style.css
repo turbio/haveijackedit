@@ -767,6 +767,7 @@ form{
 	margin: 0;
 	width: 24px;
 	height: 24px;
+	font-size: .5em;
 }
 
 .jack_icon_overlayed{
@@ -1186,7 +1187,8 @@ input[type="checkbox"]:checked + label{
 	padding: .125em;
 	padding-right: .25em;
 	padding-left: .25em;
-	display: inline-block;
+	/* display: inline-block; */
+	float: left;
 }
 
 .label a{
