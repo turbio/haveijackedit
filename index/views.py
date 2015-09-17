@@ -20,20 +20,37 @@ from random_words import RandomWords
 from django.core.files.temp import NamedTemporaryFile
 from datetime import datetime, timezone, timedelta
 
+def jackSortMethod(request, default):
+	sortMethods = {
+		'popular': 'score',
+		'top': 'votes',
+		'new': 'date',
+
+		'score': 'score',
+		'votes': 'votes',
+		'date': 'date'
+	}
+
+	return sortMethods.get(request.GET.get('sort', default), 'date')
+
 def index(request):
 	subdomain = getSubdomain(request.META['HTTP_HOST'])
 	if subdomain:
 		return feed(request)
 
+	context = {
+		'is_searchable': True,
+		'is_sortable': True,
+		'sort_method': jackSortMethod(request, 'popular')
+	}
+
 	jacks = Jack.objects.with_details(
-		score=True,
+		sort=context['sort_method'],
 		homepage=True,
 		perspective=request.session['user_id'] if 'user_id' in request.session else getIp(request),
 		perspective_ip=False if 'user_id' in request.session else True)
 
-	context = {
-		'jack_list': jacks
-	}
+	context['jack_list'] = jacks
 
 	return render(request, 'index.html', context)
 
@@ -94,28 +111,42 @@ def promo(request):
 	return render(request, 'promo.html', context)
 
 def search(request):
-	searchTerm = request.GET.get('term', None)
+	searchTerm = request.GET.get('term', '').split(' ')
+	urlTerm = request.META['PATH_INFO'].split('/')[2:]
 
 	context = {
 		'is_searchable': True,
 		'is_search_page': True,
-		'is_sortable': True
+		'is_sortable': True,
+		'sort_method': jackSortMethod(request, 'popular'),
+		'search_query': ' '.join(searchTerm),
+		'search_source_labels': '/'.join(urlTerm),
+		'search_tag_list': [],
+		'search_user_list': []
 	}
 
-	if searchTerm is None:
-		searchTerm = ' '.join(request.META['PATH_INFO'].split('/')[2:])
-
-	if searchTerm == '':
+	if searchTerm == [''] and urlTerm == ['']:
 		context['empty_search_query'] = True
 		return render(request, 'search.html', context)
-
-	searchTerms = searchTerm.split(' ')
 
 	searchTags = []
 	searchUsers = []
 	searchWords = []
 
-	for term in searchTerms:
+	for term in urlTerm:
+		term = term.replace('+', ' ')
+		if term.startswith('tag:'):
+			tag = term.replace('tag:','')
+			searchTags.append(tag)
+			context['search_tag_list'].append(tag)
+		elif term.startswith('user:'):
+			user = term.replace('user:','')
+			searchUsers.append(user)
+			context['search_user_list'].append(user)
+		else:
+			searchWords.append(term)
+
+	for term in searchTerm:
 		term = term.replace('+', ' ')
 		if term.startswith('tag:'):
 			searchTags.append(term.replace('tag:',''))
@@ -153,16 +184,13 @@ def search(request):
 	if jackFilterUser is not None:
 		foundJacks = foundJacks.filter(jackFilterUser)
 
-	context['search_query'] = searchTerm
-	context['search_tags'] = searchTags
-	context['search_users'] = searchUsers
-	context['search_words'] = ' '.join(searchWords)
-
 	if foundJacks.count() <= 0:
 		return render(request, 'search.html', context)
 
 	foundJacks = Jack.objects.with_details(
-		perspective=request.session['user_id'] if 'user_id' in request.session else getIp(request),
+		sort=context['sort_method'],
+		perspective=request.session['user_id'] if 'user_id' in request.session \
+				else getIp(request),
 		perspective_ip=False if 'user_id' in request.session else True,
 		jack_id=list(foundJacks.values_list('id', flat=True)))
 
@@ -223,7 +251,8 @@ def standalone_jack(request):
 	jackId = int(jackUrlId)
 
 	jackObject = Jack.objects.with_details(
-		perspective=request.session['user_id'] if 'user_id' in request.session else getIp(request),
+		perspective=request.session['user_id'] if 'user_id' in request.session \
+				else getIp(request),
 		perspective_ip=False if 'user_id' in request.session else True,
 		jack_id=jackId)
 
@@ -422,7 +451,8 @@ def verifyCaptcha(captcha_response, userIp):
 	encodedPostData = urllib.parse.urlencode(captchaData).encode('utf-8')
 
 	captchaRequest = urllib.request.Request(djangosettings.CAPTCHA_URL)
-	captchaRequest.add_header("Content-Type","application/x-www-form-urlencoded;charset=utf-8")
+	captchaRequest.add_header(
+			"Content-Type","application/x-www-form-urlencoded;charset=utf-8")
 
 	captchaResponse = ''
 	with urllib.request.urlopen(captchaRequest, encodedPostData) as f:
@@ -441,7 +471,8 @@ def signup(request):
 		private = str(request.POST.get('private', ''))
 
 		try:
-			captchaClientResponse = str(request.POST.get('g-recaptcha-response', ''))
+			captchaClientResponse = str(request.POST.get(
+				'g-recaptcha-response', ''))
 
 			#get the users ip
 			x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -467,15 +498,19 @@ def feed(request):
 	hasJacked = False
 	subdomain = getSubdomain(request.META['HTTP_HOST'])
 
-	#try:
 	userObject = User.objects.get(name__iexact = subdomain)
 
 	isUser = True
 
 	isPrivate = userObject.settings.private
 
+	context = {
+		'sort_method': jackSortMethod(request, 'new')
+	}
+
 	if not isPrivate:
 		userJackList = Jack.objects.with_details(
+			sort=context['sort_method'],
 			user=userObject.id,
 			perspective=request.session.get('user_id'))
 
@@ -488,13 +523,14 @@ def feed(request):
 	else:
 		jacked_message = YesWords.objects.random_word('no')
 
-	context = {
-		'jack_list': userJackList,
-		'username': subdomain,
-		'title_text_a': jacked_message,
-		'is_user': isUser,
-		'is_private': isPrivate,
-	}
+	context['jack_list'] = userJackList
+	context['search_source_labels'] = 'user:' + userObject.name
+	context['username'] = subdomain
+	context['title_text_a'] = jacked_message
+	context['is_user'] = isUser
+	context['is_private'] = isPrivate
+	context['is_searchable'] = not isPrivate
+	context['is_sortable'] = not isPrivate
 
 	return render(request, 'feed.html', context)
 
@@ -507,10 +543,18 @@ def dash(request):
 	context = {
 		'comment_filler': YesWords.objects.random_word('yes'),
 		'filler_user': User.objects.order_by('?')[:3],
-		'jack_list': Jack.objects.with_details(
-			user=request.session['user_id'],
-			perspective=request.session['user_id']),
+		'is_searchable': True,
+		'is_sortable': True,
+		'sort_method': jackSortMethod(request, 'new'),
+		'search_source_labels': 'user:' + request.session['user_name']
 	}
+
+	jackList = Jack.objects.with_details(
+		sort=context['sort_method'],
+		user=request.session['user_id'],
+		perspective=request.session['user_id'])
+
+	context['jack_list'] = jackList
 
 	return render(request, 'dash.html', context)
 
@@ -600,7 +644,8 @@ def submit_jack(request):
 		newImage.save()
 		newJack.image = newImage
 
-	if 'jack_link_url' in request.POST and not request.POST['jack_link_url'] == '':
+	if 'jack_link_url' in request.POST \
+			and not request.POST['jack_link_url'] == '':
 		validUrl = validateUrl(request.POST['jack_link_url'])
 		if(validUrl):
 			newLink = Link(
@@ -640,7 +685,8 @@ def getSubdomain(url):
 
 #returns True if a use with username exists, otherwise returns false
 def userExists(username):
-	return False if User.objects.filter(name__iexact = username).count() == 0 else True
+	return False if User.objects.filter(name__iexact = username).count() == 0 \
+			else True
 
 #creates user or raises exception detailing what went wrong
 def createUser(username, password, isPrivate=False):
