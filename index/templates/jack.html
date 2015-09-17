@@ -41,7 +41,7 @@
 					<div class="jack_row with_icon">
 						<div class="jack_icon"><i class="material-icons">label</i></div>
 						{% for t in jack.tag %}
-							<div class="jack_bro"><a href="#">{{ t }}</a></div>
+							<div class="jack_bro"><a href="http://{{ HOST_NAME }}/tag/{{ t }}">{{ t }}</a></div>
 						{% endfor %}
 					</div>
 				{% endif %}
