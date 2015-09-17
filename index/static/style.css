@@ -1199,6 +1199,14 @@ input[type="checkbox"]:checked + label{
 	display: inline-block;
 }
 
+.label a{
+	color: #fff;
+}
+
+.label a:hover{
+	text-decoration: underline;
+}
+
 .search_label{
 	font-size: .5em;
 	margin-left: .5em;
