@@ -1195,7 +1195,8 @@ input[type="checkbox"]:checked + label{
 	background: #bbb;
 	color: #fff;
 	padding: .125em;
-	padding-right: .5em;
+	padding-right: .25em;
+	padding-left: .25em;
 	display: inline-block;
 }
 
@@ -1213,5 +1214,6 @@ input[type="checkbox"]:checked + label{
 }
 
 .jack_label{
-
+	font-size: .5em;
+	margin: .125em;
 }
