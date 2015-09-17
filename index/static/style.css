@@ -727,10 +727,10 @@ form{
 .jack_row{
 	position: relative;
 	margin-top: .125em;
-	/*margin-bottom: .125em;*/
+	margin-bottom: .125em;
 	overflow: hidden;
-	/*display: block;*/
-	/*height: 0em;*/
+	display: block;
+	/* height: 0em; */
 }
 
 .jack_row a{
@@ -761,8 +761,6 @@ form{
 }
 
 .jack_icon{
-	background-color: rgba(255, 255, 255, .5);
-	font-size: .5em;
 	padding: .125em;
 	position: absolute;
 	left: 0;
@@ -771,18 +769,9 @@ form{
 	height: 24px;
 }
 
-.jack_link{
+.jack_icon_overlayed{
+	background-color: rgba(255, 255, 255, .5);
 	font-size: .5em;
-	float: left;
-	transition: all 0.2s;
-}
-
-.jack_link a:hover{
-	color: #888;
-}
-
-.jack_link:hover{
-	/*background: black;*/
 }
 
 .with_icon{
