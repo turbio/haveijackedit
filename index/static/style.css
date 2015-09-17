@@ -1177,8 +1177,8 @@ input[type="checkbox"]:checked + label{
 }
 
 .titlebar_button{
-	height: 1.25em;
-	margin-top: .25em;
+	/* height: 1.25em; */
+	/* margin-top: .25em; */
 }
 
 #pagination_nav{
