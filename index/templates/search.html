@@ -5,14 +5,16 @@
 	<div id="wrapper">
 		{% include "titlebar.html" %}
 
-		tags:
 		{% for tag in search_tag_list %}
-			{{ tag }}
+			<div class="label search_label">
+				<i class="material-icons">label</i>
+				<a href="">{{ tag }}</a></div>
 		{% endfor %}
 
-		users:
 		{% for user in search_user_list %}
-			{{ user }}
+			<div class="label search_label">
+				<i class="material-icons">person</i>
+				<a href="http://{{ HOST_N">{{ user }}</a></div>
 		{% endfor %}
 
 		{% if results %}
