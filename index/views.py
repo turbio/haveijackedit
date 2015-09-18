@@ -82,11 +82,16 @@ def community(request):
 	return render(request, 'community.html', context)
 
 def tags(request):
+
+	splitUrl = request.META['PATH_INFO'].split('/')
+
+	if len(splitUrl) >= 2 and splitUrl[2] != '':
+		return HttpResponseRedirect('/search/tag:' + splitUrl[2])
+
 	tagList = Tag.objects \
 		.annotate(occurrences=Count('jack_tags')) \
 		.order_by('-occurrences')[0:500]
 
-	#print(request.META['PATH_INFO'].split('/'))
 
 	context = {
 		'tag_list': tagList,
