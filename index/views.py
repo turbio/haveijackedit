@@ -19,6 +19,54 @@ from .data_uri import DataURI
 from random_words import RandomWords
 from django.core.files.temp import NamedTemporaryFile
 from datetime import datetime, timezone, timedelta
+from decorator import decorator
+
+@decorator
+def paginate(func, request, *args, **kwargs):
+	currentPageNumber = request.GET.get('page', 1)
+	try:
+		currentPageNumber = int(currentPageNumber)
+	except:
+		currentPageNumber = 1
+
+	nextPageNumber = currentPageNumber + 1
+	prevPageNumber = currentPageNumber - 1 if currentPageNumber > 1 else False
+
+	if not hasattr(request, 'context'):
+		request.context = {}
+
+	request.context['current_page'] = \
+			currentPageNumber if currentPageNumber >= 1 \
+			else 1
+	request.context['page_next'] = nextPageNumber
+	request.context['page_prev'] = prevPageNumber
+
+	return func(request, *args, **kwargs)
+
+@decorator
+def searchable(func, request, *args, **kwargs):
+	if not hasattr(request, 'context'):
+		request.context = {}
+	request.context['is_searchable'] = True
+	return func(request, *args, **kwargs)
+
+@decorator
+def sortable(func, request, *args, **kwargs):
+	if not hasattr(request, 'context'):
+		request.context = {}
+	request.context['is_sortable'] = True
+	return func(request, *args, **kwargs)
+
+@decorator
+def handlesubdomain(func, request, *args, **kwargs):
+	subdomain = getSubdomain(request.META['HTTP_HOST'])
+	if subdomain:
+		if request.META['PATH_INFO'] == '/':
+			return feed(request)
+		else:
+			return HttpResponseRedirect('/')
+
+	return func(request, *args, **kwargs)
 
 def jackSortMethod(request, default):
 	sortMethods = {
@@ -33,36 +81,28 @@ def jackSortMethod(request, default):
 
 	return sortMethods.get(request.GET.get('sort', default), 'date')
 
+@paginate
+@searchable
+@sortable
+@handlesubdomain
 def index(request):
-	subdomain = getSubdomain(request.META['HTTP_HOST'])
-	if subdomain:
-		return feed(request)
+	request.context['sort_method'] = jackSortMethod(request, 'popular')
 
-	context = {
-		'is_searchable': True,
-		'is_sortable': True,
-		'sort_method': jackSortMethod(request, 'popular')
-	}
-
-	pageNumber = request.GET.get('page', 1)
-	try:
-		pageNumber = int(pageNumber)
-	except:
-		pageNumber = 1
-
-	jacks = Jack.objects.with_details(
-		page=pageNumber,
-		sort=context['sort_method'],
+	request.context['jack_list'] = Jack.objects.with_details(
+		page=request.context['current_page'],
+		sort=request.context['sort_method'],
 		homepage=True,
-		perspective=request.session['user_id'] if 'user_id' in request.session else getIp(request),
+		perspective=request.session['user_id'] if 'user_id' in request.session \
+				else getIp(request),
 		perspective_ip=False if 'user_id' in request.session else True)
 
-	context['page_next'] = pageNumber + 1 if  len(list(jacks)) >= djangosettings.JACKS_PER_PAGE else False
-	context['page_prev'] = pageNumber - 1 if pageNumber > 1 else False
+	if len(request.context['jack_list']) < djangosettings.JACKS_PER_PAGE:
+		request.context['page_next'] = False
 
-	context['jack_list'] = jacks
+	print(Jack.objects.count())
+	print((request.context['current_page']  - 1) * djangosettings.JACKS_PER_PAGE)
 
-	return render(request, 'index.html', context)
+	return render(request, 'index.html', request.context)
 
 def about(request):
 	context = {
