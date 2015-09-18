@@ -4,8 +4,17 @@
 {% block content %}
 	<div id="wrapper">
 		{% include "titlebar.html" %}
-		<div id="feed_title_box">
-			<div id="feed_title_q">comming soon...</div>
-		</div>
+		<!--<div id="feed_title_box">-->
+			<!--<div id="feed_title_q">comming soon...</div>-->
+		<!--</div>-->
+		<ul id="taglist">
+			{% for tag in tag_list %}
+				<li>
+					<div class="label taglist_label">
+						<a href="http://{{ HOST_NAME }}/tag/{{ tag.text }}">{{ tag.text }}</a>
+					</div>
+				</li>
+			{% endfor %}
+		</ul>
 	</div>
 {% endblock %}

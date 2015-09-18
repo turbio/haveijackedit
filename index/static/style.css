@@ -1224,3 +1224,13 @@ input[type="checkbox"]:checked + label{
 	font-size: .5em;
 	margin: .125em;
 }
+
+.taglist_label{
+	float: none;
+	display: inline-block;
+	font-size: .5em;
+}
+
+#taglist{
+	list-style-image: url("/static/tag.svg");
+}
