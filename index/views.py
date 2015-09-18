@@ -82,7 +82,11 @@ def community(request):
 	return render(request, 'community.html', context)
 
 def tags(request):
-	tagList = Tag.objects.annotate(occurrences=Count('jack_tags')).order_by('-occurrences')
+	tagList = Tag.objects \
+		.annotate(occurrences=Count('jack_tags')) \
+		.order_by('-occurrences')[0:500]
+
+	#print(request.META['PATH_INFO'].split('/'))
 
 	context = {
 		'tag_list': tagList,
