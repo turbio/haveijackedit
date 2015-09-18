@@ -13,6 +13,7 @@
 					<div class="label taglist_label">
 						<a href="http://{{ HOST_NAME }}/tag/{{ tag.text }}">{{ tag.text }}</a>
 					</div>
+					<span class="tag_occurrences">&#215;{{ tag.occurrences }}</span>
 				</li>
 			{% endfor %}
 		</ul>

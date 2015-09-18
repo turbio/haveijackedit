@@ -1234,3 +1234,9 @@ input[type="checkbox"]:checked + label{
 #taglist{
 	list-style-image: url("/static/tag.svg");
 }
+
+.tag_occurrences{
+	font-size: .45em;
+	color: #bbb;
+	margin-left: .5em;
+}
