@@ -171,6 +171,7 @@ def promo(request):
 	}
 	return render(request, 'promo.html', context)
 
+@paginate
 def search(request):
 	searchTerm = request.GET.get('term', '').split(' ')
 	urlTerm = request.META['PATH_INFO'].split('/')[2:]
@@ -248,22 +249,17 @@ def search(request):
 	if foundJacks.count() <= 0:
 		return render(request, 'search.html', context)
 
-	pageNumber = request.GET.get('page', 1)
-	try:
-		pageNumber = int(pageNumber)
-	except:
-		pageNumber = 1
-
 	foundJacks = Jack.objects.with_details(
-		page=pageNumber,
+		page=request.context['current_page'],
 		sort=context['sort_method'],
 		perspective=request.session['user_id'] if 'user_id' in request.session \
 				else getIp(request),
 		perspective_ip=False if 'user_id' in request.session else True,
 		jack_id=list(foundJacks.values_list('id', flat=True)))
 
-	context['page_next'] = pageNumber + 1 if  len(list(foundJacks)) >= djangosettings.JACKS_PER_PAGE else False
-	context['page_prev'] = pageNumber - 1 if pageNumber > 1 else False
+	context['page_next'] = request.context['page_next'] \
+			if len(foundJacks) >= djangosettings.JACKS_PER_PAGE else False
+	context['page_prev'] = request.context['page_prev']
 
 	context['results'] = foundJacks
 
