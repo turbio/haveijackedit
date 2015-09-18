@@ -44,6 +44,13 @@ def paginate(func, request, *args, **kwargs):
 	return func(request, *args, **kwargs)
 
 @decorator
+def communitypage(func, request, *args, **kwargs):
+	if not hasattr(request, 'context'):
+		request.context = {}
+	request.context['is_community_page'] = True
+	return func(request, *args, **kwargs)
+
+@decorator
 def searchable(func, request, *args, **kwargs):
 	if not hasattr(request, 'context'):
 		request.context = {}
@@ -104,52 +111,46 @@ def index(request):
 
 	return render(request, 'index.html', request.context)
 
+@communitypage
 def about(request):
-	context = {
-		'is_community_page': True
-	}
-	return render(request, 'about.html', context)
+	return render(request, 'about.html', request.context)
 
 def stats(request):
 	context = {
 	}
 	return render(request, 'stats.html', context)
 
+@communitypage
 def community(request):
-	context = {
-		'is_community_page': True
-	}
-	return render(request, 'community.html', context)
+	return render(request, 'community.html', request.context)
 
+@communitypage
+@paginate
 def tags(request):
-
 	splitUrl = request.META['PATH_INFO'].split('/')
-
 	if len(splitUrl) >= 2 and splitUrl[2] != '':
 		return HttpResponseRedirect('/search/tag:' + splitUrl[2])
 
-	tagList = Tag.objects \
+	request.context['tag_list']  = Tag.objects \
 		.annotate(occurrences=Count('jack_tags')) \
-		.order_by('-occurrences')[0:500]
+		.order_by('-occurrences') \
+		[
+			(request.context['current_page'] - 1) * djangosettings.TAGS_PER_PAGE:
+			request.context['current_page'] * djangosettings.TAGS_PER_PAGE
+		]
 
+	if request.context['tag_list'].count() < djangosettings.TAGS_PER_PAGE:
+		request.context['page_next'] = False
 
-	context = {
-		'tag_list': tagList,
-		'is_community_page': True
-	}
-	return render(request, 'popular_tags.html', context)
+	return render(request, 'popular_tags.html', request.context)
 
+@communitypage
 def leader_board(request):
-	context = {
-		'is_community_page': True
-	}
-	return render(request, 'leader_board.html', context)
+	return render(request, 'leader_board.html', request.context)
 
+@communitypage
 def developer(request):
-	context = {
-		'is_community_page': True
-	}
-	return render(request, 'developer.html', context)
+	return render(request, 'developer.html', request.context)
 
 def bros(request):
 	context = {
@@ -161,11 +162,9 @@ def customize(request):
 	}
 	return render(request, 'customize.html', context)
 
+@communitypage
 def app_download(request):
-	context = {
-		'is_community_page': True
-	}
-	return render(request, 'app_download.html', context)
+	return render(request, 'app_download.html', request.context)
 
 def promo(request):
 	context = {
