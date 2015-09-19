@@ -89,7 +89,15 @@ def app_download(request):
 	return render(request, 'app_download.html', context)
 
 def promo(request):
+	fullPath = request.META['PATH_INFO'].split('/')
+
+	promoCode = False
+	if len(fullPath) >= 3 and fullPath[2] != '':
+		promoCode = fullPath[2]
+		request.session['promo_code'] = promoCode
+
 	context = {
+		##asdf
 	}
 	return render(request, 'promo.html', context)
 
