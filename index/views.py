@@ -19,58 +19,135 @@ from .data_uri import DataURI
 from random_words import RandomWords
 from django.core.files.temp import NamedTemporaryFile
 from datetime import datetime, timezone, timedelta
+from decorator import decorator
 
-def index(request):
+@decorator
+def paginate(func, request, *args, **kwargs):
+	currentPageNumber = request.GET.get('page', 1)
+	try:
+		currentPageNumber = int(currentPageNumber)
+	except:
+		currentPageNumber = 1
+
+	nextPageNumber = currentPageNumber + 1
+	prevPageNumber = currentPageNumber - 1 if currentPageNumber > 1 else False
+
+	if not hasattr(request, 'context'):
+		request.context = {}
+
+	request.context['current_page'] = \
+			currentPageNumber if currentPageNumber >= 1 \
+			else 1
+	request.context['page_next'] = nextPageNumber
+	request.context['page_prev'] = prevPageNumber
+
+	return func(request, *args, **kwargs)
+
+@decorator
+def communitypage(func, request, *args, **kwargs):
+	if not hasattr(request, 'context'):
+		request.context = {}
+	request.context['is_community_page'] = True
+	return func(request, *args, **kwargs)
+
+@decorator
+def searchable(func, request, *args, **kwargs):
+	if not hasattr(request, 'context'):
+		request.context = {}
+	request.context['is_searchable'] = True
+	return func(request, *args, **kwargs)
+
+@decorator
+def sortable(func, request, *args, **kwargs):
+	if not hasattr(request, 'context'):
+		request.context = {}
+	request.context['is_sortable'] = True
+	return func(request, *args, **kwargs)
+
+@decorator
+def handlesubdomain(func, request, *args, **kwargs):
 	subdomain = getSubdomain(request.META['HTTP_HOST'])
 	if subdomain:
-		return feed(request)
+		if request.META['PATH_INFO'] == '/':
+			return feed(request)
+		else:
+			return HttpResponseRedirect('/')
 
-	jacks = Jack.objects.with_details(
-		score=True,
+	return func(request, *args, **kwargs)
+
+def jackSortMethod(request, default):
+	sortMethods = {
+		'popular': 'score',
+		'top': 'votes',
+		'new': 'date',
+
+		'score': 'score',
+		'votes': 'votes',
+		'date': 'date'
+	}
+
+	return sortMethods.get(request.GET.get('sort', default), 'date')
+
+@paginate
+@searchable
+@sortable
+@handlesubdomain
+def index(request):
+	request.context['sort_method'] = jackSortMethod(request, 'popular')
+
+	request.context['jack_list'] = Jack.objects.with_details(
+		page=request.context['current_page'],
+		sort=request.context['sort_method'],
 		homepage=True,
-		perspective=request.session['user_id'] if 'user_id' in request.session else getIp(request),
+		perspective=request.session['user_id'] if 'user_id' in request.session \
+				else getIp(request),
 		perspective_ip=False if 'user_id' in request.session else True)
 
-	context = {
-		'jack_list': jacks
-	}
+	if len(request.context['jack_list']) < djangosettings.JACKS_PER_PAGE:
+		request.context['page_next'] = False
 
-	return render(request, 'index.html', context)
+	return render(request, 'index.html', request.context)
 
+@communitypage
 def about(request):
-	context = {
-		'is_community_page': True
-	}
-	return render(request, 'about.html', context)
+	return render(request, 'about.html', request.context)
 
 def stats(request):
 	context = {
 	}
 	return render(request, 'stats.html', context)
 
+@communitypage
 def community(request):
-	context = {
-		'is_community_page': True
-	}
-	return render(request, 'community.html', context)
+	return render(request, 'community.html', request.context)
 
+@communitypage
+@paginate
 def tags(request):
-	context = {
-		'is_community_page': True
-	}
-	return render(request, 'popular_tags.html', context)
+	splitUrl = request.META['PATH_INFO'].split('/')
+	if len(splitUrl) >= 2 and splitUrl[2] != '':
+		return HttpResponseRedirect('/search/tag:' + splitUrl[2])
 
+	request.context['tag_list']  = Tag.objects \
+		.annotate(occurrences=Count('jack_tags')) \
+		.order_by('-occurrences') \
+		[
+			(request.context['current_page'] - 1) * djangosettings.TAGS_PER_PAGE:
+			request.context['current_page'] * djangosettings.TAGS_PER_PAGE
+		]
+
+	if request.context['tag_list'].count() < djangosettings.TAGS_PER_PAGE:
+		request.context['page_next'] = False
+
+	return render(request, 'popular_tags.html', request.context)
+
+@communitypage
 def leader_board(request):
-	context = {
-		'is_community_page': True
-	}
-	return render(request, 'leader_board.html', context)
+	return render(request, 'leader_board.html', request.context)
 
+@communitypage
 def developer(request):
-	context = {
-		'is_community_page': True
-	}
-	return render(request, 'developer.html', context)
+	return render(request, 'developer.html', request.context)
 
 def bros(request):
 	context = {
@@ -82,11 +159,9 @@ def customize(request):
 	}
 	return render(request, 'customize.html', context)
 
+@communitypage
 def app_download(request):
-	context = {
-		'is_community_page': True
-	}
-	return render(request, 'app_download.html', context)
+	return render(request, 'app_download.html', request.context)
 
 def promo(request):
 	fullPath = request.META['PATH_INFO'].split('/')
@@ -101,29 +176,44 @@ def promo(request):
 	}
 	return render(request, 'promo.html', context)
 
+@paginate
 def search(request):
-	searchTerm = request.GET.get('term', None)
+	searchTerm = request.GET.get('term', '').split(' ')
+	urlTerm = request.META['PATH_INFO'].split('/')[2:]
 
 	context = {
 		'is_searchable': True,
 		'is_search_page': True,
-		'is_sortable': True
+		'is_sortable': True,
+		'sort_method': jackSortMethod(request, 'popular'),
+		'search_query': ' '.join(searchTerm),
+		'search_source_labels': '/'.join(urlTerm),
+		'search_tag_list': [],
+		'search_user_list': []
 	}
 
-	if searchTerm is None:
-		searchTerm = ' '.join(request.META['PATH_INFO'].split('/')[2:])
-
-	if searchTerm == '':
+	if searchTerm == [''] and urlTerm == ['']:
 		context['empty_search_query'] = True
 		return render(request, 'search.html', context)
-
-	searchTerms = searchTerm.split(' ')
 
 	searchTags = []
 	searchUsers = []
 	searchWords = []
 
-	for term in searchTerms:
+	for term in urlTerm:
+		term = term.replace('+', ' ')
+		if term.startswith('tag:'):
+			tag = term.replace('tag:','')
+			searchTags.append(tag)
+			context['search_tag_list'].append(tag)
+		elif term.startswith('user:'):
+			user = term.replace('user:','')
+			searchUsers.append(user)
+			context['search_user_list'].append(user)
+		else:
+			searchWords.append(term)
+
+	for term in searchTerm:
 		term = term.replace('+', ' ')
 		if term.startswith('tag:'):
 			searchTags.append(term.replace('tag:',''))
@@ -161,18 +251,20 @@ def search(request):
 	if jackFilterUser is not None:
 		foundJacks = foundJacks.filter(jackFilterUser)
 
-	context['search_query'] = searchTerm
-	context['search_tags'] = searchTags
-	context['search_users'] = searchUsers
-	context['search_words'] = ' '.join(searchWords)
-
 	if foundJacks.count() <= 0:
 		return render(request, 'search.html', context)
 
 	foundJacks = Jack.objects.with_details(
-		perspective=request.session['user_id'] if 'user_id' in request.session else getIp(request),
+		page=request.context['current_page'],
+		sort=context['sort_method'],
+		perspective=request.session['user_id'] if 'user_id' in request.session \
+				else getIp(request),
 		perspective_ip=False if 'user_id' in request.session else True,
 		jack_id=list(foundJacks.values_list('id', flat=True)))
+
+	context['page_next'] = request.context['page_next'] \
+			if len(foundJacks) >= djangosettings.JACKS_PER_PAGE else False
+	context['page_prev'] = request.context['page_prev']
 
 	context['results'] = foundJacks
 
@@ -231,7 +323,8 @@ def standalone_jack(request):
 	jackId = int(jackUrlId)
 
 	jackObject = Jack.objects.with_details(
-		perspective=request.session['user_id'] if 'user_id' in request.session else getIp(request),
+		perspective=request.session['user_id'] if 'user_id' in request.session \
+				else getIp(request),
 		perspective_ip=False if 'user_id' in request.session else True,
 		jack_id=jackId)
 
@@ -430,7 +523,8 @@ def verifyCaptcha(captcha_response, userIp):
 	encodedPostData = urllib.parse.urlencode(captchaData).encode('utf-8')
 
 	captchaRequest = urllib.request.Request(djangosettings.CAPTCHA_URL)
-	captchaRequest.add_header("Content-Type","application/x-www-form-urlencoded;charset=utf-8")
+	captchaRequest.add_header(
+			"Content-Type","application/x-www-form-urlencoded;charset=utf-8")
 
 	captchaResponse = ''
 	with urllib.request.urlopen(captchaRequest, encodedPostData) as f:
@@ -449,7 +543,8 @@ def signup(request):
 		private = str(request.POST.get('private', ''))
 
 		try:
-			captchaClientResponse = str(request.POST.get('g-recaptcha-response', ''))
+			captchaClientResponse = str(request.POST.get(
+				'g-recaptcha-response', ''))
 
 			#get the users ip
 			x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -475,17 +570,31 @@ def feed(request):
 	hasJacked = False
 	subdomain = getSubdomain(request.META['HTTP_HOST'])
 
-	#try:
 	userObject = User.objects.get(name__iexact = subdomain)
 
 	isUser = True
 
 	isPrivate = userObject.settings.private
 
+	context = {
+		'sort_method': jackSortMethod(request, 'new')
+	}
+
 	if not isPrivate:
+		pageNumber = request.GET.get('page', 1)
+		try:
+			pageNumber = int(pageNumber)
+		except:
+			pageNumber = 1
+
 		userJackList = Jack.objects.with_details(
+			page=pageNumber,
+			sort=context['sort_method'],
 			user=userObject.id,
 			perspective=request.session.get('user_id'))
+
+		context['page_next'] = pageNumber + 1 if  len(list(userJackList)) >= djangosettings.JACKS_PER_PAGE else False
+		context['page_prev'] = pageNumber - 1 if pageNumber > 1 else False
 
 		if len(list(userJackList)) > 0:
 			day = timedelta(days=1)
@@ -496,13 +605,14 @@ def feed(request):
 	else:
 		jacked_message = YesWords.objects.random_word('no')
 
-	context = {
-		'jack_list': userJackList,
-		'username': subdomain,
-		'title_text_a': jacked_message,
-		'is_user': isUser,
-		'is_private': isPrivate,
-	}
+	context['jack_list'] = userJackList
+	context['search_source_labels'] = 'user:' + userObject.name
+	context['username'] = subdomain
+	context['title_text_a'] = jacked_message
+	context['is_user'] = isUser
+	context['is_private'] = isPrivate
+	context['is_searchable'] = not isPrivate
+	context['is_sortable'] = not isPrivate
 
 	return render(request, 'feed.html', context)
 
@@ -515,10 +625,28 @@ def dash(request):
 	context = {
 		'comment_filler': YesWords.objects.random_word('yes'),
 		'filler_user': User.objects.order_by('?')[:3],
-		'jack_list': Jack.objects.with_details(
-			user=request.session['user_id'],
-			perspective=request.session['user_id']),
+		'is_searchable': True,
+		'is_sortable': True,
+		'sort_method': jackSortMethod(request, 'new'),
+		'search_source_labels': 'user:' + request.session['user_name']
 	}
+
+	pageNumber = request.GET.get('page', 1)
+	try:
+		pageNumber = int(pageNumber)
+	except:
+		pageNumber = 1
+
+	jackList = Jack.objects.with_details(
+		page=pageNumber,
+		sort=context['sort_method'],
+		user=request.session['user_id'],
+		perspective=request.session['user_id'])
+
+	context['page_next'] = pageNumber + 1 if  len(list(jackList)) >= djangosettings.JACKS_PER_PAGE else False
+	context['page_prev'] = pageNumber - 1 if pageNumber > 1 else False
+
+	context['jack_list'] = jackList
 
 	return render(request, 'dash.html', context)
 
@@ -608,7 +736,8 @@ def submit_jack(request):
 		newImage.save()
 		newJack.image = newImage
 
-	if 'jack_link_url' in request.POST and not request.POST['jack_link_url'] == '':
+	if 'jack_link_url' in request.POST \
+			and not request.POST['jack_link_url'] == '':
 		validUrl = validateUrl(request.POST['jack_link_url'])
 		if(validUrl):
 			newLink = Link(
@@ -648,7 +777,8 @@ def getSubdomain(url):
 
 #returns True if a use with username exists, otherwise returns false
 def userExists(username):
-	return False if User.objects.filter(name__iexact = username).count() == 0 else True
+	return False if User.objects.filter(name__iexact = username).count() == 0 \
+			else True
 
 #creates user or raises exception detailing what went wrong
 def createUser(username, password, isPrivate=False):

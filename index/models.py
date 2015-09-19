@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings as djangosettings
 from django.db.models import Sum, Count, F, When, Case, Value, CharField, Q
 from django.db.models.functions import Concat
 from datetime import datetime, timezone
@@ -60,8 +61,12 @@ class JackManager(models.Manager):
 	#adds a lot of details to jacks
 	#user: to only show jacks by a single user id or ip address
 	#perspective: show from a particular user id or ip address' perspective
-	#score: wether or not to sort the jacks by their score, if False: sorty by date
+	#sort: a string determining how to sort jacks, values:
+	#"votes": sort by the number of votes recieved
+	#"score": sort by the score
+	#"date": sort by date
 	#limit: number of posts to show
+	#page: which page to return, assuming that limit determines the page length
 	#homepage: only show jacks that would normally appear on homepage
 	#perspective_ip: if the perspective is an ip or user id
 	#jack_id: only show this specific jack
@@ -69,8 +74,9 @@ class JackManager(models.Manager):
 			self,
 			user=None,
 			perspective=None,
-			score=False,
-			limit=25,
+			sort=False,
+			limit=djangosettings.JACKS_PER_PAGE,
+			page=1,
 			homepage=False,
 			perspective_ip=False,
 			jack_id=None):
@@ -104,7 +110,7 @@ SELECT
 	END AS age,
 	(
 		SELECT
-			GROUP_CONCAT(index_tag.text SEPARATOR ', ')
+			GROUP_CONCAT(index_tag.text SEPARATOR ',')
 		FROM
 			index_jack_tags
 		INNER JOIN index_tag ON
@@ -113,7 +119,7 @@ SELECT
 	) AS tag,
 	(
 		SELECT
-			GROUP_CONCAT(index_user.name SEPARATOR ', ')
+			GROUP_CONCAT(index_user.name SEPARATOR ',')
 		FROM
 			index_jack_bros
 		INNER JOIN index_user ON
@@ -160,7 +166,7 @@ WHERE
 	AND index_jack.finished %s %s %s
 GROUP BY
 	index_jack.usersubmitted_ptr_id
-ORDER BY %s LIMIT %s"""
+ORDER BY %s LIMIT %s OFFSET %s"""
 
 		ownerQuery = """,CASE WHEN index_user.id = "%s" THEN 1 ELSE 0 END AS isowner""" % perspective
 		voteDirectionQuery = """,(SELECT index_vote.points FROM index_vote INNER JOIN index_usersubmitted ON index_vote.usersubmitted_ptr_id = index_usersubmitted.id LEFT JOIN index_user ON index_usersubmitted.user_id = index_user.id INNER JOIN index_ip ON index_usersubmitted.ip_id = index_ip.id WHERE (index_vote.jack_id = index_jack.usersubmitted_ptr_id) AND %s) AS vote_direction""" % ( ("""(index_ip.address = "%s") AND (index_usersubmitted.user_id IS NULL)""" % perspective) if perspective_ip else ("""(index_usersubmitted.user_id = "%s")""" % perspective))
@@ -168,6 +174,15 @@ ORDER BY %s LIMIT %s"""
 
 		orderDateQuery = """index_jack.date DESC"""
 		orderScoreQuery = """score DESC"""
+		orderTopQuery = """votes DESC"""
+
+		orderQuery = orderDateQuery
+
+		if sort is "votes":
+			orderQuery = orderTopQuery
+		elif sort is "score":
+			orderQuery = orderScoreQuery
+
 		homepageQuery = """AND visibility.on_homepage"""
 		singleUserQuery = """AND index_user.id = "%s" """ % user
 
@@ -182,16 +197,26 @@ ORDER BY %s LIMIT %s"""
 		query = baseQuery % (
 				ownerQuery if perspective is not None else "",
 				voteDirectionQuery if perspective is not None else "",
-				scoreQuery if score else "",
+				scoreQuery,
 				perspective if perspective is not None else "",
 				homepageQuery if homepage else "",
 				singleUserQuery if user is not None else "",
 				specificJackQuery if jack_id is not None else "",
-				orderScoreQuery if score else orderDateQuery,
-				limit
+				orderQuery,
+				limit,
+				int((page - 1) * limit)
 			)
 
-		return self.raw(query)
+		queryResults = list(self.raw(query))
+
+		for i in range(len(queryResults)):
+			if queryResults[i].bro is not None:
+				queryResults[i].bro  = queryResults[i].bro.lstrip(',').split(',')
+
+			if queryResults[i].tag is not None:
+				queryResults[i].tag  = queryResults[i].tag.lstrip(',').split(',')
+
+		return queryResults
 
 class Jack(UserSubmitted):
 	date = models.DateTimeField()

@@ -4,10 +4,24 @@
 {% block content %}
 	<div id="wrapper">
 		{% include "titlebar.html" %}
+
+		{% for tag in search_tag_list %}
+			<div class="label search_label">
+				<i class="material-icons">label</i>
+				<a href="http://{{ HOST_NAME}}/tag/{{ tag }}">{{ tag }}</a></div>
+		{% endfor %}
+
+		{% for user in search_user_list %}
+			<div class="label search_label">
+				<i class="material-icons">person</i>
+				<a href="http://{{ user }}.{{ HOST_NAME}}">{{ user }}</a></div>
+		{% endfor %}
+
 		{% if results %}
 			{% for jack in results %}
 				{% include "jack.html" %}
 			{% endfor %}
+			{% include "pagination_nav.html" %}
 		{% else %}
 			<div id="no_search_results">
 				{% if empty_search_query %}
