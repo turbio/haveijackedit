@@ -106,9 +106,6 @@ def index(request):
 	if len(request.context['jack_list']) < djangosettings.JACKS_PER_PAGE:
 		request.context['page_next'] = False
 
-	print(Jack.objects.count())
-	print((request.context['current_page']  - 1) * djangosettings.JACKS_PER_PAGE)
-
 	return render(request, 'index.html', request.context)
 
 @communitypage
