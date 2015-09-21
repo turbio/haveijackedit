@@ -50,7 +50,9 @@ this is bad and ugly... but it works for now
 {% endcomment %}
 <div class="title_bar sub_bar{% if is_community_page %} sub_bar_visible{% endif %}" id="community_bar">
 	<a href="http://{{ HOST_NAME }}/tags"><div class="titlebar_button{% if request.path == "/tags/" %} titlebar_button_selected{% endif %}"><i class="material-icons">label</i></div></a>
+	{% comment %}
 	<a href="http://{{ HOST_NAME }}/leader_board"><div class="titlebar_button{% if request.path == "/leader_board/" %} titlebar_button_selected{% endif %}"><i class="material-icons">view_list</i></div></a>
+	{% endcomment %}
 
 	<a href="http://{{ HOST_NAME }}/about"><div class="titlebar_button btn_right{% if request.path == "/about/" %} titlebar_button_selected{% endif %}"><i class="material-icons">info</i></div></a>
 	<a href="http://{{ HOST_NAME }}/dev"><div class="titlebar_button btn_right{% if request.path == "/dev/" %} titlebar_button_selected{% endif %}"><i class="material-icons">code</i></div></a>
