@@ -1235,6 +1235,11 @@ input[type="checkbox"]:checked + label{
 	list-style-image: url("/static/tag.svg");
 }
 
+#brolist{
+	list-style-image: url("/static/bro.svg");
+	margin-top: 0;
+}
+
 .tag_occurrences{
 	font-size: .45em;
 	color: #bbb;
