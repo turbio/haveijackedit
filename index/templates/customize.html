@@ -4,8 +4,18 @@
 {% block content %}
 	<div id="wrapper">
 		{% include "titlebar.html" %}
-		<div id="feed_title_box">
-			<div id="feed_title_q">comming soon...</div>
-		</div>
+		<form method="POST" action="/submit_settings/">{% csrf_token %}
+			flair
+			{% for flair in flairs %}
+				<!--placeholder-->
+				<div class="setting_option">
+					<div class="checkbox_wrapper">
+						<!--<input type="checkbox" name="private" {% if options.private %}checked="checked"{% endif %}/>-->
+						<label></label>
+					</div>
+					<div class="checkbox_label">make private</div>
+				</div>
+			{% endfor %}
+		</form>
 	</div>
 {% endblock %}
