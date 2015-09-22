@@ -127,7 +127,36 @@ def stats(request):
 	return render(request, 'stats.html', context)
 
 def calendarGraph(request):
-	return HttpResponse("lmao")
+	days = [
+		(
+			(int(x / 7) * 15) + 20,	#x
+			x % 7 * 15,			#y
+			(x * 10) % 265,	#r
+			(x * 10) % 265,	#g
+			(x * 10) % 265		#b
+		) for x in range(0, 52 * 7)
+	]
+
+	weekNames = [
+		#(0, 0, 'S'),
+		(0, 25, 'M'),
+		#(0, 40, 'T'),
+		(0, 55, 'W'),
+		#(0, 80, 'T'),
+		(0, 85, 'F'),
+		#(0, 120, 'S')
+	]
+
+	monthNames = [
+		(0, 0, 'oct')
+	]
+
+	context = {
+		'weeknames': weekNames,
+		'monthnames': monthNames,
+		'days': days
+	}
+	return render(request, 'graphs/calendar.html', context)
 
 @communitypage
 def community(request):

@@ -1,0 +1,10 @@
+<svg width="1000px" height="100px">
+	{% for x,y,r,g,b in days %}
+		<rect x="{{ x }}" y="{{ y }}" width="10" height="10" style="fill:rgb({{ r }}, {{ g }}, {{ b }})"></rect>
+	{% endfor %}
+	{% for x,y,s in weeknames %}
+		<text x="{{ x }}" y="{{ y }}" dx="5" fill="rgb(190, 190, 190)" style="font-family: mono; font-size: 9pt">{{ s }}</text>
+	{% endfor %}
+</svg>
+{% spaceless %}
+{% endspaceless %}
