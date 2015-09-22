@@ -1,15 +1,27 @@
 {% extends "base.html" %}
 {% block head %}
+	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+	<script src="http://d3js.org/topojson.v1.min.js"></script>
+	<script src="http://d3js.org/d3.geo.projection.v0.min.js" charset="utf-8"></script>
+	<script src="http://trifacta.github.com/vega/vega.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
 {% endblock %}
 {% block content %}
 	<div id="wrapper">
 		{% include "titlebar.html" %}
-		<div id="feed_title_box">
-			<!--<div id="feed_title_q">comming soon...</div>-->
+		<div id="graph_container">
+			<div id="calendar_graph"></div>
 		</div>
-
-		<svg>
-			test
-		</svg>
 	</div>
+
+<script type="text/javascript">
+function parse(spec, element){
+	vg.parse.spec(spec, function(chart){
+		chart({el: element, renderer: "svg"}).update();
+	});
+}
+parse("/stats/?graph=calendar", "#calendar_graph");
+</script>
+
+
 {% endblock %}

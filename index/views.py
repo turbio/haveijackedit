@@ -20,6 +20,7 @@ from random_words import RandomWords
 from django.core.files.temp import NamedTemporaryFile
 from datetime import datetime, timezone, timedelta
 from decorator import decorator
+import vincent
 
 @decorator
 def paginate(func, request, *args, **kwargs):
@@ -116,9 +117,17 @@ def about(request):
 	return render(request, 'about.html', request.context)
 
 def stats(request):
+	graph = request.GET.get('graph', None)
+	if graph is not None:
+		bar = vincent.Bar([1,2,3,4,5,6,5,4,3,2,1])
+		return HttpResponse(bar.to_json())
+
 	context = {
 	}
 	return render(request, 'stats.html', context)
+
+def calendarGraph(user):
+	return 0
 
 @communitypage
 def community(request):
