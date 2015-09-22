@@ -19,8 +19,7 @@ class User(models.Model):
 	creation_date = models.DateTimeField()
 	settings = models.OneToOneField('UserSettings')
 	started = models.DateTimeField(null=True)
-	owned_flairs = models.ManyToManyField('Flair', related_name='user_owned_flairs')
-	enabled_flairs = models.ManyToManyField('Flair', related_name='user_enabled_flairs')
+	flairs = models.ManyToManyField('Flair', through='FlairRelationship')
 
 	def score(self):
 		return User.objects.raw(
@@ -45,6 +44,11 @@ class User(models.Model):
 		formated["minutes"], formated["seconds"] = divmod(rem, 60)
 
 		return formated
+
+class FlairRelationship(models.Model):
+	user = models.ForeignKey(User)
+	flair = models.ForeignKey('Flair')
+	active = models.BooleanField(default=True)
 
 class Flair(models.Model):
 	name = models.CharField(max_length=16)
