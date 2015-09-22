@@ -126,8 +126,8 @@ def stats(request):
 	}
 	return render(request, 'stats.html', context)
 
-def calendarGraph(user):
-	return 0
+def calendarGraph(request):
+	return HttpResponse("lmao")
 
 @communitypage
 def community(request):

@@ -29,7 +29,6 @@ urlpatterns = [
 	url(r'^signup/$', views.signup),
 	url(r'^submit_jack/$', views.submit_jack),
 	url(r'^modify/$', views.modifyjack),
-	url(r'^stats/$', views.stats),
 	url(r'^community/$', views.community),
 	url(r'^jack/', views.standalone_jack),
 	url(r'^tag_suggestion/$', views.tag_suggestion),
@@ -46,4 +45,6 @@ urlpatterns = [
 	url(r'^promo/', views.promo),
 	url(r'^search/', views.search),
 	url(r'^$', views.index),
+	url(r'^stats/$', views.stats),
+	url(r'^stats/calendar', views.calendarGraph),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
