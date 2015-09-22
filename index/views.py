@@ -149,6 +149,7 @@ def leader_board(request):
 def developer(request):
 	return render(request, 'developer.html', request.context)
 
+@handlesubdomain
 def bros(request):
 	context = {
 	}

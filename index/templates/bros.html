@@ -5,7 +5,18 @@
 	<div id="wrapper">
 		{% include "titlebar.html" %}
 		<div id="feed_title_box">
-			<div id="feed_title_q">comming soon...</div>
+			<div id="feed_title_q">coming soon...</div>
 		</div>
+		{% comment %}
+		<ul id="taglist">
+			{% for bro in bros %}
+				<li>
+					<div class="label taglist_label">
+						<a href="http://{{ bro.name }}.{{ HOST_NAME }}">{{ bro.name }}</a>
+					</div>
+				</li>
+			{% endfor %}
+		</ul>
+		{% endcomment %}
 	</div>
 {% endblock %}

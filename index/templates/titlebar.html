@@ -32,11 +32,12 @@
 	<div class="titlebar_button">flair</div>
 	<div class="titlebar_button">score: {{ user.score }}</div>
 	<div class="titlebar_button btn_action"><a href="http://{{ HOST_NAME }}/stats"><i class="btn_action_icon material-icons">equalizer</i>stats</a></div>
+	{% comment %}
 	<div class="titlebar_button  btn_action"><a href="http://{{ HOST_NAME }}/bros"><i class="btn_action_icon material-icons">group</i>bros</a></div>
+	{% endcomment %}
 	<div class="titlebar_button  btn_action"><a href="http://{{ HOST_NAME }}/customize"><i class="btn_action_icon material-icons">brush</i>customize</a></div>
 	<div class="titlebar_button btn_action"><a href="http://{{ HOST_NAME }}/settings"><i class="btn_action_icon material-icons">settings</i>settings</a></div>
 	<div class="titlebar_button  btn_action"><a href="http://{{ HOST_NAME }}/signout"><i class="btn_action_icon material-icons">exit_to_app</i>signout</a></div>
-	<div class="titlebar_button  btn_action"><i class="btn_action_icon material-icons">close</i>close</div>
 </div>
 <div class="title_bar sub_bar" id="sort_bar">
 	{% load add_get_parameter %}
@@ -49,7 +50,9 @@ this is bad and ugly... but it works for now
 {% endcomment %}
 <div class="title_bar sub_bar{% if is_community_page %} sub_bar_visible{% endif %}" id="community_bar">
 	<a href="http://{{ HOST_NAME }}/tags"><div class="titlebar_button{% if request.path == "/tags/" %} titlebar_button_selected{% endif %}"><i class="material-icons">label</i></div></a>
+	{% comment %}
 	<a href="http://{{ HOST_NAME }}/leader_board"><div class="titlebar_button{% if request.path == "/leader_board/" %} titlebar_button_selected{% endif %}"><i class="material-icons">view_list</i></div></a>
+	{% endcomment %}
 
 	<a href="http://{{ HOST_NAME }}/about"><div class="titlebar_button btn_right{% if request.path == "/about/" %} titlebar_button_selected{% endif %}"><i class="material-icons">info</i></div></a>
 	<a href="http://{{ HOST_NAME }}/dev"><div class="titlebar_button btn_right{% if request.path == "/dev/" %} titlebar_button_selected{% endif %}"><i class="material-icons">code</i></div></a>
