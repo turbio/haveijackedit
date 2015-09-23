@@ -155,6 +155,8 @@ def calendarGraph(request):
 		days.append((
 			currentWeek * 12 + 24,
 			(currentDate.weekday() * 12) + 24,
+
+			#coloring
 			(currentDate.month * 128) % 255,
 			(currentDate.month * 128) % 255,
 			(currentDate.month * 128) % 255
@@ -167,7 +169,7 @@ def calendarGraph(request):
 				months.append((
 					days[-1][0],
 					12,
-					currentDate.strftime('%b'),
+					currentDate.strftime('%b').lower(),
 					currentDate.month
 				))
 
