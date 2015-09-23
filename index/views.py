@@ -219,7 +219,9 @@ def calendarGraph(request):
 	context = {
 		'daynames': dayNames,
 		'months': months,
-		'days': days
+		'days': days,
+		'height': 100,
+		'width': int(len(days) / 7) * 12 + 48
 	}
 	return render(request, 'graphs/calendar.html', context)
 

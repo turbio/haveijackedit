@@ -1,4 +1,4 @@
-<svg width="10000px" height="200px">
+<svg width="{{ width }}" height="{{ height }}">
 	{% for x,y,r,g,b in days %}
 		<rect x="{{ x }}" y="{{ y }}" width="10" height="10" style="fill:rgb({{ r }}, {{ g }}, {{ b }})"></rect>
 	{% endfor %}
