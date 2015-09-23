@@ -158,10 +158,6 @@ def calendarGraph(request):
 	jacksPerDayLow = min(jacksPerDay.values())
 	jacksPerDayHigh = max(jacksPerDay.values())
 
-	print(jacksPerDay)
-	print(jacksPerDayLow)
-	print(jacksPerDayHigh)
-
 	months = []
 
 	days = []
