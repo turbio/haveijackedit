@@ -3,10 +3,10 @@
 		<rect x="{{ x }}" y="{{ y }}" width="10" height="10" style="fill:rgb({{ r }}, {{ g }}, {{ b }})"></rect>
 	{% endfor %}
 	{% for x,y,s in daynames %}
-		<text x="{{ x }}" y="{{ y }}" dx="5" fill="rgb(190, 190, 190)" style="font-family: mono; font-size: 12px">{{ s }}</text>
+			<text x="{{ x }}" y="{{ y }}" dx="5" fill="rgb(190, 190, 190)" style="font-family: mono; font-size: 11px">{{ s }}</text>
 	{% endfor %}
 	{% for x,y,s in months %}
-		<text x="{{ x }}" y="{{ y }}" fill="rgb(190, 190, 190)" style="font-family: mono; font-size: 12px">{{ s }}</text>
+		<text x="{{ x }}" y="{{ y }}" fill="rgb(190, 190, 190)" style="font-family: mono; font-size: 11px">{{ s }}</text>
 	{% endfor %}
 </svg>
 {% spaceless %}

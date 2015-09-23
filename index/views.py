@@ -148,18 +148,24 @@ def calendarGraph(request):
 	currentDate = dateFrom
 	currentWeek = 0
 	timeInMonth = 0
-	while currentDate < dateTo:
-		if currentDate.weekday() == 0:
+
+	print(dateFrom)
+	print(dateTo)
+
+	while currentDate <= dateTo:
+		weekday = currentDate.isoweekday() % 7
+
+		if weekday == 0:
 			currentWeek += 1
 
 		days.append((
-			currentWeek * 12 + 24,
-			(currentDate.weekday() * 12) + 24,
+			(currentWeek * 12) + 16,
+			(weekday * 12) + 16,
 
 			#coloring
-			(currentDate.month * 128) % 255,
-			(currentDate.month * 128) % 255,
-			(currentDate.month * 128) % 255
+			216,
+			216,
+			216
 		))
 
 		if len(months) <= 0 or months[-1][3] != currentDate.month:
@@ -177,11 +183,11 @@ def calendarGraph(request):
 
 	dayNames = [
 		#(0, 0, 'S'),
-		(3, 44, 'M'),
+		(0, 37, 'M'),
 		#(0, 40, 'T'),
-		(3, 68, 'W'),
+		(0, 61, 'W'),
 		#(0, 80, 'T'),
-		(3, 92, 'F'),
+		(0, 85, 'F'),
 		#(0, 120, 'S')
 	]
 
