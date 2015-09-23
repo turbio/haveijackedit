@@ -141,6 +141,26 @@ def calendarGraph(request):
 		dateFrom = datetime.strptime(dateFrom, '%Y-%m-%d').date()
 
 	user = request.GET.get('user', request.session.get('user_name', None))
+	if user is None:
+		return HttpResponse('no user provided')
+
+	jackData = Jack.objects.filter(user__name=user)
+
+	jacksPerDay = {}
+
+	for jack in jackData:
+		jackDate = jack.date.date()
+		if jackDate in jacksPerDay:
+			jacksPerDay[jackDate] += 1
+		else:
+			jacksPerDay[jackDate] = 1
+
+	jacksPerDayLow = min(jacksPerDay.values())
+	jacksPerDayHigh = max(jacksPerDay.values())
+
+	print(jacksPerDay)
+	print(jacksPerDayLow)
+	print(jacksPerDayHigh)
 
 	months = []
 
@@ -149,23 +169,32 @@ def calendarGraph(request):
 	currentWeek = 0
 	timeInMonth = 0
 
-	print(dateFrom)
-	print(dateTo)
-
 	while currentDate <= dateTo:
 		weekday = currentDate.isoweekday() % 7
 
 		if weekday == 0:
 			currentWeek += 1
 
+		highColor = 16
+		lowColor = 128
+
+		dayColor = jacksPerDay.get(currentDate, None)
+		if dayColor is None:
+			dayColor = 216
+		else:
+			#dayColor = int(256 - dayColor * (256 / jacksPerDayHigh))
+			print(dayColor)
+			dayColor = int((lowColor - highColor) - ((jacksPerDayLow * dayColor) / jacksPerDayHigh) * (lowColor - highColor)) + highColor
+			print(dayColor)
+
 		days.append((
 			(currentWeek * 12) + 16,
 			(weekday * 12) + 16,
 
 			#coloring
-			216,
-			216,
-			216
+			dayColor,
+			dayColor,
+			dayColor
 		))
 
 		if len(months) <= 0 or months[-1][3] != currentDate.month:
