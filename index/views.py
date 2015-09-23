@@ -18,9 +18,8 @@ import io
 from .data_uri import DataURI
 from random_words import RandomWords
 from django.core.files.temp import NamedTemporaryFile
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timezone, timedelta, date
 from decorator import decorator
-import vincent
 
 @decorator
 def paginate(func, request, *args, **kwargs):
@@ -119,7 +118,6 @@ def about(request):
 def stats(request):
 	graph = request.GET.get('graph', None)
 	if graph is not None:
-		bar = vincent.Bar([1,2,3,4,5,6,5,4,3,2,1])
 		return HttpResponse(bar.to_json())
 
 	context = {
@@ -127,33 +125,67 @@ def stats(request):
 	return render(request, 'stats.html', context)
 
 def calendarGraph(request):
-	days = [
-		(
-			(int(x / 7) * 15) + 20,	#x
-			x % 7 * 15,			#y
-			(x * 10) % 265,	#r
-			(x * 10) % 265,	#g
-			(x * 10) % 265		#b
-		) for x in range(0, 52 * 7)
-	]
+	year = timedelta(days=365)
+	day = timedelta(days=1)
 
-	weekNames = [
+	dateTo = request.GET.get('to', None)
+
+	if dateTo is None:
+		dateTo = date.today()
+	else:
+		dateTo = datetime.strptime(dateTo, '%Y-%m-%d').date()
+
+	dateFrom = request.GET.get('from', None)
+
+	if dateFrom is None:
+		dateFrom = dateTo - year
+	else:
+		dateFrom = datetime.strptime(dateFrom, '%Y-%m-%d').date()
+
+	months = []
+
+	days = []
+	currentDate = dateFrom
+	currentWeek = 0
+	timeInMonth = 0
+	while currentDate < dateTo:
+		if currentDate.weekday() == 0:
+			currentWeek += 1
+
+		days.append((
+			currentWeek * 12 + 24,
+			(currentDate.weekday() * 12) + 24,
+			(currentDate.month * 128) % 255,
+			(currentDate.month * 128) % 255,
+			(currentDate.month * 128) % 255
+		))
+
+		if len(months) <= 0 or months[-1][3] != currentDate.month:
+			timeInMonth += 1
+			if timeInMonth > 14:
+				timeInMonth = 0
+				months.append((
+					days[-1][0],
+					12,
+					currentDate.strftime('%b'),
+					currentDate.month
+				))
+
+		currentDate += day
+
+	dayNames = [
 		#(0, 0, 'S'),
-		(0, 25, 'M'),
+		(3, 44, 'M'),
 		#(0, 40, 'T'),
-		(0, 55, 'W'),
+		(3, 68, 'W'),
 		#(0, 80, 'T'),
-		(0, 85, 'F'),
+		(3, 92, 'F'),
 		#(0, 120, 'S')
 	]
 
-	monthNames = [
-		(0, 0, 'oct')
-	]
-
 	context = {
-		'weeknames': weekNames,
-		'monthnames': monthNames,
+		'daynames': dayNames,
+		'months': months,
 		'days': days
 	}
 	return render(request, 'graphs/calendar.html', context)
