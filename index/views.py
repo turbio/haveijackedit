@@ -129,18 +129,18 @@ def calendarGraph(request):
 	day = timedelta(days=1)
 
 	dateTo = request.GET.get('to', None)
-
 	if dateTo is None:
 		dateTo = date.today()
 	else:
 		dateTo = datetime.strptime(dateTo, '%Y-%m-%d').date()
 
 	dateFrom = request.GET.get('from', None)
-
 	if dateFrom is None:
 		dateFrom = dateTo - year
 	else:
 		dateFrom = datetime.strptime(dateFrom, '%Y-%m-%d').date()
+
+	user = request.GET.get('user', request.session.get('user_name', None))
 
 	months = []
 
