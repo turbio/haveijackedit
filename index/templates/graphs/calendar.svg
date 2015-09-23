@@ -1,4 +1,6 @@
-<svg width="{{ width }}" height="{{ height }}">
+{% spaceless %}
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="{{ width }}" height="{{ height }}" xmlns="http://www.w3.org/2000/svg">
 	{% for x,y,r,g,b in days %}
 		<rect x="{{ x }}" y="{{ y }}" width="10" height="10" style="fill:rgb({{ r }}, {{ g }}, {{ b }})"></rect>
 	{% endfor %}
@@ -9,5 +11,4 @@
 		<text x="{{ x }}" y="{{ y }}" fill="rgb(190, 190, 190)" style="font-family: mono; font-size: 11px">{{ s }}</text>
 	{% endfor %}
 </svg>
-{% spaceless %}
 {% endspaceless %}

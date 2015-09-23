@@ -223,7 +223,7 @@ def calendarGraph(request):
 		'height': 100,
 		'width': int(len(days) / 7) * 12 + 48
 	}
-	return render(request, 'graphs/calendar.html', context)
+	return render(request, 'graphs/calendar.svg', context, content_type='image/svg+xml')
 
 @communitypage
 def community(request):
