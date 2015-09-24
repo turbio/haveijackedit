@@ -124,6 +124,18 @@ def stats(request):
 	}
 	return render(request, 'stats.html', context)
 
+def dayofweekGraph(request):
+	context = {
+		'daynames': dayNames,
+		'months': months,
+		'days': days,
+		'height': 100,
+		'width': int(len(days) / 7) * 12 + 48
+	}
+
+	return render(request, 'graphs/dayofweek.svg', context, content_type='image/svg+xml')
+
+
 def calendarGraph(request):
 	year = timedelta(days=365)
 	day = timedelta(days=1)
