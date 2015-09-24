@@ -125,16 +125,41 @@ def stats(request):
 	return render(request, 'stats.html', context)
 
 def dayofweekGraph(request):
+	height = 256
+	width = 256
+	barSpacing = 4
+	barWidth = int(width / 7) - barSpacing
+
+	jacksPerDOW = [
+		4,
+		8,
+		16,
+		32,
+		64,
+		128,
+		256
+	]
+
+	maxDOWjacks = max(jacksPerDOW)
+	minDOWjacks = min(jacksPerDOW)
+
+	days = []
+	for i in range(7):
+		barHeight = ((jacksPerDOW[i] - minDOWjacks) / (maxDOWjacks - minDOWjacks)) * height
+		days.append((
+			(barWidth + barSpacing) * i,
+			0,
+			barHeight
+		))
+
 	context = {
-		'daynames': dayNames,
-		'months': months,
 		'days': days,
-		'height': 100,
-		'width': int(len(days) / 7) * 12 + 48
+		'bar_width': barWidth,
+		'height': height,
+		'width': width
 	}
 
 	return render(request, 'graphs/dayofweek.svg', context, content_type='image/svg+xml')
-
 
 def calendarGraph(request):
 	year = timedelta(days=365)
