@@ -121,6 +121,68 @@ def stats(request):
 	}
 	return render(request, 'stats.html', context)
 
+def monthGraph(request):
+	user = request.GET.get('user', request.session.get('user_name', None))
+	if user is None:
+		return HttpResponse('no user provided')
+
+	height = 256
+	width = 256
+	barSpacing = 4
+	ticksOffset = 36
+	barWidth = int(width / 7) - barSpacing
+
+	jackData = Jack.objects.filter(user__name=user)
+
+	jacksPerDOW = [0 for i in range(7)]
+
+	for j in jackData:
+		jacksPerDOW[j.date.weekday()] += 1
+
+	jacks = Jack.objects
+	totalJacks = sum(jacksPerDOW)
+
+	percentHigh = max([
+			j / totalJacks for j in jacksPerDOW
+		]) * 1.25
+
+	days = []
+	for i in range(len(jacksPerDOW)):
+		barHeight = int(((jacksPerDOW[i] / totalJacks) / percentHigh) * height)
+		days.append((
+			((barWidth + barSpacing) * i) + ticksOffset,
+			height - barHeight,
+			barHeight
+		))
+
+	dayNames = [
+		(
+			(index * (barWidth + barSpacing)) + ticksOffset,
+			height + 12,
+			day
+		) for index,day in
+		enumerate(['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'])
+	]
+
+	yTicks = [
+		(
+			0,
+			height - ((height / 5) * x),
+			str(int((x / 5) * 100 * percentHigh)) + '%'
+		) for x in range(5)
+	]
+
+	context = {
+		'days': days,
+		'y_ticks': yTicks,
+		'daynames': dayNames,
+		'bar_width': barWidth,
+		'height': height + 12,
+		'width': width + ticksOffset
+	}
+
+	return render(request, 'graphs/dayofweek.svg', context, content_type='image/svg+xml')
+
 def dayofweekGraph(request):
 	user = request.GET.get('user', request.session.get('user_name', None))
 	if user is None:
