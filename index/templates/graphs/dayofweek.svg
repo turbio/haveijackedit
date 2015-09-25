@@ -7,5 +7,8 @@
 	{% for x,y,s in daynames %}
 			<text x="{{ x }}" y="{{ y }}" dx="5" fill="rgb(190, 190, 190)" style="font-family: mono; font-size: 11px">{{ s }}</text>
 	{% endfor %}
+	{% for x,y,s in y_ticks %}
+			<text x="{{ x }}" y="{{ y }}" dx="5" fill="rgb(190, 190, 190)" style="font-family: mono; font-size: 11px">{{ s }}</text>
+	{% endfor %}
 </svg>
 {% endspaceless %}
