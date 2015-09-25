@@ -48,4 +48,5 @@ urlpatterns = [
 	url(r'^stats/$', views.stats),
 	url(r'^graph/calendar.svg$', views.calendarGraph),
 	url(r'^graph/dayofweek.svg$', views.dayofweekGraph),
+	url(r'^graph/month.svg$', views.monthGraph),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

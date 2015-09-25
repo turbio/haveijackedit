@@ -121,7 +121,6 @@ def stats(request):
 	}
 	return render(request, 'stats.html', context)
 
-import random
 def dayofweekGraph(request):
 	user = request.GET.get('user', request.session.get('user_name', None))
 	if user is None:
