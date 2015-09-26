@@ -121,10 +121,19 @@ def stats(request):
 	}
 	return render(request, 'stats.html', context)
 
-def monthGraph(request):
+def frequencyGraph(request):
 	user = request.GET.get('user', request.session.get('user_name', None))
 	if user is None:
 		return HttpResponse('no user provided')
+
+	increment = request.GET.get('inc', 'month')
+
+	incrementKeys = {
+		'day': 0,
+		'week': 0,
+		'month': 0,
+		'year': 0
+	}
 
 	height = 256
 	width = 256
@@ -134,10 +143,10 @@ def monthGraph(request):
 
 	jackData = Jack.objects.filter(user__name=user)
 
-	jacksPerDOW = [0 for i in range(7)]
+	jacksPerMonth = {}
 
 	for j in jackData:
-		jacksPerDOW[j.date.weekday()] += 1
+		jacksPerDOW[j.date.month] += 1
 
 	jacks = Jack.objects
 	totalJacks = sum(jacksPerDOW)
