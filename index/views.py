@@ -190,9 +190,9 @@ def frequencyGraph(request):
 		'width': width + ticksOffset
 	}
 
-	return render(request, 'graphs/dayofweek.svg', context, content_type='image/svg+xml')
+	return render(request, 'graphs/frequency.svg', context, content_type='image/svg+xml')
 
-def dayofweekGraph(request):
+def distributionGraph(request):
 	user = request.GET.get('user', request.session.get('user_name', None))
 	if user is None:
 		return HttpResponse('no user provided')
@@ -252,7 +252,7 @@ def dayofweekGraph(request):
 		'width': width + ticksOffset
 	}
 
-	return render(request, 'graphs/dayofweek.svg', context, content_type='image/svg+xml')
+	return render(request, 'graphs/distribution.svg', context, content_type='image/svg+xml')
 
 def calendarGraph(request):
 	year = timedelta(days=365)
