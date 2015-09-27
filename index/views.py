@@ -230,7 +230,7 @@ def distributionGraph(request):
 	barSpacing = 4
 	ticksOffset = 36
 	barWidth = 24 if unit == 'day' else 32
-	width = ticksOffset * unitLength
+	width = (barWidth + barSpacing) * unitLength
 
 	jackData = Jack.objects.filter(user__name=user)
 
