@@ -197,42 +197,76 @@ def distributionGraph(request):
 	if user is None:
 		return HttpResponse('no user provided')
 
+	unit = request.GET.get('inc', 'week')
+
+	unitLength = {
+		'day': 24,	#day is 24 hours
+		'week': 7,	#week is 7 days
+		'year': 12	#year is 12 months
+	}.get(unit, None)
+
+	unitTicks = {
+		'day': ["%02d" % t if t % 2 == 0 else '' for t in range(24)],
+		'week': ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'],
+		'year': [
+			'jan',
+			'feb',
+			'mar',
+			'apr',
+			'may',
+			'jun',
+			'jul',
+			'aug',
+			'sep',
+			'oct',
+			'nov',
+			'dec']
+	}.get(unit, None)
+
+	if unitLength is None:
+		return HttpResponse('invalid argument')
+
 	height = 256
-	width = 256
 	barSpacing = 4
 	ticksOffset = 36
-	barWidth = int(width / 7) - barSpacing
+	barWidth = 24 if unit == 'day' else 32
+	width = ticksOffset * unitLength
 
 	jackData = Jack.objects.filter(user__name=user)
 
-	jacksPerDOW = [0 for i in range(7)]
+	jacksPer = [0 for i in range(unitLength)]
 
 	for j in jackData:
-		jacksPerDOW[j.date.weekday()] += 1
+		if unit == 'day':
+			print(j.comment)
+			jacksPer[j.date.hour] += 1
+		elif unit == 'week':
+			jacksPer[j.date.weekday()] += 1
+		elif unit == 'year':
+			jacksPer[j.date.month] += 1
 
-	jacks = Jack.objects
-	totalJacks = sum(jacksPerDOW)
+	totalJacks = jackData.count()
 
 	percentHigh = max([
-			j / totalJacks for j in jacksPerDOW
-		]) * 1.25
+		j / totalJacks for j in jacksPer
+	]) * 1.25
 
-	days = []
-	for i in range(len(jacksPerDOW)):
-		barHeight = int(((jacksPerDOW[i] / totalJacks) / percentHigh) * height)
-		days.append((
+	points = []
+	for i in range(len(jacksPer)):
+		barHeight = int(((jacksPer[i] / totalJacks) / percentHigh) * height)
+		points.append((
 			((barWidth + barSpacing) * i) + ticksOffset,
 			height - barHeight,
 			barHeight
 		))
 
-	dayNames = [
+	xTicks = [
 		(
 			(index * (barWidth + barSpacing)) + ticksOffset,
 			height + 12,
 			day
 		) for index,day in
-		enumerate(['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'])
+		enumerate(unitTicks)
 	]
 
 	yTicks = [
@@ -244,11 +278,11 @@ def distributionGraph(request):
 	]
 
 	context = {
-		'days': days,
+		'points': points,
 		'y_ticks': yTicks,
-		'daynames': dayNames,
+		'x_ticks': xTicks,
 		'bar_width': barWidth,
-		'height': height + 12,
+		'height': height + 24,
 		'width': width + ticksOffset
 	}
 
