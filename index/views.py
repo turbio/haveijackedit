@@ -288,6 +288,15 @@ def distributionGraph(request):
 
 	return render(request, 'graphs/bar.svg', context, content_type='image/svg+xml')
 
+def dataDump(request):
+	pass
+
+def dumpCSV(request):
+	pass
+
+def dumpJson(request):
+	pass
+
 def calendarGraph(request):
 	year = timedelta(days=365)
 	day = timedelta(days=1)
