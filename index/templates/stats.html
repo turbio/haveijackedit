@@ -4,12 +4,35 @@
 {% block content %}
 	<div id="wrapper">
 		{% include "titlebar.html" %}
-		<div id="feed_title_box">
-			<!--<div id="feed_title_q">comming soon...</div>-->
+		<div id="graphs_container">
+			<div class="graph_section" id="calendar_graph">
+				<div class="graph_section_title">calendar</div>
+				<div class="single_graph">
+					<img class="graph_image" src="/graph/calendar.svg"/>
+				</div>
+			</div>
+			<div class="graph_section">
+				<div class="graph_section_title">distribution</div>
+				<div class="single_graph">
+					<div class="graph_title">daily</div>
+					<img class="graph_image" src="/graph/dist.svg?inc=day"/>
+				</div>
+				<div class="single_graph">
+					<div class="graph_title">weekly</div>
+					<img class="graph_image" src="/graph/dist.svg?inc=week"/>
+				</div>
+				<div class="single_graph">
+					<div class="graph_title">yearly</div>
+					<img class="graph_image" src="/graph/dist.svg?inc=year"/>
+				</div>
+			</div>
 		</div>
-
-		<svg>
-			test
-		</svg>
+		<div id="stats_footer">
+			more visualizations coming soon...
+			</br>
+			you can <a href="mailto:contact@haveijackedit.com">request a visualization</a>
+			</br>
+			or make your own from a <a href="http://{{ HOST_NAME }}/dump">data dump</a>
+		</div>
 	</div>
 {% endblock %}

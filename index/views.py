@@ -18,7 +18,7 @@ import io
 from .data_uri import DataURI
 from random_words import RandomWords
 from django.core.files.temp import NamedTemporaryFile
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timezone, timedelta, date
 from decorator import decorator
 
 @decorator
@@ -113,9 +113,279 @@ def about(request):
 	return render(request, 'about.html', request.context)
 
 def stats(request):
+	graph = request.GET.get('graph', None)
+	if graph is not None:
+		return HttpResponse(bar.to_json())
+
 	context = {
 	}
 	return render(request, 'stats.html', context)
+
+def frequencyGraph(request):
+	user = request.GET.get('user', request.session.get('user_name', None))
+	if user is None:
+		return HttpResponse('no user provided')
+
+	increment = request.GET.get('inc', 'month')
+
+	incrementKeys = {
+		'day': 0,
+		'week': 0,
+		'month': 0,
+		'year': 0
+	}
+
+	height = 256
+	width = 256
+	barSpacing = 4
+	ticksOffset = 36
+	barWidth = int(width / 7) - barSpacing
+
+	jackData = Jack.objects.filter(user__name=user)
+
+	jacksPerMonth = {}
+
+	for j in jackData:
+		jacksPerDOW[j.date.month] += 1
+
+	jacks = Jack.objects
+	totalJacks = sum(jacksPerDOW)
+
+	percentHigh = max([
+			j / totalJacks for j in jacksPerDOW
+		]) * 1.25
+
+	days = []
+	for i in range(len(jacksPerDOW)):
+		barHeight = int(((jacksPerDOW[i] / totalJacks) / percentHigh) * height)
+		days.append((
+			((barWidth + barSpacing) * i) + ticksOffset,
+			height - barHeight,
+			barHeight
+		))
+
+	dayNames = [
+		(
+			(index * (barWidth + barSpacing)) + ticksOffset,
+			height + 12,
+			day
+		) for index,day in
+		enumerate(['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'])
+	]
+
+	yTicks = [
+		(
+			0,
+			height - ((height / 5) * x),
+			str(int((x / 5) * 100 * percentHigh)) + '%'
+		) for x in range(5)
+	]
+
+	context = {
+		'days': days,
+		'y_ticks': yTicks,
+		'daynames': dayNames,
+		'bar_width': barWidth,
+		'height': height + 12,
+		'width': width + ticksOffset
+	}
+
+	return render(request, 'graphs/bar.svg', context, content_type='image/svg+xml')
+
+def distributionGraph(request):
+	user = request.GET.get('user', request.session.get('user_name', None))
+	if user is None:
+		return HttpResponse('no user provided')
+
+	unit = request.GET.get('inc', 'week')
+
+	unitLength = {
+		'day': 24,	#day is 24 hours
+		'week': 7,	#week is 7 days
+		'year': 12	#year is 12 months
+	}.get(unit, None)
+
+	unitTicks = {
+		'day': ["%02d" % t if t % 2 == 0 else '' for t in range(24)],
+		'week': ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'],
+		'year': [
+			'jan',
+			'feb',
+			'mar',
+			'apr',
+			'may',
+			'jun',
+			'jul',
+			'aug',
+			'sep',
+			'oct',
+			'nov',
+			'dec']
+	}.get(unit, None)
+
+	if unitLength is None:
+		return HttpResponse('invalid argument')
+
+	height = 256
+	barSpacing = 4
+	ticksOffset = 36
+	barWidth = 24 if unit == 'day' else 32
+	width = (barWidth + barSpacing) * unitLength
+
+	jackData = Jack.objects.filter(user__name=user)
+
+	jacksPer = [0 for i in range(unitLength)]
+
+	for j in jackData:
+		if unit == 'day':
+			print(j.comment)
+			jacksPer[j.date.hour] += 1
+		elif unit == 'week':
+			jacksPer[j.date.weekday()] += 1
+		elif unit == 'year':
+			jacksPer[j.date.month] += 1
+
+	totalJacks = jackData.count()
+
+	percentHigh = max([
+		j / totalJacks for j in jacksPer
+	]) * 1.25
+
+	points = []
+	for i in range(len(jacksPer)):
+		barHeight = int(((jacksPer[i] / totalJacks) / percentHigh) * height)
+		points.append((
+			((barWidth + barSpacing) * i) + ticksOffset,
+			height - barHeight,
+			barHeight
+		))
+
+	xTicks = [
+		(
+			(index * (barWidth + barSpacing)) + ticksOffset,
+			height + 12,
+			day
+		) for index,day in
+		enumerate(unitTicks)
+	]
+
+	yTicks = [
+		(
+			0,
+			height - ((height / 5) * x),
+			str(int((x / 5) * 100 * percentHigh)) + '%'
+		) for x in range(5)
+	]
+
+	context = {
+		'points': points,
+		'y_ticks': yTicks,
+		'x_ticks': xTicks,
+		'bar_width': barWidth,
+		'height': height + 24,
+		'width': width + ticksOffset
+	}
+
+	return render(request, 'graphs/bar.svg', context, content_type='image/svg+xml')
+
+def calendarGraph(request):
+	year = timedelta(days=365)
+	day = timedelta(days=1)
+
+	dateTo = request.GET.get('to', None)
+	if dateTo is None:
+		dateTo = date.today()
+	else:
+		dateTo = datetime.strptime(dateTo, '%Y-%m-%d').date()
+
+	dateFrom = request.GET.get('from', None)
+	if dateFrom is None:
+		dateFrom = dateTo - year
+	else:
+		dateFrom = datetime.strptime(dateFrom, '%Y-%m-%d').date()
+
+	user = request.GET.get('user', request.session.get('user_name', None))
+	if user is None:
+		return HttpResponse('no user provided')
+
+	jackData = Jack.objects.filter(user__name=user)
+
+	jacksPerDay = {}
+
+	for jack in jackData:
+		jackDate = jack.date.date()
+		if jackDate in jacksPerDay:
+			jacksPerDay[jackDate] += 1
+		else:
+			jacksPerDay[jackDate] = 1
+
+	jacksPerDayLow = min(jacksPerDay.values())
+	jacksPerDayHigh = max(jacksPerDay.values())
+
+	months = []
+
+	days = []
+	currentDate = dateFrom
+	currentWeek = 0
+	timeInMonth = 0
+
+	while currentDate <= dateTo:
+		weekday = currentDate.isoweekday() % 7
+
+		if weekday == 0:
+			currentWeek += 1
+
+		highColor = 16
+		lowColor = 128
+
+		dayColor = jacksPerDay.get(currentDate, None)
+		if dayColor is None:
+			dayColor = 216
+		else:
+			#dayColor = int(256 - dayColor * (256 / jacksPerDayHigh))
+			dayColor = int((lowColor - highColor) - ((jacksPerDayLow * dayColor) / jacksPerDayHigh) * (lowColor - highColor)) + highColor
+
+		days.append((
+			(currentWeek * 12) + 16,
+			(weekday * 12) + 16,
+
+			#coloring
+			dayColor,
+			dayColor,
+			dayColor
+		))
+
+		if len(months) <= 0 or months[-1][3] != currentDate.month:
+			timeInMonth += 1
+			if timeInMonth > 14:
+				timeInMonth = 0
+				months.append((
+					days[-1][0],
+					12,
+					currentDate.strftime('%b').lower(),
+					currentDate.month
+				))
+
+		currentDate += day
+
+	dayNames = [
+		#(0, 0, 'S'),
+		(0, 37, 'M'),
+		#(0, 40, 'T'),
+		(0, 61, 'W'),
+		#(0, 80, 'T'),
+		(0, 85, 'F'),
+		#(0, 120, 'S')
+	]
+
+	context = {
+		'daynames': dayNames,
+		'months': months,
+		'days': days,
+		'height': 100,
+		'width': int(len(days) / 7) * 12 + 48
+	}
+	return render(request, 'graphs/calendar.svg', context, content_type='image/svg+xml')
 
 @communitypage
 def community(request):
@@ -357,7 +627,6 @@ def modifyjack(request):
 		jackObject.delete()
 
 	elif request.POST['operation'] == 'submit_edit':
-		print(request.POST['new_jack'])
 		jackObject.comment = request.POST['new_jack']
 		jackObject.save()
 

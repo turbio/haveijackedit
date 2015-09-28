@@ -1,0 +1,14 @@
+{% spaceless %}
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="{{ width }}" height="{{ height }}" xmlns="http://www.w3.org/2000/svg">
+	{% for x,y,h in days %}
+		<rect x="{{ x }}" y="{{ y }}" width="{{ bar_width }}" height="{{ h }}" style="fill:rgb(20, 180, 255)"></rect>
+	{% endfor %}
+	{% for x,y,s in daynames %}
+			<text x="{{ x }}" y="{{ y }}" dx="5" fill="rgb(190, 190, 190)" style="font-family: mono; font-size: 11px">{{ s }}</text>
+	{% endfor %}
+	{% for x,y,s in y_ticks %}
+			<text x="{{ x }}" y="{{ y }}" dx="5" fill="rgb(190, 190, 190)" style="font-family: mono; font-size: 11px">{{ s }}</text>
+	{% endfor %}
+</svg>
+{% endspaceless %}
