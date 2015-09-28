@@ -169,10 +169,16 @@ def promo(request):
 	promoCode = False
 	if len(fullPath) >= 3 and fullPath[2] != '':
 		promoCode = fullPath[2]
-		request.session['promo_code'] = promoCode
+
+	#check if promo code actually exists
+	promoObject = Promo.objects.filter(code=promoCode)
+	if promoObject.count() > 0:
+		print('yep')
+	else:
+		print('nope')
+	#request.session['promo_code'] = promoCode
 
 	context = {
-		##asdf
 	}
 	return render(request, 'promo.html', context)
 

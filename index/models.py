@@ -267,7 +267,6 @@ class Tag(models.Model):
 	text = models.CharField(max_length=32)
 
 class Promo(models.Model):
-	name = models.CharField(max_length=160)
 	description = models.CharField(max_length=512)
 	code = models.CharField(max_length=16)
 	start = models.DateTimeField(null=True)
