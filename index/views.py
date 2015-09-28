@@ -315,7 +315,32 @@ def dumpCSV(request):
 
 @handlesubdomain
 def dumpJson(request):
-	pass
+	jackData = Jack.objects.filter(user__id=request.session['user_id'])
+
+	jsonObject = {
+		'jacks': []
+	}
+
+	for j in jackData:
+		jsonObject['jacks'].append(
+			{
+				'comment': j.comment,
+				'date': str(j.date),
+				'location': {
+					'lng': str(j.location.lng), #for percision...
+					'lat': str(j.location.lat)
+				} if j.location is not None else None,
+				'link': j.link.url if j.link is not None else None,
+				'duration': (j.date - j.start).seconds if j.start is not None else None,
+				'finished': j.finished,
+				'tags': list(j.tags.values_list('text', flat=True)),
+				'bros': list(j.bros.values_list('name', flat=True))
+			}
+		)
+
+	jsonResponse = json.dumps(jsonObject)
+
+	return HttpResponse(jsonResponse, content_type='application/json')
 
 def calendarGraph(request):
 	year = timedelta(days=365)
