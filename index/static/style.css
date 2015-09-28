@@ -358,6 +358,10 @@ form{
 	float: right;
 }
 
+.btn_left{
+	float: left;
+}
+
 #top_bar a{
 	color: white;
 	/*background: red;*/
@@ -510,6 +514,7 @@ form{
 	border-width: 3px;
 	transition: all .2s;
 	padding: .1em;
+	color: #888;
 }
 
 .button:hover{

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block head %}
+{% endblock %}
+{% block content %}
+	<div id="wrapper">
+		{% include "titlebar.html" %}
+		<div>download your data:</div>
+		<a href="http://{{ HOST_NAME}}/dump/data.csv"><div class="button btn_left">download csv</div></a>
+		<a href="http://{{ HOST_NAME}}/dump/data.json"><div class="button btn_left">download json</div></a>
+	</div>
+{% endblock %}

@@ -290,11 +290,28 @@ def distributionGraph(request):
 
 @handlesubdomain
 def dataDump(request):
-	pass
+	context = {
+	}
+
+	return render(request, 'dump.html', context)
 
 @handlesubdomain
 def dumpCSV(request):
-	pass
+	csvResponse = 'datetime,comment,location_lat,location_lng,link,duration,finished';
+
+	jackData = Jack.objects.filter(user__id=request.session['user_id'])
+
+	for j in jackData:
+		csvResponse += str(j.date) + ','
+		csvResponse += ('"' + j.comment + '"' if j.comment is not None else '') + ','
+		csvResponse += str(j.location.lat if j.location is not None else '') + ','
+		csvResponse += str(j.location.lng if j.location is not None else '') + ','
+		csvResponse += ('"' + j.link.url + '"' if j.link is not None else '') + ','
+		csvResponse += str(j.date - j.start if j.start is not None else '') + ','
+		csvResponse += str(j.finished)
+		csvResponse += '\n'
+
+	return HttpResponse(csvResponse, content_type='text/csv')
 
 @handlesubdomain
 def dumpJson(request):
