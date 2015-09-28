@@ -170,17 +170,35 @@ def promo(request):
 	if len(fullPath) >= 3 and fullPath[2] != '':
 		promoCode = fullPath[2]
 
+	valid = verifyPromo(promoCode)
 	#check if promo code actually exists
-	promoObject = Promo.objects.filter(code=promoCode)
-	if promoObject.count() > 0:
-		print('yep')
-	else:
-		print('nope')
-	#request.session['promo_code'] = promoCode
 
 	context = {
+		'valid': valid
 	}
 	return render(request, 'promo.html', context)
+
+def verifyPromo(promoCode):
+	validcode = (False, "something... went wrong")
+	promoObject = Promo.objects.filter(code=promoCode)
+	#WWWOOOO, intentatio
+	if promoObject.count() > 0:
+		if promoObject[0].start is None \
+				or promoObject[0].start < datetime.now(timezone.utc):
+			if promoObject[0].end is None \
+					or promoObject[0].end > datetime.now(timezone.utc):
+				if (promoObject[0].uses is None or promoObject[0].uses > 0):
+					validcode = (True, "wew")
+				else:
+					validcode = (False, "already used up ")
+			else:
+				validcode = (False, "expired")
+		else:
+			validcode = (False, "hasn't started yet")
+	else:
+		validcode = (False, "not a valid code")
+
+	return validcode
 
 @paginate
 def search(request):
