@@ -288,12 +288,15 @@ def distributionGraph(request):
 
 	return render(request, 'graphs/bar.svg', context, content_type='image/svg+xml')
 
+@handlesubdomain
 def dataDump(request):
 	pass
 
+@handlesubdomain
 def dumpCSV(request):
 	pass
 
+@handlesubdomain
 def dumpJson(request):
 	pass
 
