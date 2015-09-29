@@ -274,6 +274,9 @@ class Promo(models.Model):
 	uses = models.IntegerField(null=True)
 	redirect = models.CharField(max_length=16)
 
+	#only flairs for now
+	flair = models.ForeignKey('Flair', null=True)
+
 #this is just the different' words to show, these models shouldn't be edited
 class RandomWordManager(models.Manager):
 	def random_word(self, default=None):
