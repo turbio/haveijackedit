@@ -166,16 +166,20 @@ def app_download(request):
 def promo(request):
 	fullPath = request.META['PATH_INFO'].split('/')
 
-	promoCode = False
-	if len(fullPath) >= 3 and fullPath[2] != '':
+	context = {
+	}
+
+	promoCode = request.GET.get('code', None)
+	if promoCode is None and len(fullPath) >= 3 and fullPath[2] != '':
 		promoCode = fullPath[2]
 
-	valid = verifyPromo(promoCode)
-	#check if promo code actually exists
+	if promoCode is not None:
+		valid = verifyPromo(promoCode)
+		context['valid'] = valid[0]
+		context['err_message'] = valid[1]
+	else:
+		context['no_code'] = True
 
-	context = {
-		'valid': valid
-	}
 	return render(request, 'promo.html', context)
 
 def verifyPromo(promoCode):

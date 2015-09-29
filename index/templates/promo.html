@@ -3,10 +3,20 @@
 {% endblock %}
 {% block content %}
 	<div id="wrapper">
-		{% include "titlebar.html" %}
 		<div id="feed_title_box">
-			<div id="feed_title_q">comming soon...</div>
-			{{ valid }}
+			{% if no_code %}
+				<form method="GET" action="http://{{ HOST_NAME }}/promo/">
+					<div>enter promo code:</div>
+					<input type="text" name="code" placeholder="promo code..."/>
+					<input class="inline_button" type="submit" value="submit"/>
+				</form>
+			{% else %}
+				{% if valid %}
+					wewww
+				{% else %}
+					{{ err_message }}
+				{% endif %}
+			{% endif %}
 		</div>
 	</div>
 {% endblock %}

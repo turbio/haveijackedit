@@ -272,6 +272,7 @@ class Promo(models.Model):
 	start = models.DateTimeField(null=True)
 	end = models.DateTimeField(null=True)
 	uses = models.IntegerField(null=True)
+	redirect = models.CharField(max_length=16)
 
 #this is just the different' words to show, these models shouldn't be edited
 class RandomWordManager(models.Manager):
