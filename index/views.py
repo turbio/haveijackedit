@@ -175,6 +175,10 @@ def promo(request):
 
 	if promoCode is not None:
 		valid = verifyPromo(promoCode)
+		if valid[0]:
+			request.session['promo_code'] = promoCode
+			return HttpResponseRedirect(valid[1].redirect)
+
 		context['valid'] = valid[0]
 		context['err_message'] = valid[1]
 	else:
@@ -192,7 +196,7 @@ def verifyPromo(promoCode):
 			if promoObject[0].end is None \
 					or promoObject[0].end > datetime.now(timezone.utc):
 				if (promoObject[0].uses is None or promoObject[0].uses > 0):
-					validcode = (True, "wew")
+					validcode = (True, promoObject[0])
 				else:
 					validcode = (False, "already used up ")
 			else:

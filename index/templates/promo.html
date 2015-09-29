@@ -4,18 +4,15 @@
 {% block content %}
 	<div id="wrapper">
 		<div id="feed_title_box">
-			{% if no_code %}
+			{% if no_code or not valid%}
+				{% if err_message %}
+					<div class="error_box">{{ err_message }}</div>
+				{% endif %}
 				<form method="GET" action="http://{{ HOST_NAME }}/promo/">
 					<div>enter promo code:</div>
 					<input type="text" name="code" placeholder="promo code..."/>
 					<input class="inline_button" type="submit" value="submit"/>
 				</form>
-			{% else %}
-				{% if valid %}
-					wewww
-				{% else %}
-					{{ err_message }}
-				{% endif %}
 			{% endif %}
 		</div>
 	</div>
