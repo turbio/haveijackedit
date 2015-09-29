@@ -396,7 +396,6 @@ def modifyjack(request):
 		jackObject.delete()
 
 	elif request.POST['operation'] == 'submit_edit':
-		print(request.POST['new_jack'])
 		jackObject.comment = request.POST['new_jack']
 		jackObject.save()
 
