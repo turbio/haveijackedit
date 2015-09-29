@@ -191,11 +191,9 @@ def verifyPromo(promoCode):
 	promoObject = Promo.objects.filter(code=promoCode)
 	#WWWOOOO, intentatio
 	if promoObject.count() > 0:
-		if promoObject[0].start is None \
-				or promoObject[0].start < datetime.now(timezone.utc):
-			if promoObject[0].end is None \
-					or promoObject[0].end > datetime.now(timezone.utc):
-				if (promoObject[0].uses is None or promoObject[0].uses > 0):
+		if promoObject[0].start is None or promoObject[0].start < datetime.now(timezone.utc):
+			if promoObject[0].end is None or promoObject[0].end > datetime.now(timezone.utc):
+				if promoObject[0].uses is None or promoObject[0].uses > 0:
 					validcode = (True, promoObject[0])
 				else:
 					validcode = (False, "already used up ")
@@ -589,7 +587,7 @@ def signup(request):
 			createUser(username, password, private == 'on')
 			if 'promo_code' in request.session:
 				addPromo(username, request.session['promo_code'])
-				request.session.remove('promo_code')
+				del request.session['promo_code']
 			signin(request)
 			return HttpResponseRedirect('/dash')
 		except Exception as e:
@@ -602,7 +600,12 @@ def addPromo(user, promo):
 	userObject = User.objects.get(name=user)
 
 	if promoObject.flair is not None:
-		userObject.flairs.add(promoObject.flair)
+		#userObject.flairs.add(promoObject.flair)
+		flairShip = FlairRelationship(
+			user=userObject,
+			flair=promoObject.flair
+		)
+		flairShip.save()
 
 def feed(request):
 	isUser = False
