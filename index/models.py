@@ -20,6 +20,7 @@ class User(models.Model):
 	settings = models.OneToOneField('UserSettings')
 	started = models.DateTimeField(null=True)
 	bros = models.ManyToManyField('User')
+	flairs = models.ManyToManyField('Flair', through='FlairRelationship')
 
 	def score(self):
 		return User.objects.raw(
@@ -44,6 +45,15 @@ class User(models.Model):
 		formated["minutes"], formated["seconds"] = divmod(rem, 60)
 
 		return formated
+
+class FlairRelationship(models.Model):
+	user = models.ForeignKey(User)
+	flair = models.ForeignKey('Flair')
+	active = models.BooleanField(default=True)
+
+class Flair(models.Model):
+	name = models.CharField(max_length=16)
+	image = models.CharField(max_length=128)
 
 class UserSettings(models.Model):
 	private = models.BooleanField(default=False)
@@ -256,6 +266,17 @@ class Image(UserSubmitted):
 
 class Tag(models.Model):
 	text = models.CharField(max_length=32)
+
+class Promo(models.Model):
+	description = models.CharField(max_length=512)
+	code = models.CharField(max_length=16)
+	start = models.DateTimeField(null=True)
+	end = models.DateTimeField(null=True)
+	uses = models.IntegerField(null=True)
+	redirect = models.CharField(max_length=16)
+
+	#only flairs for now
+	flair = models.ForeignKey('Flair', null=True)
 
 #this is just the different' words to show, these models shouldn't be edited
 class RandomWordManager(models.Manager):

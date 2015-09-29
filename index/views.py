@@ -489,9 +489,47 @@ def app_download(request):
 	return render(request, 'app_download.html', request.context)
 
 def promo(request):
+	fullPath = request.META['PATH_INFO'].split('/')
+
 	context = {
 	}
+
+	promoCode = request.GET.get('code', None)
+	if promoCode is None and len(fullPath) >= 3 and fullPath[2] != '':
+		promoCode = fullPath[2]
+
+	if promoCode is not None:
+		valid = verifyPromo(promoCode)
+		if valid[0]:
+			request.session['promo_code'] = promoCode
+			return HttpResponseRedirect(valid[1].redirect)
+
+		context['valid'] = valid[0]
+		context['err_message'] = valid[1]
+	else:
+		context['no_code'] = True
+
 	return render(request, 'promo.html', context)
+
+def verifyPromo(promoCode):
+	validcode = (False, "something... went wrong")
+	promoObject = Promo.objects.filter(code=promoCode)
+	#WWWOOOO, intentatio
+	if promoObject.count() > 0:
+		if promoObject[0].start is None or promoObject[0].start < datetime.now(timezone.utc):
+			if promoObject[0].end is None or promoObject[0].end > datetime.now(timezone.utc):
+				if promoObject[0].uses is None or promoObject[0].uses > 0:
+					validcode = (True, promoObject[0])
+				else:
+					validcode = (False, "already used up ")
+			else:
+				validcode = (False, "expired")
+		else:
+			validcode = (False, "hasn't started yet")
+	else:
+		validcode = (False, "not a valid code")
+
+	return validcode
 
 @paginate
 def search(request):
@@ -872,12 +910,27 @@ def signup(request):
 			verifyCaptcha(captchaClientResponse, ip)
 
 			createUser(username, password, private == 'on')
+			if 'promo_code' in request.session:
+				addPromo(username, request.session['promo_code'])
+				del request.session['promo_code']
 			signin(request)
 			return HttpResponseRedirect('/dash')
 		except Exception as e:
 			context['error'] = e.args[0]
 
 	return render(request, 'signup_standalone.html', context)
+
+def addPromo(user, promo):
+	promoObject = Promo.objects.get(code=promo)
+	userObject = User.objects.get(name=user)
+
+	if promoObject.flair is not None:
+		#userObject.flairs.add(promoObject.flair)
+		flairShip = FlairRelationship(
+			user=userObject,
+			flair=promoObject.flair
+		)
+		flairShip.save()
 
 def feed(request):
 	isUser = False

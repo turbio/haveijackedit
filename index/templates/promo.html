@@ -3,9 +3,17 @@
 {% endblock %}
 {% block content %}
 	<div id="wrapper">
-		{% include "titlebar.html" %}
 		<div id="feed_title_box">
-			<div id="feed_title_q">comming soon...</div>
+			{% if no_code or not valid%}
+				{% if err_message %}
+					<div class="error_box">{{ err_message }}</div>
+				{% endif %}
+				<form method="GET" action="http://{{ HOST_NAME }}/promo/">
+					<div>enter promo code:</div>
+					<input type="text" name="code" placeholder="promo code..."/>
+					<input class="inline_button" type="submit" value="submit"/>
+				</form>
+			{% endif %}
 		</div>
 	</div>
 {% endblock %}

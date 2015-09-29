@@ -1251,6 +1251,7 @@ input[type="checkbox"]:checked + label{
 	margin-left: .5em;
 }
 
+<<<<<<< HEAD
 #graphs_container{
 /* margin-top: 1em; *//* display: inline-block; *//* margin-left: auto; *//* margin-right: auto; */overflow: hidden;margin-right: auto;margin-left: auto;}
 
@@ -1291,4 +1292,8 @@ margin-left: auto;float: left;margin-right: auto;border-style: solid;     border
 	padding: .5em;
 
 	border-radius: 0.5em;
+}
+
+.inline_button{
+	border-left-style: none;
 }
