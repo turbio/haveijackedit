@@ -587,12 +587,22 @@ def signup(request):
 			verifyCaptcha(captchaClientResponse, ip)
 
 			createUser(username, password, private == 'on')
+			if 'promo_code' in request.session:
+				addPromo(username, request.session['promo_code'])
+				request.session.remove('promo_code')
 			signin(request)
 			return HttpResponseRedirect('/dash')
 		except Exception as e:
 			context['error'] = e.args[0]
 
 	return render(request, 'signup_standalone.html', context)
+
+def addPromo(user, promo):
+	promoObject = Promo.objects.get(code=promo)
+	userObject = User.objects.get(name=user)
+
+	if promoObject.flair is not None:
+		userObject.flairs.add(promoObject.flair)
 
 def feed(request):
 	isUser = False
