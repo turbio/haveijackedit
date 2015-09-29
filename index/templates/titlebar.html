@@ -29,7 +29,11 @@
 	<a id="community_button_link" href="http://{{ HOST_NAME }}/community"><div id="community_button_icon" class="titlebar_button btn_right{% if is_community_page %} titlebar_button_selected_secondary{% endif %}"><i class="material-icons">group_work</i></div></a>
 </div>
 <div id="user_actions">
-	<div class="titlebar_button">flair</div>
+	<div class="titlebar_button">
+		{% for f in  user.flairs.all %}
+			<img class="flair" src="/static/flair/{{ f.image }}"/>
+		{% endfor %}
+	</div>
 	<div class="titlebar_button">score: {{ user.score }}</div>
 	<div class="titlebar_button btn_action"><a href="http://{{ HOST_NAME }}/stats"><i class="btn_action_icon material-icons">equalizer</i>stats</a></div>
 	{% comment %}

@@ -1332,3 +1332,8 @@ margin-left: auto;float: left;margin-right: auto;border-style: solid;     border
 .currently_jacking{
 	color: #ff8888;
 }
+
+.flair{
+	width: 1em;
+	height: 1em;
+}
