@@ -19,7 +19,6 @@ class User(models.Model):
 	creation_date = models.DateTimeField()
 	settings = models.OneToOneField('UserSettings')
 	started = models.DateTimeField(null=True)
-	bros = models.ManyToManyField('User')
 	flairs = models.ManyToManyField('Flair', through='FlairRelationship')
 
 	def score(self):
