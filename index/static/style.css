@@ -1297,3 +1297,38 @@ margin-left: auto;float: left;margin-right: auto;border-style: solid;     border
 .inline_button{
 	border-left-style: none;
 }
+
+.feed_profile{
+
+}
+
+.feed_jack_list{
+	background-color: #f8f8f8;
+}
+
+@media (min-width: 700px){
+	.feed_profile{
+		display: inline-block;
+		width: 5em;
+		vertical-align: top;
+	}
+
+	.feed_jack_list{
+		width: calc(100% - 5em);
+		display: inline-block;
+		vertical-align: top;
+		text-align: center;
+	}
+}
+
+.feed_wrapper{
+	width: 100%;
+}
+
+.user_status{
+	font-size: .3em;
+}
+
+.currently_jacking{
+	color: #ff8888;
+}

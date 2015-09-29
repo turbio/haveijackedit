@@ -14,26 +14,43 @@
 	{% if is_user %}
 		<div id="wrapper">
 			{% include "titlebar.html" %}
-			<div id="feed_title_box">
-				<div id="feed_title_q">
-					Has {{ username }} jacked it today?
+			<div class="feed_wrapper">
+				<div class="feed_profile">
+					<div id="feed_title_box">
+						{{ user.name }}
+						<div>~flair~</div>
+						<div class="user_status{% if user.isJacking %} currently_jacking{% endif %}">
+							{% if user.isJacking %}
+								<i class="material-icons" style="font-size: 1em;">thumb_up</i> currently jacking!
+							{% elif rand %}
+								jacked it recently
+							{% else %}
+								hasn't jacked it
+							{% endif %}
+						</div>
+						<div>
+							bio
+						</div>
+						<div>
+							kinks
+						</div>
+					</div>
 				</div>
-				<div id="feed_title_a">
-					{{ title_text_a }}
+				<div class="feed_jack_list">
+					{% if jack_list %}
+						{% for jack in jack_list %}
+							{% include "jack.html" %}
+						{% endfor %}
+						{% include "pagination_nav.html" %}
+					{% else %}
+					{% endif %}
 				</div>
 			</div>
-		{% if jack_list %}
-			{% for jack in jack_list %}
-				{% include "jack.html" %}
-			{% endfor %}
-			{% include "pagination_nav.html" %}
-		{% else %}
-		{% endif %}
 		</div>
 	{% else %}
 		<div class="error_page_message">
 			doesn't look like this user exists
-			<div><a href="http://{{ HOST_NAME }}?u={{ username }}">
+			<div><a href="http://{{ HOST_NAME }}/signup?u={{ username }}">
 				take this url
 			</a></div>
 			<div><a href="http://{{ HOST_NAME }}">
