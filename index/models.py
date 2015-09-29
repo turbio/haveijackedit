@@ -18,6 +18,7 @@ class User(models.Model):
 	last_online = models.DateTimeField()
 	creation_date = models.DateTimeField()
 	settings = models.OneToOneField('UserSettings')
+	profile = models.OneToOneField('UserProfile')
 	started = models.DateTimeField(null=True)
 	flairs = models.ManyToManyField('Flair', through='FlairRelationship')
 
@@ -53,6 +54,11 @@ class FlairRelationship(models.Model):
 class Flair(models.Model):
 	name = models.CharField(max_length=16)
 	image = models.CharField(max_length=128)
+
+class UserProfile(models.Model):
+	bio = models.CharField(null=True)
+	url = models.CharField(null=True)
+	kinks = models.ManyToManyField('Tag', related_name='user_kinks')
 
 class UserSettings(models.Model):
 	private = models.BooleanField(default=False)
