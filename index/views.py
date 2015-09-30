@@ -1130,7 +1130,6 @@ def submit_jack(request):
 
 		for broString in broStrings:
 			try:
-				print(broString)
 				newBroObjet = User.objects.get(name__iexact=broString)
 				newJack.bros.add(newBroObjet)
 			except:
@@ -1138,9 +1137,18 @@ def submit_jack(request):
 
 	if 'jack_tag' in request.POST and not request.POST['jack_tag'] == '':
 		tagStrings = request.POST['jack_tag'].split(",")
+		print(tagStrings)
 		tagStrings = [s.strip(' ') for s in tagStrings]
+		print(tagStrings)
 
 		for tagText in tagStrings:
+			print(tagText)
+			#tag text must be alphanumeric with spaces allowed but not required
+			#although it cannot just be spaces
+			if not (all(c.isalnum() or c.isspace() for c in tagText)
+					and any(c.isalnum() for c in tagText)):
+				print('skipping')
+				continue
 			userTagObject, created = Tag.objects.get_or_create(text=tagText)
 			newJack.tags.add(userTagObject)
 
