@@ -7,7 +7,7 @@
 		{% include "titlebar.html" %}
 		<div id="settings_container">
 			<div>{{ user.name }}</div>
-			<form method="POST" action="/submit_customizations/">{% csrf_token %}
+			<form method="post" action=".">{% csrf_token %}
 				<textarea class="fake_input_field" name="bio" placeholder="about you...">{% if user.profile.bio %}{{ user.profile.bio }}{% endif %}</textarea>
 				<input name="link" type="text" value="{% if user.profile.link %}{{ user.profile.link.url }}{% endif %}" placeholder="link to your shit"/>
 				<div id="profile_add_tag" class="profile_field">

@@ -482,6 +482,23 @@ def bros(request):
 def customize(request):
 	context = {
 	}
+
+	if request.method == 'POST':
+		userObject = User.objects.get(id=request.session['user_id'])
+		userObject.profile.bio = request.POST['bio']
+
+		validUrl = validateUrl(request.POST['link'])
+		if validUrl:
+			link = Link(
+				url=validUrl,
+				user=userObject,
+				ip=getUserIp(request)
+			)
+			link.save()
+			userObject.profile.link = link
+
+		userObject.profile.save()
+
 	return render(request, 'customize.html', context)
 
 @communitypage
