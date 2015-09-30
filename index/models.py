@@ -45,6 +45,11 @@ class User(models.Model):
 
 		return formated
 
+	def activeFlairs(self):
+		return Flair.objects.filter(
+			id__in=FlairRelationship.objects.filter(
+				user=self,active=True).values('flair'))
+
 class FlairRelationship(models.Model):
 	user = models.ForeignKey(User)
 	flair = models.ForeignKey('Flair')

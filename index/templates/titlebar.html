@@ -30,13 +30,13 @@
 </div>
 <div id="user_actions">
 	<div class="titlebar_button">
-		{% for f in  user.flairs.all %}
-			<img class="flair" src="/static/flair/{{ f.image }}"/>
-		{% endfor %}
+		<a href="http://{{ HOST_NAME}}/stats"><i class="material-icons">thumb_up</i>&nbsp;{{ user.score }}</a>
+		<div class="actions_flair_list">
+			{% for f in user.activeFlairs %}
+				<img class="flair" src="/static/flair/{{ f.image }}"/>
+			{% endfor %}
+		</div>
 	</div>
-	{% if user.score %}
-		<div class="titlebar_button"><a href="http://{{ HOST_NAME}}/stats"><i class="material-icons">thumb_up</i>&nbsp;{{ user.score }}</a></div>
-	{% endif %}
 	<div class="titlebar_button btn_action"><a href="http://{{ HOST_NAME }}/stats"><i class="btn_action_icon material-icons">equalizer</i>stats</a></div>
 	{% comment %}
 	<div class="titlebar_button  btn_action"><a href="http://{{ HOST_NAME }}/bros"><i class="btn_action_icon material-icons">group</i>bros</a></div>
