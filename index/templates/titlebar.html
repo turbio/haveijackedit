@@ -35,7 +35,7 @@
 		{% endfor %}
 	</div>
 	{% if user.score %}
-		<div class="titlebar_button"><i class="material-icons">thumb_up</i>&nbsp;{{ user.score }}</div>
+		<div class="titlebar_button"><a href="http://{{ HOST_NAME}}/stats"><i class="material-icons">thumb_up</i>&nbsp;{{ user.score }}</a></div>
 	{% endif %}
 	<div class="titlebar_button btn_action"><a href="http://{{ HOST_NAME }}/stats"><i class="btn_action_icon material-icons">equalizer</i>stats</a></div>
 	{% comment %}

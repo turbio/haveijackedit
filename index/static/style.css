@@ -1186,6 +1186,10 @@ input[type="checkbox"]:checked + label{
 	/* margin-top: .25em; */
 }
 
+.titlebar_button > a{
+	color: black;
+}
+
 #pagination_nav{
 	text-align: center;
 	font-size: .5em;
