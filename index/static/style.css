@@ -800,6 +800,7 @@ form{
 	margin-right: auto;
 	padding: .5em;
 	overflow: hidden;
+	background-color: #eee;
 }
 
 #setting_title{
