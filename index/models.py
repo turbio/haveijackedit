@@ -23,8 +23,7 @@ class User(models.Model):
 	flairs = models.ManyToManyField('Flair', through='FlairRelationship')
 
 	def score(self):
-		return User.objects.raw(
-			open("index/user_score.sql").read() % self.id)[0].score
+		return User.objects.raw(open("index/user_score.sql").read() % self.id)[0].score
 
 	def isJacking(self):
 		return self.started is not None

@@ -1,12 +1,12 @@
 SELECT
 	index_user.id,
-	(votes.total_recieved * 5) + jacks.unique_dates + FLOOR(jacks.total_submitted_length / jacks.total_submitted) AS score
+	(IFNULL(votes.total_recieved, 0) * 5) + jacks.unique_dates + FLOOR(jacks.total_submitted_length / jacks.total_submitted) AS score
 FROM
 	index_user
 LEFT JOIN (
 	SELECT
 		index_usersubmitted.user_id AS user_id,
-		SUM(index_vote.points) AS total_recieved
+		IFNULL(SUM(index_vote.points), 0) AS total_recieved
 	FROM
 		index_vote
 	INNER JOIN index_jack ON
