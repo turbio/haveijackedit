@@ -886,7 +886,9 @@ def verifyCaptcha(captcha_response, userIp):
 
 	decodedCaptchaResponse = json.loads(captchaResponse)
 	if not decodedCaptchaResponse['success']:
-		raise Exception('must verify captcha')
+		return False
+
+	return True
 
 def signup(request):
 	context = { }
@@ -896,27 +898,32 @@ def signup(request):
 		password = str(request.POST.get('password', ''))
 		private = str(request.POST.get('private', ''))
 
-		try:
-			captchaClientResponse = str(request.POST.get(
-				'g-recaptcha-response', ''))
+		captchaClientResponse = str(request.POST.get(
+			'g-recaptcha-response', ''))
 
-			#get the users ip
-			x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-			if x_forwarded_for:
-				ip = x_forwarded_for.split(',')[0]
+		#get the users ip
+		x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+		if x_forwarded_for:
+			ip = x_forwarded_for.split(',')[0]
+		else:
+			ip = request.META.get('REMOTE_ADDR')
+
+		verifyResult = verifyCaptcha(captchaClientResponse, ip)
+		if not verifyCaptcha:
+			context['error'] = 'must verify captcha'
+
+		else:
+			createUserResult = createUser(username, password, private == 'on')
+
+			if not createUserResult[0]:
+				context['error'] = createUserResult[1]
 			else:
-				ip = request.META.get('REMOTE_ADDR')
+				if 'promo_code' in request.session:
+					addPromo(username, request.session['promo_code'])
+					del request.session['promo_code']
+				signin(request)
 
-			verifyCaptcha(captchaClientResponse, ip)
-
-			createUser(username, password, private == 'on')
-			if 'promo_code' in request.session:
-				addPromo(username, request.session['promo_code'])
-				del request.session['promo_code']
-			signin(request)
-			return HttpResponseRedirect('/dash')
-		except Exception as e:
-			context['error'] = e.args[0]
+				return HttpResponseRedirect('/dash')
 
 	return render(request, 'signup_standalone.html', context)
 
@@ -1152,11 +1159,11 @@ def userExists(username):
 #creates user or raises exception detailing what went wrong
 def createUser(username, password, isPrivate=False):
 	if username == '':
-		raise Exception('must supply a username')
+		return (False, 'must supply a username')
 	if not username.isalnum():
-		raise Exception('username must be alphanumeric')
+		return (False, 'username must be alphanumeric')
 	if userExists(username):
-		raise Exception('username already exists')
+		return (False, 'username already exists')
 
 	hash_salt = createPasswordSalt()
 	hashed_password = hashPassword(password, hash_salt)
@@ -1173,6 +1180,8 @@ def createUser(username, password, isPrivate=False):
 		password_salt=hash_salt,
 		settings=newUserSettings)
 	newUser.save()
+
+	return (True)
 
 def createPasswordSalt():
 	return hashlib.md5(str(time.time()).encode()).hexdigest()
