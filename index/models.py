@@ -56,8 +56,8 @@ class Flair(models.Model):
 	image = models.CharField(max_length=128)
 
 class UserProfile(models.Model):
-	bio = models.CharField(null=True)
-	url = models.CharField(null=True)
+	bio = models.CharField(max_length=160, null=True)
+	link = models.ForeignKey('Link', null=True)
 	kinks = models.ManyToManyField('Tag', related_name='user_kinks')
 
 class UserSettings(models.Model):
