@@ -1129,7 +1129,12 @@ def submit_jack(request):
 		broStrings = [s.strip(' ') for s in broStrings]
 
 		for broString in broStrings:
-			newJack.bros.add(User.objects.get(name__iexact=broString))
+			try:
+				print(broString)
+				newBroObjet = User.objects.get(name__iexact=broString)
+				newJack.bros.add(newBroObjet)
+			except:
+				pass
 
 	if 'jack_tag' in request.POST and not request.POST['jack_tag'] == '':
 		tagStrings = request.POST['jack_tag'].split(",")
@@ -1172,16 +1177,20 @@ def createUser(username, password, isPrivate=False):
 	newUserSettings.private = isPrivate
 	newUserSettings.save()
 
+	newUserProfile = UserProfile()
+	newUserProfile.save()
+
 	newUser = User(
 		name=username,
 		password_hash=hashed_password,
 		last_online=datetime.today(),
 		creation_date=datetime.today(),
 		password_salt=hash_salt,
-		settings=newUserSettings)
+		settings=newUserSettings,
+		profile=newUserProfile)
 	newUser.save()
 
-	return (True)
+	return (True, 'success')
 
 def createPasswordSalt():
 	return hashlib.md5(str(time.time()).encode()).hexdigest()
