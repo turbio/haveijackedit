@@ -497,6 +497,21 @@ def customize(request):
 			link.save()
 			userObject.profile.link = link
 
+		tagStrings = request.POST['profile_tag'].split(",")
+
+		userObject.profile.kinks.clear()
+		for tag in tagStrings:
+			tag = ' '.join(tag.strip(' ').split(' '))
+
+			#tag text must be alphanumeric with spaces allowed but not required
+			#although it cannot just be spaces
+			if not (all(c.isalnum() or c.isspace() for c in tag)
+					and any(c.isalnum() for c in tag)):
+				continue
+
+			userTagObject, created = Tag.objects.get_or_create(text=tag)
+			userObject.profile.kinks.add(userTagObject)
+
 		userObject.profile.save()
 
 	return render(request, 'customize.html', context)
