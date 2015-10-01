@@ -34,6 +34,13 @@ class User(models.Model):
 		else:
 			return None
 
+	def lastJacked(self):
+		#try:
+		mostRecentJack = Jack.objects.filter(user=self)[0]
+		return (datetime.now(timezone.utc) - mostRecentJack.date)
+		#except:
+			#return False
+
 	def jackTimeFormated(self):
 		diff = self.jackTime()
 		if diff is None:

@@ -18,21 +18,32 @@
 				<div class="feed_profile">
 					<div id="feed_title_box">
 						{{ user.name }}
-						<div>~flair~</div>
+						{% for f in user.activeFlairs %}
+							<img class="flair" src="/static/flair/{{ f.image }}"/>
+						{% endfor %}
 						<div class="user_status{% if user.isJacking %} currently_jacking{% endif %}">
 							{% if user.isJacking %}
 								<i class="material-icons" style="font-size: 1em;">thumb_up</i> currently jacking!
-							{% elif rand %}
-								jacked it recently
+							{% elif user.lastJacked %}
+								jacked it
+								{% with user.lastJacked as lastjacked %}
+									{% if lastjacked.days > 0 %}
+										{{ lastjacked.days }} day{{ lastjacked.days|pluralize }} ago
+									{% else %}
+										{{ lastjacked.seconds }} second{{ lastjacked.seconds|pluralize }} ago
+									{% endif %}
+								{% endwith %}
 							{% else %}
 								hasn't jacked it
 							{% endif %}
 						</div>
-						<div>
-							bio
+						<div class="user_bio">
+							{{ user.profile.bio }}
 						</div>
 						<div>
-							kinks
+							{% for kink in user.profile.kinks %}
+								{{ kink.text }}
+							{% endfor %}
 						</div>
 					</div>
 				</div>
