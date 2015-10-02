@@ -38,6 +38,8 @@ body{
 .msg{
 	font-style: italic;
 	text-align: center;
+	word-wrap: break-word;
+	white-space: normal;
 }
 
 .name{
@@ -1235,6 +1237,26 @@ input[type="checkbox"]:checked + label{
 	margin: .125em;
 }
 
+.profile_label{
+	float: none;
+	font-size: .5em;
+	margin-left: .15em;
+	margin-right: .15em;
+}
+
+.user_bio{
+	font-size: .75em;
+	margin-bottom: .25em;
+	margin-top: .25em;
+	word-wrap: break-word;
+	white-space: normal;
+}
+
+#profile_tag_container{
+	display: flex;
+	justify-content: center;
+}
+
 .taglist_label{
 	float: none;
 	display: inline-block;
@@ -1256,7 +1278,6 @@ input[type="checkbox"]:checked + label{
 	margin-left: .5em;
 }
 
-<<<<<<< HEAD
 #graphs_container{
 /* margin-top: 1em; *//* display: inline-block; *//* margin-left: auto; *//* margin-right: auto; */overflow: hidden;margin-right: auto;margin-left: auto;}
 
@@ -1342,6 +1363,7 @@ margin-left: auto;float: left;margin-right: auto;border-style: solid;     border
 	width: 1em;
 	height: 1em;
 }
+
 @media (max-width: 600px){
 	.center_container input{
 		width: 100%;
@@ -1374,4 +1396,14 @@ hr{
 
 .centered_content{
 	font-size: .5em;
+}
+
+.security_warning{
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	font-size: .25em;
+	color: red;
+	text-align: right;
+	margin: 1em;
 }

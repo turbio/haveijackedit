@@ -26,5 +26,12 @@
 			<input type="submit" name="submin" value="sign up"/>
 		</form>
 		<a href="http://{{ request.META.HTTP_HOST }}">back</a>
+		<div class="security_warning">
+			WARNING! i'm too poor to afford ssl certificates
+			<br/>
+			please don't use your default password here
+			<br/>
+			passwords are sent in plaintext over the internet
+		</div>
 	</div>
 {% endblock %}
