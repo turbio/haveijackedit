@@ -29,7 +29,6 @@ urlpatterns = [
 	url(r'^signup/$', views.signup),
 	url(r'^submit_jack/$', views.submit_jack),
 	url(r'^modify/$', views.modifyjack),
-	url(r'^community/$', views.community),
 	url(r'^jack/', views.standalone_jack),
 	url(r'^tag_suggestion/$', views.tag_suggestion),
 	url(r'^bro_suggestion/$', views.bro_suggestion),

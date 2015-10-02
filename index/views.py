@@ -442,10 +442,6 @@ def calendarGraph(request):
 	return render(request, 'graphs/calendar.svg', context, content_type='image/svg+xml')
 
 @communitypage
-def community(request):
-	return render(request, 'community.html', request.context)
-
-@communitypage
 @paginate
 def tags(request):
 	splitUrl = request.META['PATH_INFO'].split('/')

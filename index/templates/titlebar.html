@@ -26,7 +26,7 @@
 	{% with user.name|add:"."|add:HOST_NAME as user_feed %}
 		<a href="http://{{ user.name}}.{{ HOST_NAME }}"><div class="titlebar_button btn_right{% if request.get_host == user_feed and request.path == "/"%} titlebar_button_selected{% endif %}" id="dash_icon"><i class="material-icons">view_agenda</i></div></a>
 	{% endwith %}
-	<a id="community_button_link" href="http://{{ HOST_NAME }}/community"><div id="community_button_icon" class="titlebar_button btn_right{% if is_community_page %} titlebar_button_selected_secondary{% endif %}"><i class="material-icons">group_work</i></div></a>
+	<a id="community_button_link" href="http://{{ HOST_NAME }}/about"><div id="community_button_icon" class="titlebar_button btn_right{% if is_community_page %} titlebar_button_selected_secondary{% endif %}"><i class="material-icons">group_work</i></div></a>
 </div>
 <div id="user_actions">
 	<div class="titlebar_button">
