@@ -37,9 +37,11 @@
 								hasn't jacked it
 							{% endif %}
 						</div>
-						<div class="user_bio">
-							{{ user.profile.bio }}
-						</div>
+						{% if user.profile.bio %}
+							<div class="user_bio">
+								{{ user.profile.bio }}
+							</div>
+						{% endif %}
 						<div id="profile_tag_container">
 							{% for t in user.profile.kinks.all %}
 								<div class="label profile_label"><a href="http://{{ HOST_NAME }}/tag/{{ t.text }}">{{ t.text }}</a></div>
