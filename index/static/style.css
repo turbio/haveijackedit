@@ -38,6 +38,8 @@ body{
 .msg{
 	font-style: italic;
 	text-align: center;
+	word-wrap: break-word;
+	white-space: normal;
 }
 
 .name{
@@ -1246,6 +1248,8 @@ input[type="checkbox"]:checked + label{
 	font-size: .75em;
 	margin-bottom: .25em;
 	margin-top: .25em;
+	word-wrap: break-word;
+	white-space: normal;
 }
 
 #profile_tag_container{
