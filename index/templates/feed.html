@@ -40,9 +40,9 @@
 						<div class="user_bio">
 							{{ user.profile.bio }}
 						</div>
-						<div>
-							{% for kink in user.profile.kinks %}
-								{{ kink.text }}
+						<div id="profile_tag_container">
+							{% for t in user.profile.kinks.all %}
+								<div class="label profile_label"><a href="http://{{ HOST_NAME }}/tag/{{ t.text }}">{{ t.text }}</a></div>
 							{% endfor %}
 						</div>
 					</div>

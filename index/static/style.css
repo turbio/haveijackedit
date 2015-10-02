@@ -1235,6 +1235,24 @@ input[type="checkbox"]:checked + label{
 	margin: .125em;
 }
 
+.profile_label{
+	float: none;
+	font-size: .5em;
+	margin-left: .15em;
+	margin-right: .15em;
+}
+
+.user_bio{
+	font-size: .75em;
+	margin-bottom: .25em;
+	margin-top: .25em;
+}
+
+#profile_tag_container{
+	display: flex;
+	justify-content: center;
+}
+
 .taglist_label{
 	float: none;
 	display: inline-block;
