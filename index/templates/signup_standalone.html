@@ -4,6 +4,7 @@
 	<script src='https://www.google.com/recaptcha/api.js'></script>
 {% endblock %}
 {% block content %}
+	{% include "titlebar.html" %}
 	<div class="account_dialog">
 		<form method="POST" action="/signup/">{% csrf_token %}sign up<br/>
 			{% if error %}

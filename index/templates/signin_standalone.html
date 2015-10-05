@@ -3,6 +3,7 @@
 	<script src="/static/account_action.js"></script>
 {% endblock %}
 {% block content %}
+	{% include "titlebar.html" %}
 	<div class="account_dialog">
 		<form method="POST" action="/signin/">{% csrf_token %}sign in<br/>
 			{% if error %}
