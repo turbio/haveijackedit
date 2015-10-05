@@ -47,12 +47,6 @@
 	<div class="titlebar_button  btn_action"><a href="http://{{ HOST_NAME }}/signout"><i class="btn_action_icon material-icons">exit_to_app</i>signout</a></div>
 	<div class="titlebar_button  btn_action"><i class="btn_action_icon material-icons">close</i>close</div>
 </div>
-<div class="title_bar sub_bar" id="sort_bar">
-	{% load add_get_parameter %}
-	<a href="http://{{ request.get_host }}{{ request.path }}{% add_get sort='popular' %}"><div class="titlebar_button{% if sort_method == "score" %} titlebar_button_selected{% endif %}">popular</div></a>
-	<a href="http://{{ request.get_host }}{{ request.path }}{% add_get sort='new' %}"><div class="titlebar_button{% if sort_method == "date" %} titlebar_button_selected{% endif %}">new</div></a>
-	<a href="http://{{ request.get_host }}{{ request.path }}{% add_get sort='top' %}"><div class="titlebar_button{% if sort_method == "votes" %} titlebar_button_selected{% endif %}">top</div></a>
-</div>
 {% comment %}
 this is bad and ugly... but it works for now
 {% endcomment %}
@@ -67,4 +61,34 @@ this is bad and ugly... but it works for now
 	<a href="http://{{ HOST_NAME }}/dev"><div class="titlebar_button btn_right{% if request.path == "/dev/" %} titlebar_button_selected{% endif %}"><i class="material-icons">code</i></div></a>
 	<!--<a href="http://{{ HOST_NAME }}/app"><div class="titlebar_button btn_right{% if request.path == "/app/" %} titlebar_button_selected{% endif %}"><i class="material-icons">file_download</i></div></a>-->
 </div>
+{% elif request.get_host != HOST_NAME or request.path != "/" %}
+<div class="title_bar" id="top_bar">
+	<a href="http://{{ HOST_NAME }}"><div class="titlebar_button{% if request.get_host == HOST_NAME and request.path == "/" %} titlebar_button_selected{% endif %}" id="home_icon"><i class="material-icons">home</i></div></a>
+
+	{% if is_searchable %}
+	<form method="GET" action="/search{% if search_source_labels %}/{{ search_source_labels }}{% endif %}">
+			{% comment %}
+			baiscally, when you go to the search page from something like the dash
+			it should only show what would be on the dash and sort by how the dash
+			was being sorted
+			{% endcomment %}
+			<input type="hidden" name="sort" value="{{ sort_method }}"/>
+			<div class="titlebar_button{% if is_search_page %} titlebar_button_selected{% endif %}"><input name="term" id="bar_search" type="text" placeholder="search..." {% if search_query %}value="{{ search_query }}"{% endif %}/></div>
+		</form>
+	{% endif %}
+	{% if is_sortable %}
+		<div id="sort_button" class="titlebar_button"><i class="material-icons">sort</i></div>
+	{% endif %}
+
+	<a href="http://{{ HOST_NAME }}/signup"><div class="titlebar_button btn_right{% if request.path == "/signup/" %} titlebar_button_selected{% endif %}">signup</div></a>
+	<a href="http://{{ HOST_NAME }}/signin"><div class="titlebar_button btn_right{% if request.path == "/signin/" %} titlebar_button_selected{% endif %}">signin</div></a>
+
+	<a href="http://{{ HOST_NAME }}/tags"><div class="titlebar_button btn_right{% if request.path == "/tags/" %} titlebar_button_selected{% endif %}"><i class="material-icons">label</i></div></a>
+</div>
 {% endif %}
+<div class="title_bar sub_bar" id="sort_bar">
+	{% load add_get_parameter %}
+	<a href="http://{{ request.get_host }}{{ request.path }}{% add_get sort='popular' %}"><div class="titlebar_button{% if sort_method == "score" %} titlebar_button_selected{% endif %}">popular</div></a>
+	<a href="http://{{ request.get_host }}{{ request.path }}{% add_get sort='new' %}"><div class="titlebar_button{% if sort_method == "date" %} titlebar_button_selected{% endif %}">new</div></a>
+	<a href="http://{{ request.get_host }}{{ request.path }}{% add_get sort='top' %}"><div class="titlebar_button{% if sort_method == "votes" %} titlebar_button_selected{% endif %}">top</div></a>
+</div>
