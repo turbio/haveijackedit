@@ -5,17 +5,21 @@
 	<div id="wrapper">
 		{% include "titlebar.html" %}
 
-		{% for tag in search_tag_list %}
-			<div class="label search_label">
-				<i class="material-icons">label</i>
-				<a href="http://{{ HOST_NAME}}/tag/{{ tag }}">{{ tag }}</a></div>
-		{% endfor %}
+		{% if search_tag_list|length > 0 or search_user_list|length > 0 %}
+			<div class="search_label_container">
+				{% for tag in search_tag_list %}
+					<div class="label search_label">
+						<i class="material-icons">label</i>
+						<a href="http://{{ HOST_NAME}}/tag/{{ tag }}">{{ tag }}</a></div>
+				{% endfor %}
 
-		{% for user in search_user_list %}
-			<div class="label search_label">
-				<i class="material-icons">person</i>
-				<a href="http://{{ user }}.{{ HOST_NAME}}">{{ user }}</a></div>
-		{% endfor %}
+				{% for user in search_user_list %}
+					<div class="label search_label">
+						<i class="material-icons">person</i>
+						<a href="http://{{ user }}.{{ HOST_NAME}}">{{ user }}</a></div>
+				{% endfor %}
+			</div>
+		{% endif %}
 
 		{% if results %}
 			{% for jack in results %}

@@ -1229,7 +1229,11 @@ input[type="checkbox"]:checked + label{
 
 .search_label{
 	font-size: .5em;
-	margin-left: .5em;
+	margin: .5em;
+}
+
+.search_label_container{
+	overflow: hidden;
 }
 
 .jack_label{
