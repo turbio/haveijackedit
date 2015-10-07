@@ -27,7 +27,9 @@ function addNewTag(object, text){
 }
 
 function checkForTagRemoval(event){
-	if(event.key == "Backspace" && this.value.length == 0 && $(this).data("currentTags").length > 0){
+	if((event.key == "Backspace" || event.keyCode == 8)
+			&& this.value.length == 0
+			&& $(this).data("currentTags").length > 0){
 		$(this).prev('.inserted_tag').remove();
 		$(this).data("currentTags").pop();
 	}
