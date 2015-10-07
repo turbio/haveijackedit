@@ -115,21 +115,50 @@ form{
 	margin: 0.25em;
 }
 
+@media (max-width: 600px){
+	#sign_links{
+		flex-direction: column;
+	}
+
+	.sign_sep{
+		display: none;
+	}
+
+	.sign_link{
+		padding: .25em;
+		margin: .125em;
+	}
+
+	.sign_link:hover{
+		background: black;
+	}
+
+	.sign_link > a{
+		color: black;
+	}
+
+	.sign_link:hover > a{
+		color: white;
+	}
+}
+
+.sign_sep{
+	margin-left: 1em;
+	margin-right: 1em;
+}
+
+
 #sign_links{
-	font-size: .5em;
 	display: flex;
-	justify-content: center;
 	align-items: center;
 	flex-wrap: wrap;
+
+	font-size: .5em;
+	justify-content: center;
 }
 
 .sign_link{
 	/*float: left;*/
-}
-
-#sign_sep{
-	margin-left: 1em;
-	margin-right: 1em;
 }
 
 .account_dialog{
