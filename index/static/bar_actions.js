@@ -33,7 +33,8 @@ $(document).ready(function(){
 			}
 		},
 		delay: 300,
-		html: true
+		html: true,
+		appendTo: "#top_bar"
 	});
 
 	$("#sort_button").bind("click", function(e){

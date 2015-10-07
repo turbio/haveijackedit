@@ -674,6 +674,7 @@ form{
 	position: relative;
 	background-color: #eee;
 	padding: .25em;
+	/* font-size: .5em; */
 }
 
 #jack_time_field{
@@ -1095,15 +1096,10 @@ input[type="checkbox"]:checked + label{
 .ui-autocomplete{
 	/*sorry... don't want to deal with jquery*/
 	border-top-style: none !important;
-	font-size: .5em !important;
 	border-style: solid !important;
 	border-width: 3px !important;
 	border-color: #888 !important;
 	background-color: #fff;
-
-	top: 1.5em !important;
-	left: 1.5em !important;
-	position: fixed !important;
 }
 
 .ui-state-focus{
@@ -1114,6 +1110,10 @@ input[type="checkbox"]:checked + label{
 
 .ui-menu-item{
 	transition: all .2s;
+}
+
+.ui-menu-item > a{
+	color: #000 !important;
 }
 
 .div_text_input{
@@ -1150,6 +1150,9 @@ input[type="checkbox"]:checked + label{
 	overflow: hidden;
 	background: white;
 	cursor: text;
+	margin-top: .25em;
+	width: 100%;
+	/* font-size: 2em; */
 }
 
 .hidden_input_field{
@@ -1410,4 +1413,13 @@ hr{
 	color: red;
 	text-align: right;
 	margin: 1em;
+}
+
+.jack_field_title{
+	font-size: .5em;
+	text-align: left;
+}
+
+.jack_field > .ui-autocomplete{
+	font-size: .5em;
 }

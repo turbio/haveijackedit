@@ -76,7 +76,8 @@ $(document).ready(function(){
 			this.value = "";
 			return false;
 		},
-		delay: 100
+		delay: 100,
+		appendTo: "#jack_add_tag"
 	})
 	.bind("change paste keyup", checkForTagChange)
 	.bind("keydown", checkForTagRemoval)
@@ -93,7 +94,8 @@ $(document).ready(function(){
 			this.value = "";
 			return false;
 		},
-		delay: 100
+		delay: 100,
+		appendTo: "#jack_add_bro"
 	})
 	.bind("change paste keyup", checkForTagChange)
 	.bind("keydown", checkForTagRemoval)
