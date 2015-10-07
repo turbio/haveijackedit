@@ -117,7 +117,7 @@ form{
 
 @media (max-width: 600px){
 	#sign_links{
-		flex-direction: column;
+		/*flex-direction: column;*/
 	}
 
 	.sign_sep{
@@ -125,20 +125,21 @@ form{
 	}
 
 	.sign_link{
+		background: black;
 		padding: .25em;
 		margin: .125em;
 	}
 
 	.sign_link:hover{
-		background: black;
+		background: white;
 	}
 
 	.sign_link > a{
-		color: black;
+		color: white;
 	}
 
 	.sign_link:hover > a{
-		color: white;
+		color: black;
 	}
 }
 
