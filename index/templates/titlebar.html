@@ -29,7 +29,7 @@
 	<a id="community_button_link" href="http://{{ HOST_NAME }}/about"><div id="community_button_icon" class="titlebar_button btn_right{% if is_community_page %} titlebar_button_selected_secondary{% endif %}"><i class="material-icons">group_work</i></div></a>
 </div>
 <div id="user_actions">
-	<div class="titlebar_button">
+	<div class="titlebar_button no_hover">
 		<a href="http://{{ HOST_NAME}}/stats"><i class="material-icons">thumb_up</i>&nbsp;{{ user.score }}</a>
 		<div class="actions_flair_list">
 			{% for f in user.activeFlairs %}

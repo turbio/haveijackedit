@@ -1192,7 +1192,7 @@ input[type="checkbox"]:checked + label{
 	/* margin-top: .25em; */
 }
 
-.titlebar_button > a{
+.no_hover > a{
 	color: black;
 }
 
