@@ -5,3 +5,4 @@ settings.py
 Session.vim
 media/
 index/static/MaterialIcons-Regular.*
+*.pyc
