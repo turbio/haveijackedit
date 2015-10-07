@@ -72,8 +72,8 @@ $(document).ready(function(){
 	$("#jack_tag_input").autocomplete({
 		source: "/tag_suggestion/",
 		select: function(event, ui){
-			addNewTag(this, ui.item.value);
-			this.value = "";
+			this.value = ui.item.value + ",";
+			checkForTagChange.call(this, null);
 			return false;
 		},
 		delay: 100,
@@ -90,8 +90,8 @@ $(document).ready(function(){
 	$("#jack_bro_input").autocomplete({
 		source: "/bro_suggestion/",
 		select: function(event, ui){
-			addNewTag(this, ui.item.value);
-			this.value = "";
+			this.value = ui.item.value + ",";
+			checkForTagChange.call(this, null);
 			return false;
 		},
 		delay: 100,
