@@ -17,16 +17,16 @@
 			<div class="feed_wrapper">
 				<div class="feed_profile">
 					<div id="feed_title_box">
-						{{ user.name }}
-						{% for f in user.activeFlairs %}
+						{{ feedUser.name }}
+						{% for f in feedUser.activeFlairs %}
 							<img class="flair" src="/static/flair/{{ f.image }}"/>
 						{% endfor %}
-						<div class="user_status{% if user.isJacking %} currently_jacking{% endif %}">
-							{% if user.isJacking %}
+						<div class="user_status{% if feedUser.isJacking %} currently_jacking{% endif %}">
+							{% if feedUser.isJacking %}
 								<i class="material-icons" style="font-size: 1em;">thumb_up</i> currently jacking!
-							{% elif user.lastJacked %}
+							{% elif feedUser.lastJacked %}
 								jacked it
-								{% with user.lastJacked as lastjacked %}
+								{% with feedUser.lastJacked as lastjacked %}
 									{% if lastjacked.days > 0 %}
 										{{ lastjacked.days }} day{{ lastjacked.days|pluralize }} ago
 									{% else %}
@@ -37,13 +37,13 @@
 								hasn't jacked it
 							{% endif %}
 						</div>
-						{% if user.profile.bio %}
+						{% if feedUser.profile.bio %}
 							<div class="user_bio">
-								{{ user.profile.bio }}
+								{{ feedUser.profile.bio }}
 							</div>
 						{% endif %}
 						<div id="profile_tag_container">
-							{% for t in user.profile.kinks.all %}
+							{% for t in feedUser.profile.kinks.all %}
 								<div class="label profile_label"><a href="http://{{ HOST_NAME }}/tag/{{ t.text }}">{{ t.text }}</a></div>
 							{% endfor %}
 						</div>

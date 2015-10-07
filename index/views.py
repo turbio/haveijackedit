@@ -1012,6 +1012,7 @@ def feed(request):
 	context['jack_list'] = userJackList
 	context['search_source_labels'] = 'user:' + userObject.name
 	context['username'] = subdomain
+	context['feedUser'] = userObject
 	context['title_text_a'] = jacked_message
 	context['is_user'] = isUser
 	context['is_private'] = isPrivate
