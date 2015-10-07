@@ -3,61 +3,59 @@
 	<script src="/static/account_action.js"></script>
 {% endblock %}
 {% block content %}
-{% if is_private %}
-		<div class="error_page_message">
-			this page is private
-			<div><a href="http://{{ HOST_NAME }}">
-				return home
-			</a></div>
-		</div>
-{% else %}
-	{% if is_user %}
-		<div id="wrapper">
-			{% include "titlebar.html" %}
-			<div class="feed_wrapper">
-				<div class="feed_profile">
-					<div id="feed_title_box">
-						{{ feedUser.name }}
-						{% for f in feedUser.activeFlairs %}
-							<img class="flair" src="/static/flair/{{ f.image }}"/>
-						{% endfor %}
-						<div class="user_status{% if feedUser.isJacking %} currently_jacking{% endif %}">
-							{% if feedUser.isJacking %}
-								<i class="material-icons" style="font-size: 1em;">thumb_up</i> currently jacking!
-							{% elif feedUser.lastJacked %}
-								jacked it
-								{% with feedUser.lastJacked as lastjacked %}
-									{% if lastjacked.days > 0 %}
-										{{ lastjacked.days }} day{{ lastjacked.days|pluralize }} ago
-									{% else %}
-										{{ lastjacked.seconds }} second{{ lastjacked.seconds|pluralize }} ago
-									{% endif %}
-								{% endwith %}
-							{% else %}
-								hasn't jacked it
-							{% endif %}
-						</div>
-						{% if feedUser.profile.bio %}
-							<div class="user_bio">
-								{{ feedUser.profile.bio }}
-							</div>
+<div id="wrapper">
+	{% include "titlebar.html" %}
+	{% if is_private %}
+			<div class="error_page_message">
+				this page is private
+				<div><a href="http://{{ HOST_NAME }}">
+					return home
+				</a></div>
+			</div>
+	{% elif is_user %}
+		<div class="feed_wrapper">
+			<div class="feed_profile">
+				<div id="feed_title_box">
+					{{ feedUser.name }}
+					{% for f in feedUser.activeFlairs %}
+						<img class="flair" src="/static/flair/{{ f.image }}"/>
+					{% endfor %}
+					<div class="user_status{% if feedUser.isJacking %} currently_jacking{% endif %}">
+						{% if feedUser.isJacking %}
+							<i class="material-icons" style="font-size: 1em;">thumb_up</i> currently jacking!
+						{% elif feedUser.lastJacked %}
+							jacked it
+							{% with feedUser.lastJacked as lastjacked %}
+								{% if lastjacked.days > 0 %}
+									{{ lastjacked.days }} day{{ lastjacked.days|pluralize }} ago
+								{% else %}
+									{{ lastjacked.seconds }} second{{ lastjacked.seconds|pluralize }} ago
+								{% endif %}
+							{% endwith %}
+						{% else %}
+							hasn't jacked it
 						{% endif %}
-						<div id="profile_tag_container">
-							{% for t in feedUser.profile.kinks.all %}
-								<div class="label profile_label"><a href="http://{{ HOST_NAME }}/tag/{{ t.text }}">{{ t.text }}</a></div>
-							{% endfor %}
+					</div>
+					{% if feedUser.profile.bio %}
+						<div class="user_bio">
+							{{ feedUser.profile.bio }}
 						</div>
+					{% endif %}
+					<div id="profile_tag_container">
+						{% for t in feedUser.profile.kinks.all %}
+							<div class="label profile_label"><a href="http://{{ HOST_NAME }}/tag/{{ t.text }}">{{ t.text }}</a></div>
+						{% endfor %}
 					</div>
 				</div>
-				<div class="feed_jack_list">
-					{% if jack_list %}
-						{% for jack in jack_list %}
-							{% include "jack.html" %}
-						{% endfor %}
-						{% include "pagination_nav.html" %}
-					{% else %}
-					{% endif %}
-				</div>
+			</div>
+			<div class="feed_jack_list">
+				{% if jack_list %}
+					{% for jack in jack_list %}
+						{% include "jack.html" %}
+					{% endfor %}
+					{% include "pagination_nav.html" %}
+				{% else %}
+				{% endif %}
 			</div>
 		</div>
 	{% else %}
@@ -71,5 +69,5 @@
 			</a></div>
 		</div>
 	{% endif %}
-{% endif %}
+</div>
 {% endblock %}

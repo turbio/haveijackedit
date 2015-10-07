@@ -968,56 +968,45 @@ def addPromo(user, promo):
 		flairShip.save()
 
 def feed(request):
-	isUser = False
 	isPrivate = False
-	userJackList = False
-	hasJacked = False
 	subdomain = getSubdomain(request.META['HTTP_HOST'])
-
-	userObject = User.objects.get(name__iexact = subdomain)
-
-	isUser = True
-
-	isPrivate = userObject.settings.private
 
 	context = {
 		'sort_method': jackSortMethod(request, 'new')
 	}
 
-	if not isPrivate:
-		pageNumber = request.GET.get('page', 1)
-		try:
-			pageNumber = int(pageNumber)
-		except:
-			pageNumber = 1
+	try:
+		userObject = User.objects.get(name__iexact = subdomain)
+		isPrivate = userObject.settings.private
+		context['is_private'] = isPrivate
+		context['is_searchable'] = not isPrivate
+		context['is_sortable'] = not isPrivate
 
-		userJackList = Jack.objects.with_details(
-			page=pageNumber,
-			sort=context['sort_method'],
-			user=userObject.id,
-			perspective=request.session.get('user_id'))
+		context['feedUser'] = userObject
+		context['is_user'] = True
 
-		context['page_next'] = pageNumber + 1 if  len(list(userJackList)) >= djangosettings.JACKS_PER_PAGE else False
-		context['page_prev'] = pageNumber - 1 if pageNumber > 1 else False
+		if not isPrivate:
+			pageNumber = request.GET.get('page', 1)
+			try:
+				pageNumber = int(pageNumber)
+			except:
+				pageNumber = 1
 
-		if len(list(userJackList)) > 0:
-			day = timedelta(days=1)
-			hasJacked = datetime.now(timezone.utc) - userJackList[0].date < day
+			userJackList = Jack.objects.with_details(
+				page=pageNumber,
+				sort=context['sort_method'],
+				user=userObject.id,
+				perspective=request.session.get('user_id'))
 
-	if hasJacked:
-		jacked_message = YesWords.objects.random_word('yes')
-	else:
-		jacked_message = YesWords.objects.random_word('no')
+			context['page_next'] = pageNumber + 1 if  len(list(userJackList)) >= djangosettings.JACKS_PER_PAGE else False
+			context['page_prev'] = pageNumber - 1 if pageNumber > 1 else False
 
-	context['jack_list'] = userJackList
-	context['search_source_labels'] = 'user:' + userObject.name
-	context['username'] = subdomain
-	context['feedUser'] = userObject
-	context['title_text_a'] = jacked_message
-	context['is_user'] = isUser
-	context['is_private'] = isPrivate
-	context['is_searchable'] = not isPrivate
-	context['is_sortable'] = not isPrivate
+			context['jack_list'] = userJackList
+			context['search_source_labels'] = 'user:' + userObject.name
+			context['username'] = subdomain
+
+	except:
+		isUser = False
 
 	return render(request, 'feed.html', context)
 
