@@ -2,7 +2,8 @@ from django.db import models
 from django.conf import settings as djangosettings
 from django.db.models import Sum, Count, F, When, Case, Value, CharField, Q
 from django.db.models.functions import Concat
-from datetime import datetime, timezone
+from datetime import datetime
+from django.utils import timezone
 import re
 
 class UserSubmitted(models.Model):
