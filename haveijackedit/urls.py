@@ -51,4 +51,4 @@ urlpatterns = [
 	url(r'^graph/calendar.svg$', views.calendarGraph),
 	url(r'^graph/dist.svg$', views.distributionGraph),
 	url(r'^graph/freq.svg$', views.frequencyGraph),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
