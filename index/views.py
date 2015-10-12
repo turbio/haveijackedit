@@ -449,6 +449,9 @@ def tags(request):
 		return HttpResponseRedirect('/search/tag:' + splitUrl[2])
 
 	request.context['tag_list']  = Tag.objects \
+		.filter(
+				Q(jack_tags__user__settings__private=False) &
+				Q(jack_tags__private=False)) \
 		.annotate(occurrences=Count('jack_tags')) \
 		.order_by('-occurrences') \
 		[

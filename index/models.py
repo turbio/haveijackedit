@@ -12,6 +12,9 @@ class UserSubmitted(models.Model):
 	private = models.BooleanField(default=False)
 	hidden = models.BooleanField(default=False)
 
+	def isprivate(self):
+		return self.private or user.setttings.private
+
 class User(models.Model):
 	name = models.CharField(max_length=16)
 	password_hash = models.CharField(max_length=128)
