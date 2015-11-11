@@ -714,9 +714,6 @@ def standalone_jack(request):
 		perspective_ip=False if 'user_id' in request.session else True,
 		jack_id=jackId)
 
-	if jackObject.private and jackObject.user.id != request.session['user_id']:
-		return HttpResponse('you are not authorized to view this jack', status=401)
-
 	if len(list(jackObject)) == 0:
 		raise Http404("This jack doesn't exist")
 
